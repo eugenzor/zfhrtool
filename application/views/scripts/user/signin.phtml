@@ -1,0 +1,32 @@
+<?php
+/**
+ * Signin page view
+ *
+ * Страница формы авторизации зарегистрированных пользователей
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+$this->headTitle($this->translate('[LS_PAGE_TITLE_USER_SIGNIN]'));
+?>
+<?php if (count($this->signinForm->getErrorMessages())):?>
+    <div class="error">
+        <?php echo implode(';',$this->signinForm->getErrorMessages()); ?>
+    </div>
+<?php endif;?>
+<div>
+    <div id="left_pane">
+        <h1>Вход</h1>
+        <div id="signin_form">
+            <?php echo $this->signinForm; ?>
+        </div>
+    </div>
+    <div id="right_pane">
+        <div>
+            <a href="<?php echo $this->url ( array ('action'=>'singup') ); ?>"><?php echo $this->translate('[LS_LINK_HAVENT_ACCOUNT_YET]'); ?></a>
+            <br />
+            <a href="<?php echo $this->url ( array ('action'=>'forget-password') ); ?>"><?php echo $this->translate('[LS_LINK_FORGET_YOUR_PASSWORD]'); ?></a>
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+</div>

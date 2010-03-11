@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./application/bootstrap.php">
+    <testsuite name="zfhrtool Test Suite">
+        <directory>./</directory>
+    </testsuite>
+</phpunit>

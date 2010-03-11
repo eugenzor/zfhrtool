@@ -1,0 +1,21 @@
+<?php
+/**
+ * Вид страницы регистрации
+ *
+ * Форма регистрации редакторов
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+$this->headTitle($this->translate('[LS_PAGE_TITLE_USER_SIGNUP]'));
+
+?>
+<h1>Регистрация</h1>
+<?php if(count($this->form->getErrorMessages())):?>
+    <div class="error">
+        <?php echo implode(';',$this->form->getErrorMessages()); ?>
+    </div>
+<?php endif;?>
+<div id="signup_form">
+   <?php echo $this->form;?>
+</div>

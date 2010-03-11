@@ -1,0 +1,28 @@
+<?php
+/**
+ * Главный слой
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+
+$this->headLink()->appendStylesheet("/styles/main.css");
+echo $this->doctype(),PHP_EOL;
+?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <?= $this->headTitle()?>
+    <?= $this->headLink() ?>
+    <?= $this->headScript(); ?>
+</head>
+
+<body>
+    <div class="menu-h">
+        <?php echo $this->navigation()->menu(); ?>
+    </div>
+    <div class="content">
+        <?php echo $this->layout()->content; ?>
+    </div>
+</body>
+</html>
