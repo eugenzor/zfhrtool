@@ -1,4 +1,5 @@
 #Требования к разработке
+
 = Требования к разработке =
 
   * Разработка на Zend Framework по стандартам кодирования Zend: [http://framework.zend.com/manual/ru/coding-standard.html] Исключения: в видах допускается запись `<?= $this->prop?>`
