@@ -1,0 +1,42 @@
+1. Загрузить из репозитория исходный код:
+svn co https://zfhrtool.googlecode.com/svn/trunk/ zfhrtool --username {Ваш логин/email}
+
+2. Настроить виртуалхост apache так, что бы DocumentRoot был в папке zfhrtool/public,
+а так же добавить переменную окружения APPLICATION_ENV.
+Локальное имя сайта (ServerName) желательно настроить отличным от рабочего домена.
+Пример конфигурации вирталхоста:
+<VirtualHost *:80>
+	DocumentRoot /var/www/google/zfhrtool/public/
+	ErrorLog /var/log/apache2/error.log
+	CustomLog /var/log/apache2/access.log combined
+	ServerName "zfhrtool.net"
+	SetEnv APPLICATION_ENV development
+</VirtualHost>
+
+3. Папке zfhrtool/public/images/captcha/
+
+Установить права, которые позволили бы apache записывать файлы. Это можно сделать выполнив следующие команды:
+cd zfhrtool;
+chmod 777 ./public/images/captcha/
+
+
+4. Создать 2 базы данных - для проекта и для его тестов, например такие: zfhrtool и test_zfhrtool.
+Залить в каждую из них sql-дамп zfhrtool/docs/dump.sql
+
+5. Создать файл zfhrtool/application/configs/_application.ini с настройками базы данных
+для локальной среди прописать свои настройки базы данных. Пример содержимого файла:
+[production]
+    resources.db.params.password = realpass
+[staging : production]
+[testing : production]
+[development : production]
+
+7. Копируем в папку zfhrtool/library/Zend файлы библиотеки Zend_Framework
+или (что предпочтительнее) создаем ссылку.
+
+8. Проверяем тесты:
+cd zfhrtool/tests
+phpunit --colors ./
+
+9. Запускаем сайт из-под браузера:
+http://zfhrtool.net/
