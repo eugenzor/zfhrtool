@@ -1,0 +1,22 @@
+<?php
+/**
+ *
+ * Вид страницы активации учетной записи
+ *
+ * Вывод ошибки, в случае введения неверной ссылки либо вывод сообщения об успешной активации
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+$this->headTitle($this->translate('[LS_PAGE_TITLE_ACCOUNT_ACTIVATION]'));
+?>
+
+<?php if($this->activationFailed === true): ?>
+    <div class="error">
+        <?php echo $this->translate('[LS_ACCOUNT_ACTIVATION_FAILED]') ?>
+    </div>
+<?php else: ?>
+    <div class="message">
+        <?php echo sprintf($this->translate('[LS_ACCOUNT_ACTIVATION_SUCCESS]'),$this->url(array('action'=>'signin'),'default', true)); ?>
+    </div>
+<?php endif;?>

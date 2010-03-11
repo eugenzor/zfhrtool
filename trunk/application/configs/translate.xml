@@ -1,0 +1,271 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "tmx14.dtd">
+<tmx version="1.4">
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence"
+         adminlang="en-us" srclang="de-at" o-tmf="abc"
+         creationtool="XYZTool" >
+ </header>
+ <body>
+  <tu tuid='[LS_FORM_FIELD_EMAIL]'>
+   <tuv xml:lang="ru"><seg>E-mail</seg></tuv>
+  </tu>
+  <tu tuid='[LS_PAGE_TITLE_USER_SIGNUP]'>
+   <tuv xml:lang="ru"><seg>Регистрация пользователей</seg></tuv>
+  </tu>
+  <tu tuid='[LS_FORM_FIELD_NICKNAME]'>
+   <tuv xml:lang="ru"><seg>Имя</seg></tuv>
+  </tu>
+  <tu tuid='[LS_VALIDATION_NICKNAME_HINT]'>
+   <tuv xml:lang="ru"><seg>Оно будет отображаться на сайте после входа</seg></tuv>
+  </tu>
+    <tu tuid='[LS_VALIDATION_LOGIN_HINT]'>
+   <tuv xml:lang="ru"><seg>Логин используется для входа на сайт</seg></tuv>
+  </tu>
+
+<tu tuid='[LS_FORM_FIELD_PASSWORD]'>
+   <tuv xml:lang="ru"><seg>Пароль</seg></tuv>
+</tu>
+
+<tu tuid='[LS_VALIDATION_CSRF_FAILED]'>
+   <tuv xml:lang="ru"><seg>Данные на форме устарели</seg></tuv>
+</tu>
+
+<tu tuid='[LS_FORM_BUTTON_SIGNIN]'>
+   <tuv xml:lang="ru"><seg>Ввойти</seg></tuv>
+</tu>
+
+<tu tuid='[LS_LINK_HAVENT_ACCOUNT_YET]'>
+   <tuv xml:lang="ru"><seg>Вы еще не зарегистрированы?</seg></tuv>
+</tu>
+
+<tu tuid='[LS_LINK_FORGET_YOUR_PASSWORD]'>
+   <tuv xml:lang="ru"><seg>Забыли свой пароль?</seg></tuv>
+</tu>
+
+<tu tuid='[LS_AUTH_SIGNIN_ERROR]'>
+   <tuv xml:lang="ru"><seg>Ошибка авторизации. Проверьте Ваши данные</seg></tuv>
+</tu>
+
+<tu tuid='[LS_FORM_FIELD_EMAIL_F]'>
+   <tuv xml:lang="ru"><seg>Ваш почтовый адрес</seg></tuv>
+</tu>
+
+
+<tu tuid='[LS_VALIDATTION_FORM_FAILED]'>
+   <tuv xml:lang="ru"><seg>Ошибка! Проверьте, верно ли заполнены все поля формы.</seg></tuv>
+</tu>
+
+<tu tuid='[LS_FORM_FIELD_CAPTCHA]'>
+   <tuv xml:lang="ru"><seg>Введите код с картинки</seg></tuv>
+</tu>
+
+<tu tuid='[LS_FORM_BUTTON_SIGNUP]'>
+   <tuv xml:lang="ru"><seg>Зарегистрироваться</seg></tuv>
+</tu>
+
+<tu tuid='[LS_FORM_FIELD_LOGIN]'>
+   <tuv xml:lang="ru"><seg>Логин</seg></tuv>
+</tu>
+  
+<tu tuid='[LS_SIGNUP_SUCCESS]'>
+   <tuv xml:lang="ru"><seg>Регистрация успешно завершена. На указанный Вами почтовый ящик было выслано письмо с инструкцией по активации аккаунта.</seg></tuv>
+  </tu>
+
+<tu tuid='[LS_AUTH_USEREMAIL_ALREADY_EXISTS]'>
+   <tuv xml:lang="ru"><seg>Пользователь с таким почтовым адресом уже существует</seg></tuv>
+  </tu>
+
+<tu tuid='[LS_AUTH_USERLOGIN_ALREADY_EXISTS]'>
+   <tuv xml:lang="ru"><seg>Пользователь с таким логином уже существует</seg></tuv>
+  </tu>
+
+<tu tuid='[LS_VALIDATION_PASSWORD_HINT]'>
+   <tuv xml:lang="ru"><seg>Пароль должен состоять минимум из 6 символов</seg></tuv>
+  </tu>
+
+<tu tuid='[LS_FORM_BUTTON_SUBMIT]'>
+   <tuv xml:lang="ru"><seg>Восстановить</seg></tuv>
+  </tu>
+
+<tu tuid='[LS_VALIDATION_LOGIN_RULE]'>
+   <tuv xml:lang="ru"><seg>Логин содержит недопустимые символы</seg></tuv>
+  </tu>
+
+<tu tuid='[LS_USERLOGIN_MISSED]'>
+   <tuv xml:lang="ru"><seg>Пользователя с таким логином не существует</seg></tuv>
+  </tu>
+
+<tu tuid='[LS_ACCOUNT_ACTIVATION_SUCCESS]'>
+   <tuv xml:lang="ru"><seg>Ваш аккаунт успешно активирован</seg></tuv>
+  </tu>
+
+<tu tuid='[LS_ACCOUNT_ACTIVATION_FAILED]'>
+   <tuv xml:lang="ru"><seg>Активация не удалась</seg></tuv>
+  </tu>
+
+<tu tuid='[LS_FORGETPASSWORD_SUCCESS]'>
+   <tuv xml:lang="ru"><seg>Восстановление пароля прошло успешно. На Ваш почтовый ящик было выслано письмо с необходимыми инструкциями.</seg></tuv>
+  </tu>
+
+<tu tuid='[LS_CHANGEPASSWORD_FAILED]'>
+   <tuv xml:lang="ru"><seg>Операция по смене пароля не удалась</seg></tuv>
+</tu>
+<tu tuid='[LS_CHANGEPASSWORD_SUCCESS]'>
+   <tuv xml:lang="ru"><seg>Пароль успешно изменён</seg></tuv>
+</tu>
+<tu tuid='[LS_LOGIN_NO_ACTIVATED]'>
+   <tuv xml:lang="ru"><seg>Ваш аккаунт не активирован</seg></tuv>
+</tu>
+<tu tuid='[LS_VALIDATION_CAPTCHA_HINT]'>
+   <tuv xml:lang="ru"><seg>Введите код с изображения</seg></tuv>
+</tu>
+<tu tuid='[LS_VALIDATION_CAPTCHA_RULE]'>
+   <tuv xml:lang="ru"><seg>Не верно введён код изображения</seg></tuv>
+</tu>
+<tu tuid='[LS_BALANCE]'>
+   <tuv xml:lang="ru"><seg>Баланс</seg></tuv>
+</tu>
+<tu tuid='[LS_FILL_BALANCE]'>
+   <tuv xml:lang="ru"><seg>Пополнить баланс</seg></tuv>
+</tu>
+<tu tuid='[LS_WAGES_TODAY]'>
+   <tuv xml:lang="ru"><seg>Заработано сегодня</seg></tuv>
+</tu>
+<tu tuid='[LS_WAGES_ALL]'>
+   <tuv xml:lang="ru"><seg>Заработано всего</seg></tuv>
+</tu>
+<tu tuid='[LS_SPENT_TODAY]'>
+   <tuv xml:lang="ru"><seg>Потрачено сегодня</seg></tuv>
+</tu>
+<tu tuid='[LS_SPENT_ALL]'>
+   <tuv xml:lang="ru"><seg>Потрачено всего</seg></tuv>
+</tu>
+<tu tuid='[LS_REFUSE_REASON]'>
+   <tuv xml:lang="ru"><seg>Причина отклонения</seg></tuv>
+</tu>
+<tu tuid='[LS_NO_REASON]'>
+   <tuv xml:lang="ru"><seg>Причина не указана</seg></tuv>
+</tu>
+<tu tuid='[LS_FORM_FIELD_NAME]'>
+   <tuv xml:lang="ru"><seg>Ваше настоящее имя</seg></tuv>
+</tu>
+<tu tuid='[LS_FORM_FIELD_PCONFIRM]'>
+   <tuv xml:lang="ru"><seg>Подтверждение пароля</seg></tuv>
+</tu>
+<tu tuid='[LS_PASSWORDS_NO_COINCIDES]'>
+   <tuv xml:lang="ru"><seg>Введённые пароли не совпадают</seg></tuv>
+</tu>
+<tu tuid='[LS_DOMAIN]'>
+   <tuv xml:lang="ru"><seg>Домен</seg></tuv>
+</tu>
+<tu tuid='[LS_ENCODING]'>
+   <tuv xml:lang="ru"><seg>Кодировка</seg></tuv>
+</tu>
+<tu tuid='[LS_ENCODING_DESC]'>
+   <tuv xml:lang="ru"><seg>укажите для правильного отображения объявлений</seg></tuv>
+</tu>
+<tu tuid='[LS_STATUS]'>
+   <tuv xml:lang="ru"><seg>Статус</seg></tuv>
+</tu>
+<tu tuid='[LS_INO]'>
+   <tuv xml:lang="ru"><seg>№</seg></tuv>
+</tu>
+<tu tuid='[LS_COMMENTS]'>
+   <tuv xml:lang="ru"><seg>Комментарий</seg></tuv>
+</tu>
+<tu tuid='[LS_ACTIONS]'>
+   <tuv xml:lang="ru"><seg>Действия</seg></tuv>
+</tu>
+<tu tuid='[LS_STAT_LINK]'>
+   <tuv xml:lang="ru"><seg>Статистика сайта</seg></tuv>
+</tu>
+<tu tuid='[LS_STAT_LINK_DESC]'>
+   <tuv xml:lang="ru"><seg>укажите ссылку для просмотра статистики сайта и пароль, в случае надобности; обязательная возможность видеть источники переходов, желательна статистика от LiveInternet</seg></tuv>
+</tu>
+<tu tuid='[LS_MIRROR_DOMAINS]'>
+   <tuv xml:lang="ru"><seg>Зеркала сайта</seg></tuv>
+</tu>
+<tu tuid='[LS_MIRROR_DOMAINS_DESC]'>
+   <tuv xml:lang="ru"><seg>укажите по одному на строку, если они есть</seg></tuv>
+</tu>
+<tu tuid='[LS_SITE_ADD]'>
+   <tuv xml:lang="ru"><seg>Добавление сайта</seg></tuv>
+</tu>
+<tu tuid='[LS_SITE_EDIT]'>
+   <tuv xml:lang="ru"><seg>Редактирование настроек сайта</seg></tuv>
+</tu>
+<tu tuid='[LS_ADD]'>
+   <tuv xml:lang="ru"><seg>Добавить</seg></tuv>
+</tu>
+<tu tuid='[LS_EDIT]'>
+   <tuv xml:lang="ru"><seg>Изменить</seg></tuv>
+</tu>
+<tu tuid='[LS_DEL]'>
+   <tuv xml:lang="ru"><seg>Удалить</seg></tuv>
+</tu>
+<tu tuid='[LS_SUBMIT]'>
+   <tuv xml:lang="ru"><seg>Отправить</seg></tuv>
+</tu>
+<tu tuid='[LS_NO_SITES]'>
+   <tuv xml:lang="ru"><seg>Нет сайтов</seg></tuv>
+</tu>
+<tu tuid='[LS_NAVIGATION_INFORMERS]'>
+   <tuv xml:lang="ru"><seg>Информеры</seg></tuv>
+</tu>
+<tu tuid='[LS_NAVIGATION_MAIN]'>
+   <tuv xml:lang="ru"><seg>Главная</seg></tuv>
+</tu>
+<tu tuid='[LS_NAVIGATION_MY_SITES]'>
+   <tuv xml:lang="ru"><seg>Мои сайты</seg></tuv>
+</tu>
+<tu tuid='[LS_NAVIGATION_EXIT]'>
+   <tuv xml:lang="ru"><seg>Выход</seg></tuv>
+</tu>
+<tu tuid='[LS_NAVIGATION_BALANCE]'>
+   <tuv xml:lang="ru"><seg>Баланс</seg></tuv>
+</tu>
+<tu tuid='[LS_NAVIGATION_STATE]'>
+   <tuv xml:lang="ru"><seg>Состояние</seg></tuv>
+</tu>
+<tu tuid='[LS_NAVIGATION_PAYMENTS]'>
+   <tuv xml:lang="ru"><seg>Выплаты</seg></tuv>
+</tu>
+<tu tuid='[LS_NAVIGATION_ABOUT]'>
+   <tuv xml:lang="ru"><seg>О разделе</seg></tuv>
+</tu>
+<tu tuid='[LS_NAVIGATION_WAGES]'>
+   <tuv xml:lang="ru"><seg>Для заработка</seg></tuv>
+</tu>
+<tu tuid='[LS_NAVIGATION_EXCHANGE]'>
+   <tuv xml:lang="ru"><seg>По обмену</seg></tuv>
+</tu>
+<tu tuid='goods'>
+   <tuv xml:lang="ru"><seg>Товарный информер</seg></tuv>
+</tu>
+<tu tuid='news'>
+   <tuv xml:lang="ru"><seg>Новостной информер</seg></tuv>
+</tu>
+<tu tuid='under'>
+   <tuv xml:lang="ru"><seg>Попандер</seg></tuv>
+</tu>
+<tu tuid='composite'>
+   <tuv xml:lang="ru"><seg>Композитный информер</seg></tuv>
+</tu>
+<tu tuid='draw'>
+   <tuv xml:lang="ru"><seg>Рисуночный информер</seg></tuv>
+</tu>
+<tu tuid='total'>
+   <tuv xml:lang="ru"><seg>Итого</seg></tuv>
+</tu>
+<tu tuid='abnews'>
+   <tuv xml:lang="ru"><seg>Н</seg></tuv>
+</tu>
+<tu tuid='abgoods'>
+   <tuv xml:lang="ru"><seg>Т</seg></tuv>
+</tu>
+<tu tuid='Captcha value is wrong'>
+   <tuv xml:lang="ru"><seg>Не правильно введён код с картинки</seg></tuv>
+</tu>
+
+</body>
+</tmx>
