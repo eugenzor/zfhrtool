@@ -24,7 +24,6 @@
 </head>
 
 <body>
-<!--
     <div class="menu-h">
         <ul class="navigation"> 
             <li class="active"><a href="/index.php/">Главная</a></li> 
@@ -34,5 +33,4 @@
             <li><a href="/index.php/user/signout">Выйти</a></li> 
         </ul>
     </div>
--->
 	<h1>Система тестирования MarketGid</h1>
