@@ -32,6 +32,11 @@ class Navigation extends Zend_Navigation
             'action' => 'signup'
         ),
         array(
+            'label'=>'Тесты',
+            'controller'=>'test',
+            'action' => 'index'
+        ),
+        array(
             'label'=>"Выйти",
             'controller'=>'user',
             'action' => 'signout'
