@@ -95,9 +95,10 @@ class TestController extends Controller_Action_Abstract
         try {
             if (array_key_exists('testId', $arrParams) &&
                     !empty($arrParams['testId'])) {
-                $objTest = $objTests ->
-                getTestById( ( int ) $arrParams['testId'] );
+                $testId = ( int ) $arrParams['testId'];
+                $objTest = $objTests -> getTestById( $testId );
             } else {
+                $testId = null;
                 $objTest = $objTests -> createRow();
             }
 
@@ -113,9 +114,19 @@ class TestController extends Controller_Action_Abstract
             $objTest->setQuestionAmount (
                 ( int ) $arrParams['testQuestionAmount'] );
             $objTest -> save();
+
         } catch ( Exception $e ){ print $e -> getMessage(); }
 
-        $this->_helper->redirector ( 'index', 'test' );
+        if ( 'questionAdd' == $arrParams[ 'formAction' ] ) {
+            if (!$testId) {
+                $testId = $objTests -> getAdapter()-> lastInsertId();
+            }
+
+            $this->_helper -> redirector ( 'edit', 'question', null,
+                array( 'testId' => $testId ) );
+        } else {
+            $this->_helper->redirector ( 'index', 'test' );
+        }
     }
 
     public function removeAction()

@@ -1,4 +1,19 @@
 {include file = 'header.tpl' title = 'Добавление/редактирование категории :: Тесты :: '}
+{literal}
+<script type="text/javascript" language="javascript"> 
+<!--
+//<![CDATA[
+	function SetAction(action)
+	{
+		
+		var form = document.getElementById('questionForm');
+		form.formAction.value = action;
+		return true;
+	}
+//]]>
+-->
+</script>
+{/literal}
 <div id="main">
     <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
     <ul class="menu" style="float:right">
@@ -10,7 +25,7 @@
     <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
 	<h1 class="title" style="display:inline; border:0">Тесты : добавление/редактирование</h1>
     <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
-    <form action="/index.php/test/update" method="post">
+    <form action="/index.php/test/update" method="post" id="questionForm">
         <label for="testname" class="required">Название теста :</label><br />
         <input type="text" name="testName" value="{$objTest->t_name}" id="testname" style="width:300px" /><br />
         <label for="categorydescr">Категория теста :</label><br />
@@ -52,6 +67,8 @@
         </table>
         <input type="hidden" name="testQuestionAmount" value="{$intQuestionAmount}" />
         <input type="hidden" name="testId" value="{$objTest->t_id}" />
+        <input type="hidden" name="formAction" id="formAction" value="" />
+        <input type="submit" value="Добавить вопрос" onclick="return SetAction('questionAdd');" /><br />
         <input type="submit" value="Сохранить" />
     </form>
 </div>
