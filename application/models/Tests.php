@@ -5,7 +5,7 @@
  */
 
 /**
- * Òàáëèöà òåñòîâ
+ * Ð¢Ð°Ð±Ð»Ð¸Ñ†Ð° Ñ‚ÐµÑÑ‚Ð¾Ð²
  *
  * @package zfhrtool
  * @subpackage Model
@@ -13,7 +13,7 @@
 class Tests extends Zht_Db_Table
 {
     /**
-     * Èìÿ òàáëèöû
+     * Ð˜Ð¼Ñ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹
      * @var string
      */
     protected $_name = 'mg_test';
@@ -81,16 +81,16 @@ class Tests extends Zht_Db_Table
         $arrQuestionsId = $this -> getQuestionIdListByTestId( $testId );
 
         if ( !empty( $arrQuestionsId ) ) {
-            // Óäàëÿåì îòâåòû äëÿ âîïðîñîâ òåñòà
+            // Ð£Ð´Ð°Ð»ÑÐµÐ¼ Ð¾Ñ‚Ð²ÐµÑ‚Ñ‹ Ð´Ð»Ñ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ¾Ð² Ñ‚ÐµÑÑ‚Ð°
             $this -> getAdapter()-> delete('mg_test_question_answer',
                 'tq_id IN( ' . implode(', ', $arrQuestionsId) . ' )' );
 
-            // Óäàëÿåì âîïðîñû òåñòà
+            // Ð£Ð´Ð°Ð»ÑÐµÐ¼ Ð²Ð¾Ð¿Ñ€Ð¾ÑÑ‹ Ñ‚ÐµÑÑ‚Ð°
             $this -> getAdapter()-> delete('mg_test_question',
                 'tq_id IN( ' . implode(', ', $arrQuestionsId) . ' )' );
         }
 
-        // Óäàëÿåì èíôîðìàöèþ î òåñòå èç ÁÄ
+        // Ð£Ð´Ð°Ð»ÑÐµÐ¼ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸ÑŽ Ð¾ Ñ‚ÐµÑÑ‚Ðµ Ð¸Ð· Ð‘Ð”
         $where = array (
                 't_id=?' => $testId );
         $this -> delete( $where );

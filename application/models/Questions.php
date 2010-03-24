@@ -5,7 +5,7 @@
  */
 
 /**
- * Òàáëèöà âîïðîñîâ
+ * Ð¢Ð°Ð±Ð»Ð¸Ñ†Ð° Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ¾Ð²
  *
  * @package zfhrtool
  * @subpackage Model
@@ -13,7 +13,7 @@
 class Questions extends Zht_Db_Table
 {
     /**
-     * Èìÿ òàáëèöû
+     * Ð˜Ð¼Ñ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹
      * @var string
      */
     protected $_name = 'mg_test_question';
@@ -66,18 +66,18 @@ class Questions extends Zht_Db_Table
      * @param array arrAnswer
      * @return arrAnswer | array
      */
-    public function saveAnswerList($questionId, array $arrAnswer = array())
+    public function saveAnswerList( $questionId, array $arrAnswer = array() )
     {
         if (!$questionId) {
             $questionId =$this -> getAdapter()-> lastInsertId(); 
         }
-        // Óäàëÿåì îòâåòû äëÿ òåêóùåãî âîïðîñà
+        // Ð£Ð´Ð°Ð»ÑÐµÐ¼ Ð¾Ñ‚Ð²ÐµÑ‚Ñ‹ Ð´Ð»Ñ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ°
         $this -> getAdapter()-> delete('mg_test_question_answer',
             'tq_id = '.$questionId);
         foreach ($arrAnswer as $arrAnswerItem) {
             $data = array(
                     'tqa_text'      =>  $arrAnswerItem['text'],
-                    'tqa_flag'      =>  array_key_exists( 'flag', $arrAnswerItem )?1:0,
+                    'tqa_flag'      =>  $arrAnswerItem['flag']?1:0,
                     'tq_id'         =>  $questionId
             );
             $this -> getAdapter()-> insert('mg_test_question_answer', $data );
@@ -95,16 +95,16 @@ class Questions extends Zht_Db_Table
         $objQuestion = $this -> getQuestionById( $questionId );
         $intSortIndex = $objQuestion -> getSortIndex();
 
-        // Óäàëÿåì îòâåòû äëÿ òåêóùåãî âîïðîñà
+        // Ð£Ð´Ð°Ð»ÑÐµÐ¼ Ð¾Ñ‚Ð²ÐµÑ‚Ñ‹ Ð´Ð»Ñ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ°
         $this -> getAdapter()-> delete('mg_test_question_answer',
             'tq_id = '.$questionId);
 
-        // Óäàëÿåì äàííûå î âîïðîñå èç ÁÄ
+        // Ð£Ð´Ð°Ð»ÑÐµÐ¼ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐµ Ð¸Ð· Ð‘Ð”
         $where = array (
                 'tq_id=?' => $questionId );
         $this -> delete( $where );
 
-        // Îáíîâëÿåì ïîðÿäîê ñîðòèðîâêè
+        // ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ð¿Ð¾Ñ€ÑÐ´Ð¾Ðº ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ¸
         $data = array('tq_sort_index' => new Zend_Db_Expr('tq_sort_index - 1'));
         $this -> getAdapter() ->
             update('mg_test_question', $data, "tq_sort_index > $intSortIndex");
@@ -124,12 +124,12 @@ class Questions extends Zht_Db_Table
         if ($intSortIndex > 1) {
             $intNewSortIndex  = $intSortIndex - 1;
 
-            // Îáíîâëÿåì èíäíåêñ ñîðòèðîâêè ïðåäûäóùåãî åëåìåíòà
+            // ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ð¸Ð½Ð´Ð½ÐµÐºÑ ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ¸ Ð¿Ñ€ÐµÐ´Ñ‹Ð´ÑƒÑ‰ÐµÐ³Ð¾ ÐµÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°
             $data = array('tq_sort_index' => $intSortIndex);
             $this -> getAdapter() -> update('mg_test_question', $data,
                 "tq_sort_index  = $intNewSortIndex" );
 
-            // Îáíîâëÿåì èíäíåêñ ñîðòèðîâêè òåêóùåãî åëåìåíòà
+            // ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ð¸Ð½Ð´Ð½ÐµÐºÑ ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ¸ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ ÐµÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°
             $data = array('tq_sort_index' => $intSortIndex - 1);
             $this -> getAdapter() -> update('mg_test_question', $data,
                 'tq_id  = '.$questionId );
@@ -151,16 +151,28 @@ class Questions extends Zht_Db_Table
         if ($intSortIndex < $intMaxSortIndex) {
             $intNewSortIndex  = $intSortIndex + 1;
 
-            // Îáíîâëÿåì èíäíåêñ ñîðòèðîâêè ñëåäóþùåãî åëåìåíòà
+            // ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ð¸Ð½Ð´Ð½ÐµÐºÑ ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ¸ ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÐµÐ³Ð¾ ÐµÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°
             $data = array('tq_sort_index' => $intSortIndex);
             $this -> getAdapter() -> update('mg_test_question', $data,
                 "tq_sort_index  = $intNewSortIndex" );
 
-            // Îáíîâëÿåì èíäíåêñ ñîðòèðîâêè òåêóùåãî åëåìåíòà
+            // ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ð¸Ð½Ð´Ð½ÐµÐºÑ ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ¸ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ ÐµÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°
             $data = array('tq_sort_index' => $intSortIndex + 1);
             $this -> getAdapter() -> update('mg_test_question', $data,
                 'tq_id  = '.$questionId );
         }
+    }
+
+    /**
+     * Get Maximum sort index
+     *
+     * @return $intMaxSortIndex 
+     */
+    public function getMaxSortIndex()
+    {
+        $query = 'SELECT max(tq_sort_index) from '.$this -> _name;
+        $intMaxSortIndex = $this -> getAdapter() -> fetchOne( $query );
+        return $intMaxSortIndex;
     }
 }
 

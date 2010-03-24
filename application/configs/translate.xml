@@ -267,16 +267,56 @@
    <tuv xml:lang="ru"><seg>Не правильно введён код с картинки</seg></tuv>
 </tu>
 
- <tu tuid='[LS_PAGE_TITLE_TESTS]'>
-  <tuv xml:lang="ru"><seg>Тесты</seg></tuv>
- </tu>
-
  <tu tuid='[LS_FILTER_FORM_BUTTON_SUBMIT]'>
     <tuv xml:lang="ru"><seg>Применить</seg></tuv>
    </tu>
 
  <tu tuid='[LS_CATEGORY_HAS_TESTS]'>
   <tuv xml:lang="ru"><seg>Невозможно удалить категорию. Категория содержит тысты.</seg></tuv>
+ </tu>
+
+ <tu tuid='[LS_PAGE_TITLE_TESTS]'>
+  <tuv xml:lang="ru"><seg>Тесты :: Система тестирования MarketGid</seg></tuv>
+ </tu>
+
+ <tu tuid='[LS_LINK_REMOVE]'>
+    <tuv xml:lang="ru"><seg>Удалить</seg></tuv>
+ </tu>
+
+ <tu tuid='[LS_LINK_REMOVE_CONFIRMATION]'>
+    <tuv xml:lang="ru"><seg>Вы действительно хотите удалить</seg></tuv>
+ </tu>
+
+ <tu tuid='[LS_LINK_EDIT]'>
+    <tuv xml:lang="ru"><seg>Изменить</seg></tuv>
+ </tu>
+
+ <tu tuid='[LS_FORM_FILTER_TEXT_LABEL]'>
+    <tuv xml:lang="ru"><seg>Название теста :</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_FILTER_SELECT_LABEL]'>
+    <tuv xml:lang="ru"><seg>Категории :</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_SUBMMIT_FILTER]'>
+    <tuv xml:lang="ru"><seg>Применить</seg></tuv>
+ </tu>
+ <tu tuid='[LS_PAGE_TITLE_CATEGORIES]'>
+  <tuv xml:lang="ru"><seg>Категории тестов</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_SUBMMIT_SAVE]'>
+    <tuv xml:lang="ru"><seg>Сохранить</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_SUBMMIT_ADD_QUESTION]'>
+    <tuv xml:lang="ru"><seg>Добавить вопрос</seg></tuv>
+ </tu>
+ <tu tuid='[LS_LINK_UP]'>
+    <tuv xml:lang="ru"><seg>Вверх</seg></tuv>
+ </tu>
+ <tu tuid='[LS_LINK_DOWN]'>
+    <tuv xml:lang="ru"><seg>Вниз</seg></tuv>
+ </tu>
+ <tu tuid='[LS_PAGE_TITLE_QUESTION]'>
+  <tuv xml:lang="ru"><seg>Добавить/редактировать вопрос :: Вопросы :: Тесты :: Система тестирования MarketGid</seg></tuv>
  </tu>
  </body>
 </tmx>

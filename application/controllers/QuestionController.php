@@ -6,9 +6,9 @@
 
 
 /**
- * ���������� ��������
+ * Контроллер вопросов
  *
- * ������������ ������ � ��������� � ������
+ * Обеспечивает работу с вопросами к тестам
  * @package zfhrtool
  * @subpackage Controller
  */
@@ -17,101 +17,117 @@ class QuestionController extends Controller_Action_Abstract
 {
 
     /**
-     * ������������� �����������
+     * Инициализация контроллера
      * @return void
      */
     public function init()
     {
         parent::init();
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();
-//        Zend_Controller_Action_HelperBroker::removeHelper('viewRenderer');
     }
 
+    /**
+     * Добавление/обновление вопроса
+     * @return void
+     */
     public function editAction()
     {
-        $smarty = Zend_Registry::get('smarty');
+        $objForm = new Form_Question_Edit();
+        if ($this->getRequest ()->isPost ()){
+            if ( $objForm->isValid ( $_POST )) {
+                // Выполняем update (insert/update данных о вопросе)
+                $arrParams = $this->getRequest()->getParams();
+//                print_r($arrParams);
+                $testId = (int) $objForm -> testId -> getValue();
+                $strQuestionText = $objForm -> questionText -> getValue();
 
-        $arrParams = $this->getRequest()->getParams();
-        $testId = $this->getRequest()->getParam('testId');
-        if ($testId != '') {
-            // �������� �� ���� ������ � ������������� �����
-            $objTests = new Tests ( );
-            $objTest = $objTests->getTestById( $testId );
+                $objQuestions = new Questions ();
+                $intMaxSortIndex = $objQuestions -> getMaxSortIndex();
 
-            $smarty -> assign ( 'objTest', $objTest);
-        }
+                $questionId = $objForm -> questionId -> getValue();
+                if ( !empty( $questionId)) {
+                    $objQuestion = $objQuestions -> getQuestionById( $questionId );
+                } else {
+                    $objQuestion = $objQuestions -> createRow();
+                    $questionId = null;
+                }
 
-        if (array_key_exists('questionId', $arrParams)  &&
-                !empty($arrParams['questionId'])) {
-            $questionId = ( int ) $arrParams['questionId'];
+                $objQuestion -> setText( $strQuestionText );
+                $objQuestion -> setTestId( $testId );
+                $objQuestion -> setSortIndex( $intMaxSortIndex + 1 );
+                if ( array_key_exists( 'answer', $arrParams ) ) {
+                    $intAnswerAmount = sizeof( $arrParams['answer'] );
+                    $objQuestion -> setAnswerAmount( $intAnswerAmount);
+                }
 
-            // �������� �� ���� ������ � ������������� �������
-            $objQuestions = new Questions();
-            $objQuestion = $objQuestions->getQuestionById( $questionId );
-            $arrAnswer = $objQuestions ->
-                getAnswerListByQuestionId( $questionId );
-            $smarty -> assign ( 'arrAnswer', $arrAnswer);
+                    $objQuestion -> save();
+                    if (array_key_exists( 'answer', $arrParams)  &&
+                            !empty( $arrParams['answer'] ) ) {
+                        $objQuestions -> saveAnswerList($questionId,
+                            $arrParams['answer'] );
+                    }
 
-            $smarty -> assign ( 'objQuestion', $objQuestion);
-        }
-        $smarty -> display('question_edit.tpl');
-    }
 
-    public function updateAction()
-    {
-        $arrParams = $this->getRequest()->getParams();
-        try {
-            if (array_key_exists('testId', $arrParams)  &&
-                    !empty($arrParams['testId'])) {
-                $testId = ( int) $arrParams['testId'];
+                $this->_helper->redirector ( 'edit', 'test', null,
+                    array( 'testId' => $testId ) );
             } else {
-                throw new Exception ( '[LS_REQUIRED_PARAM_FAILED]' );
+                $arrParams = $this->getRequest() -> getParams();
+                $testId = $objForm -> testId -> getValue();
+                if ($testId != '') {
+                    // выбираем из базы данные о редактируемом тесте
+                    $objTests = new Tests ( );
+                    $objTest = $objTests->getTestById( $testId );
+                    $this -> view -> objTest = $objTest;
+                }
+
+                $arrAnswer = array();
+                if (array_key_exists('questionId', $arrParams)  &&
+                        !empty($arrParams['questionId'])) {
+                    $questionId = ( int ) $arrParams['questionId'];
+
+                    // выбираем из базы данные о редактируемом вопросе
+                    $objQuestions = new Questions();
+                    $objQuestion = $objQuestions -> getQuestionById( $questionId );
+                    $arrAnswer = $objQuestions ->
+                        getAnswerListByQuestionId( $questionId );
+                }
+                $objForm -> addAnswersSubForm( $arrAnswer );
+                // @todo: пререформатировать массив answer, полученный через POST для функции addAnswersSubForm()
             }
-
-            if (array_key_exists('questionText', $arrParams)  &&
-                    !empty($arrParams['questionText'])) {
-                $strQuestionText =
-                        strip_tags( trim( $arrParams['questionText'] ) );
-            } else {
-                throw new Exception ( '[LS_REQUIRED_PARAM_FAILED]' );
-            }
-
-            $objQuestions = new Questions ();
-            $query = 'SELECT max(tq_sort_index) from mg_test_question';
-            $intMaxSortIndex = $objQuestions -> getAdapter() ->
-                fetchOne( $query );
-
-            if (array_key_exists('questionId', $arrParams) &&
+        } else {
+            $arrParams = $this->getRequest() -> getParams();
+            $testId = $this -> getRequest() -> getParam('testId');
+            $arrAnswer = array();
+            if (array_key_exists('questionId', $arrParams)  &&
                     !empty($arrParams['questionId'])) {
                 $questionId = ( int ) $arrParams['questionId'];
+
+                // выбираем из базы данные о редактируемом вопросе
+                $objQuestions = new Questions();
                 $objQuestion = $objQuestions -> getQuestionById( $questionId );
-            } else {
-                $objQuestion = $objQuestions -> createRow();
-                $questionId = null;
+                $arrAnswer = $objQuestions ->
+                    getAnswerListByQuestionId( $questionId );
+                $objForm -> populate(
+                    array( 'questionText'       => $objQuestion -> tq_text,
+                           'questionId'         => $objQuestion -> tq_id,
+                           'testId'             => $testId));
             }
+            $objForm -> addAnswersSubForm( $arrAnswer );
+            if ($testId != '') {
+                // выбираем из базы данные о редактируемом тесте
+                $objTests = new Tests ( );
+                $objTest = $objTests->getTestById( $testId );
 
-            $objQuestion -> setText( $strQuestionText );
-            $objQuestion -> setTestId( $testId );
-            $objQuestion -> setSortIndex( $intMaxSortIndex + 1 );
-            if (array_key_exists('answer', $arrParams) ) {
-                $intAnswerAmount = sizeof( $arrParams['answer'] );
-                $objQuestion -> setAnswerAmount( $intAnswerAmount);
+                $this -> view -> objTest = $objTest;
+                $objForm -> populate( array( 'testId' => $testId));
             }
-
-            $objQuestion -> save();
-            if (array_key_exists('answer', $arrParams)  &&
-                    !empty($arrParams['answer'])) {
-                $objQuestions -> saveAnswerList($questionId,
-                    $arrParams['answer']);
-            }
-
-        } catch ( Exception $e ){ print $e -> getMessage(); }
-
-        $this->_helper->redirector ( 'edit', 'test', null,
-            array( 'testId' => $testId ) );
+        }
+        $this -> view -> objForm = $objForm;
     }
 
+    /**
+     * Удаление вопроса
+     * @return void
+     */
     public function removeAction()
     {
         $objQuestions = new Questions ();
@@ -135,6 +151,10 @@ class QuestionController extends Controller_Action_Abstract
         }
     }
 
+    /**
+     * Уменьшение индекса сортировка для вопроса (перемещение вверх в списке)
+     * @return void
+     */
     public function upAction()
     {
         $arrParams = $this->getRequest()->getParams();
@@ -159,6 +179,10 @@ class QuestionController extends Controller_Action_Abstract
         }
     }
 
+    /**
+     * Увеличение индекса сортировка для вопроса (перемещение вниз в списке)
+     * @return void
+     */
     public function downAction()
     {
         $arrParams = $this->getRequest()->getParams();

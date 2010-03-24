@@ -1,0 +1,53 @@
+<?php
+/**
+ * Edit Question page view
+ *
+ * Страница добавление/ редактирования вопросов к тесту системы тестирования
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+$this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
+?>
+<script type="text/javascript" language="javascript">
+<!--
+//<![CDATA[
+function addAnswer(num)
+{
+        num = num + 1;
+        var objHasNew = document.getElementById('hasNew');
+        if (0 == objHasNew.value) {
+            objHasNew.value = 1;
+            var newAnswer = document.getElementById('answerTable').innerHTML + '<div><textarea name="answer[' + num + '][text]" rows="3" cols="50"></textarea>' +
+                '<input type="checkbox" name="answer[' + num + '][flag]" /></div><div id="answer_block_' + (num + 1) + '"></div>';
+            var objElementToChange = document.getElementById('answerTable');
+        } else {
+            var newAnswer = '<div><textarea name="answer[' + num + '][text]" rows="3" cols="50"></textarea>' +
+                '<input type="checkbox" name="answer[' + num + '][flag]" /></div><div id="answer_block_' + (num + 1) + '"></div>';
+            var objElementToChange = document.getElementById('answer_block_' + (num));
+        }
+
+
+
+        objElementToChange.innerHTML = newAnswer;
+        document.getElementById("addAnswerButton").innerHTML = '<button type="button" onclick="addAnswer(' + num + '); return true;">Добавить</button>';
+}
+//]]>
+-->
+</script>
+
+<div id="main">
+   <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+   <ul class="menu" style="float:right">
+       <li style="display:inline"><a href="/index.php">Главная</a></li>
+       <li style="display:inline"><a href="/index.php/test">Тесты</a></li>
+       <li style="display:inline"><a href="/index.php/category">Категории тестов</a></li>
+   </ul>
+   <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+   <h1 class="title" style="display:inline; border:0">Вопросы : добавление/редактирование (тест № <?php echo $this-> objTest -> t_id; ?>, '<?php echo $this -> escape( $this -> objTest -> t_name); ?>'
+       <a href="<?php echo $this -> url ( array ( 'controller' => 'test', 'action' => 'edit', 'testId' => $this -> objTest -> t_id ) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a> )
+   </h1>
+   <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+       <?php echo $this -> objForm; ?>
+       <input type="hidden" id="hasNew" value="0" />
+   </div>

@@ -6,142 +6,135 @@
 
 
 /**
- * Êîíòðîëëåð òåñòîâ
+ * ÐšÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð»ÐµÑ€ Ñ‚ÐµÑÑ‚Ð¾Ð²
  *
- * Îáåñïå÷èâàåò ðàáîòó ñ òåñòàìè
+ * ÐžÐ±ÐµÑÐ¿ÐµÑ‡Ð¸Ð²Ð°ÐµÑ‚ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ñ Ñ‚ÐµÑÑ‚Ð°Ð¼Ð¸
  * @package zfhrtool
  * @subpackage Controller
  */
-
 class TestController extends Controller_Action_Abstract
 {
 
     /**
-     * Èíèöèàëèçàöèÿ êîíòðîëëåðà
+     * Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð»ÐµÑ€Ð°
      * @return void
      */
     public function init()
     {
         parent::init();
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();
-//        Zend_Controller_Action_HelperBroker::removeHelper('viewRenderer');
     }
 
+    /**
+     * Ð¡Ð¿Ð¸ÑÐ¾Ðº Ñ‚ÐµÑÑ‚Ð¾Ð² (Ð³Ð»Ð°Ð²Ð½Ð°Ñ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°)
+     * @return void
+     */
     public function indexAction()
     {
-        $arrParams = $this->getRequest()->getParams();
-        if ( array_key_exists( "categoryId", $arrParams ) ) {
-            $categoryId = ( int ) $arrParams["categoryId"];
-        } else {
-            $categoryId = -1;
-        }
-
-        if ( array_key_exists( "strTestFilter", $arrParams ) &&
-                !empty( $arrParams["strTestFilter"] ) ) {
-            $strTestFilter = strip_tags( trim( $arrParams["strTestFilter"] ) );
-        } else {
-            $strTestFilter = null;
-        }
-
-        $smarty = Zend_Registry::get('smarty');
-
+        $objFilterForm = new Form_Test_Filter();
         $objCategories = new Categories ();
         $arrCategory = $objCategories -> getCategoryList();
+        $objFilterForm -> setFilterSelectOptions( $arrCategory );
+
+        if ($this->getRequest ()->isPost ()) {
+               $arrParams = $this -> _request -> getPost();
+               $categoryId = ( int ) $arrParams['categoryId'];
+               $strTestFilter = !empty( $arrParams['strTestFilter'] )?
+                    strip_tags( trim ( $arrParams['strTestFilter'] ) ) : null;
+               $objFilterForm -> populate( $arrParams );
+        } else {
+            $categoryId = -1;
+            $strTestFilter = null;
+        }
 
         $objTests = new Tests();
         $arrTest = $objTests ->
             getTestListByCategoryId($categoryId, $strTestFilter);
 
-        $smarty -> assign('categoryId', $categoryId);
-        $smarty -> assign('arrCategory', $arrCategory);
-        $smarty -> assign('arrTest', $arrTest);
-        $smarty -> display('test_cat.tpl');
+        $this -> view -> arrTest = $arrTest;
+        $this -> view -> objFilterForm = $objFilterForm; 
     }
 
+    /**
+     * Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ/Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ñ‚ÐµÑÑ‚Ð°
+     * @return void
+     */
     public function editAction()
     {
-        $smarty = Zend_Registry::get('smarty');
-        $testId = $this->getRequest()->getParam('testId');
-        if ($testId != '')
-        {
-            // âûáèðàåì èç áàçû äàííûå î ðåäàêòèðóåìîì òåñòå
-            $objTests = new Tests ( );
-            $objTest = $objTests->getTestById( $testId );
-
-            if ($objTest) {
-                $arrQuestion = $objTests -> getQuestionListByTestId( $testId );
-
-                $smarty -> assign( 'objTest', $objTest);
-                $smarty -> assign( 'arrQuestion', $arrQuestion);
-                $smarty -> assign( 'intQuestionAmount',
-                    sizeof( $arrQuestion ) );
-            }
-
-
-        }
+        $objForm = new Form_Test_Edit();
         $objCategories = new Categories ();
         $arrCategory = $objCategories -> getCategoryList();
+        $objForm -> setSelectOptions( $arrCategory );
 
-        $smarty -> assign('arrCategory', $arrCategory);
-        $smarty -> display('test_edit.tpl');
-    }
+        if ($this->getRequest ()->isPost ()){
+            if ( $objForm->isValid ( $_POST )) {
+                // Ð’Ñ‹Ð¿Ð¾Ð»Ð½ÑÐµÐ¼ update (insert/update Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¾ ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¸)
+                $objTests = new Tests ();
 
-    public function updateAction()
-    {
-        $objTests = new Tests ();
+                $testId = $objForm -> testId -> getValue();
+                if ( !empty($testId)) {
+                    $objTest = $objTests -> getTestById( $testId );
+                } else {
+                    $testId = null;
+                    $objTest = $objTests -> createRow();
+                }
 
-        $arrParams = $this->getRequest()->getParams();
-        try {
-            if (array_key_exists('testId', $arrParams) &&
-                    !empty($arrParams['testId'])) {
-                $testId = ( int ) $arrParams['testId'];
-                $objTest = $objTests -> getTestById( $testId );
-            } else {
-                $testId = null;
-                $objTest = $objTests -> createRow();
+                $testName = $objForm -> testName -> getValue();
+                    $objTest->setName ( $testName );
+                $objTest->setCategoryId (
+                    ( int ) $objForm -> categoryId -> getValue() );
+                $objTest->setQuestionAmount (
+                    ( int ) $objForm -> testQuestionAmount -> getValue() );
+                $objTest -> save();
+
+                if ( 'questionAdd' == $objForm -> formAction -> getValue() ) {
+                    if (!$testId) {
+                        $testId = $objTests -> getAdapter()-> lastInsertId();
+                    }
+                    $this->_helper -> redirector ( 'edit', 'question', null,
+                        array( 'testId' => $testId ) );
+                } else {
+                    $this->_helper->redirector ( 'index', 'test' );
+                }
             }
-
-            if (array_key_exists('testName', $arrParams)  &&
-                    !empty($arrParams['testName'])) {
-                $objTest->setName (
-                    strip_tags( trim( $arrParams['testName'] ) ) );
-            } else {
-                throw new Exception ( '[LS_REQUIRED_PARAM_FAILED]' );
-            }
-            $objTest->setCategoryId (
-                ( int ) $arrParams['categoryId'] );
-            $objTest->setQuestionAmount (
-                ( int ) $arrParams['testQuestionAmount'] );
-            $objTest -> save();
-
-        } catch ( Exception $e ){ print $e -> getMessage(); }
-
-        if ( 'questionAdd' == $arrParams[ 'formAction' ] ) {
-            if (!$testId) {
-                $testId = $objTests -> getAdapter()-> lastInsertId();
-            }
-
-            $this->_helper -> redirector ( 'edit', 'question', null,
-                array( 'testId' => $testId ) );
         } else {
-            $this->_helper->redirector ( 'index', 'test' );
+            $testId = $this->getRequest()->getParam('testId');
+            if ($testId != '')
+            {
+                // Ð²Ñ‹Ð±Ð¸Ñ€Ð°ÐµÐ¼ Ð¸Ð· Ð±Ð°Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾ Ñ€ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€ÑƒÐµÐ¼Ð¾Ð¼ Ñ‚ÐµÑÑ‚Ðµ
+                $objTests = new Tests ( );
+                $objTest = $objTests->getTestById( $testId );
+
+                if ($objTest) {
+                    $arrQuestion = $objTests -> getQuestionListByTestId( $testId );
+
+                    $this -> view -> arrQuestion = $arrQuestion;
+                    $this -> view -> testId = $testId;
+                    $objForm -> populate(
+                        array( 'testName'           => $objTest -> t_name,
+                               'categoryId'         => $objTest -> cat_id,
+                               'testQuestionAmount' => sizeof( $arrQuestion ),
+                                'testId'            => $objTest -> t_id));
+                }
+            }
         }
+        $this -> view -> objForm = $objForm;
     }
 
+    /**
+     * Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ  Ñ‚ÐµÑÑ‚Ð°
+     * @return void
+     */
     public function removeAction()
     {
         $objTests = new Tests ();
 
         $arrParams = $this->getRequest()->getParams();
 
-        try {
         if (array_key_exists('testId', $arrParams) &&
                 !empty($arrParams['testId'])) {
             $objTests -> removeTestById( ( int ) $arrParams['testId']);
         }
-        } catch ( Exception $e ){ print $e -> getMessage(); }
 
-        $this->_helper->redirector ( 'index', 'test' );
+        $this->_forward ( 'index', 'test' );
     }
 }
