@@ -6,7 +6,7 @@
 
 
 /**
- * ����
+ * Тест ( строка таблицы )
  *
  * @package zfhrtool
  * @subpackage Model
