@@ -5,7 +5,7 @@
  */
 
 /**
- * Òàáëèöà êàòåãîðèé
+ * Ð¢Ð°Ð±Ð»Ð¸Ñ†Ð° ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¹
  *
  * @package zfhrtool
  * @subpackage Model
@@ -13,7 +13,7 @@
 class Categories extends Zht_Db_Table
 {
     /**
-     * Èìÿ òàáëèöû
+     * Ð˜Ð¼Ñ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹
      * @var string
      */
     protected $_name = 'mg_category';
@@ -41,6 +41,11 @@ class Categories extends Zht_Db_Table
         return $objCategory;
     }
 
+    /**
+     * Get Category List (array)
+     *
+     * @return Category | boolean
+     */
     public function getCategoryList()
     {
         $arrCategory = $this -> getAdapter()->
@@ -52,6 +57,12 @@ class Categories extends Zht_Db_Table
         return $arrCategory;
     }
 
+    /**
+     * Remove Category By Id
+     *
+     * @param string $categoryId
+     * @return boolean
+     */
     public function removeCategoryById($categoryId)
     {
         $query = "SELECT count(t_id) from mg_test "

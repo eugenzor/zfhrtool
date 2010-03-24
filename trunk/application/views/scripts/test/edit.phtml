@@ -1,0 +1,68 @@
+<?php
+/**
+ * Edit Test page view
+ *
+ * Страница добавление/ редактирования тестов системы тестирования
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+$this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
+?>
+<script type="text/javascript" language="javascript">
+<!--
+//<![CDATA[
+	function SetAction(action)
+	{
+
+		var form = document.getElementById('questionForm');
+		form.formAction.value = action;
+		return true;
+	}
+//]]>
+-->
+</script>
+
+<div id="main">
+    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+    <ul class="menu" style="float:right">
+        <li style="display:inline"><a href="/index.php">Главная</a></li>
+        <li style="display:inline"><a href="/index.php/test">Тесты</a></li>
+        <li style="display:inline"><a href="/index.php/category">Категории тестов</a></li>
+        <li style="display:inline"><a href="/index.php/question/edit/testId/<?php echo $this -> testId; ?>">Добавить вопрос</a></li>
+    </ul>
+    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+	<h1 class="title" style="display:inline; border:0">Тесты : добавление/редактирование</h1>
+    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+        <?php echo $this -> objForm; ?>
+
+        Список вопросов теста :
+        <table width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="head">
+                <td>№</td>
+                <td>Текст вопроса</td>
+                <td>к-во вариантов ответов</td>
+                <td class="action">Действия</td>
+            </tr>
+<?php $i = 1; if (!empty($this -> arrQuestion)): ?>
+    <?php foreach ($this -> arrQuestion as $question): ?>
+            <tr class="item_row">
+                <td><?php echo $this->escape( $question['tq_sort_index'] ); ?></td>
+                <td><?php echo $this->escape( $question['tq_text'] ); ?></td>
+                <td><?php echo $this->escape( $question['tq_answer_amount'] ); ?></td>
+                <td class="action">
+                    <a href="<?php echo $this -> url ( array ( 'controller' => 'question', 'action' => 'edit', 'testId' => $this -> testId, 'questionId' => $question['tq_id'] ) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a><br />
+                    <a href="<?php echo $this -> url ( array ( 'controller' => 'question', 'action' => 'remove', 'testId' => $this -> testId, 'questionId' => $question['tq_id'] ) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $test['t_name'] ); ?>\'');"><?php echo $this->translate('[LS_LINK_REMOVE]'); ?></a><br />
+                    <?php if ( $i > 1 ): ?><a href="<?php echo $this -> url ( array ( 'controller' => 'question', 'action' => 'up', 'testId' => $this-> testId, 'questionId' => $question['tq_id'] ) ); ?>"><?php echo $this->translate('[LS_LINK_UP]'); ?></a><br /><?php endif;?>
+                    <?php if ( $i < sizeof( $this -> arrQuestion ) ): ?><a href="<?php echo $this -> url ( array ( 'controller' => 'question', 'action' => 'down', 'testId' => $this -> testId, 'questionId' => $question['tq_id'] ) ); ?>"><?php echo $this->translate('[LS_LINK_DOWN]'); ?></a><br /><?php endif;?>
+                </td>
+            </tr>
+    <?php $i++; endforeach; ?>
+<?php else: ?>
+            <tr class="item_row">
+                <td></td>
+                <td colspan="5">нет вопросов</td>
+            </tr>
+<?php endif;?>
+        </table>
+</div>

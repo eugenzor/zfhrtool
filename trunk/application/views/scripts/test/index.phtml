@@ -1,0 +1,63 @@
+<?php
+/**
+ * Index Test page view
+ *
+ * Страница тестов системы тестирования
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+$this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
+?>
+
+<div id="main">
+    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+    <ul class="menu" style="float:right">
+        <li style="display:inline"><a href="/index.php">Главная</a></li>
+        <li style="display:inline"><a href="/index.php/category">Редактор категорий</a></li>
+        <li style="display:inline"><a href="/index.php/test/edit">Добавить тест</a></li>
+    </ul>
+    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+	<h1 class="title" style="display:inline; border:0">Тесты : </h1>
+    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+    <div id="filter-form">
+        <?php echo $this -> objFilterForm; ?>
+    </div>
+	<!-- Таблица тестов -->
+	<table width="100%" border="1" cellpadding="0" cellspacing="0" id="tableTest" class="tablesorter">
+    <thead>
+		<tr>
+			<th>№</th>
+			<th>Дата создания</th>
+			<th>Название</th>
+			<th>Категория</th>
+			<th>к-во вопросов</th>
+			<th>Действия</th>
+		</tr>
+    </thead>
+    <tbody>
+
+    <?php if (!empty($this -> arrTest)): ?>
+        <?php foreach ($this -> arrTest as $test): ?>
+        <tr>
+			<td><?php echo $this->escape( $test['t_id'] ); ?></td>
+			<td><?php echo $this->escape( $test['t_date'] ); ?></td>
+			<td><?php echo $this->escape( $test['t_name'] ); ?></td>
+			<td><?php echo $this->escape( $test['cat_name'] ); ?></td>
+			<td><?php echo $this->escape( $test['t_quest_amount'] ); ?></td>
+			<td>
+				<a href="<?php echo $this -> url ( array ( 'controller' => 'test', 'action' => 'edit', 'testId' => $test['t_id']) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a><br />
+				<a href="<?php echo $this -> url ( array ( 'controller' => 'test', 'action' => 'remove', 'testId' => $test['t_id']) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $test['t_name'] ); ?>\'');"><?php echo $this->translate('[LS_LINK_REMOVE]'); ?></a><br />
+			</td>
+		</tr>
+	    <?php endforeach; ?>
+    <?php else: ?>
+    	<tr>
+			<td></td>
+			<td colspan="5">нет тестов</td>
+		</tr>
+    <?php endif;?>
+	</tbody>
+	</table>
+	<!-- End of Таблица тестов-->
+</div>

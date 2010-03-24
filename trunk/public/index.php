@@ -8,9 +8,11 @@ defined('APPLICATION_PATH')
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
+/*
 // Define path to smarty library directory
 defined('SMARTY_DIR')
     || define('SMARTY_DIR', APPLICATION_PATH . '/../library/smarty/');
+*/
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
@@ -22,7 +24,8 @@ require_once "Zend/Loader/Autoloader.php";
 Zend_Loader_Autoloader::getInstance()->registerNamespace('Zht_')
     ->pushAutoloader(new Zht_Loader(APPLICATION_PATH . '/models'));
 
-/** Инициализируем Smarty шаблонизатор */
+/** Инициализируем Smarty шаблонизатор *//*
+
 //print "smarty_dir = ".SMARTY_DIR;
 require_once SMARTY_DIR . 'Smarty.class.php';
 $Smarty = new Smarty();
@@ -36,8 +39,11 @@ $Smarty -> compile_dir      = APPLICATION_PATH . '/sviews/templates_c';
 $Smarty -> plugins_dir      = array(
                               SMARTY_DIR . 'plugins', 'resources/
 plugins');
-/** Добавляем в реестр Smarty */
+*/
+/** Добавляем в реестр Smarty *//*
+
 Zend_Registry::set('smarty', $Smarty);
+*/
 
 // Create application, bootstrap, and run
 $application = new Zht_Application(
