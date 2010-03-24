@@ -5,7 +5,7 @@
  */
 
 /**
- * Форма регистрации пользователя
+ * 
  *
  * @package zfhrtool
  * @subpackage Model
@@ -37,5 +37,17 @@ class Acl extends Zend_Acl
 
 
         $this->allow ( 'administrator' );
+
+        // Систма тестов (для юзера с правами manager-a)
+        $this -> addRole( new Zend_Acl_Role( 'manager' ), 'staff' );
+
+        $this -> add( new Zend_Acl_Resource( 'test' ));
+        $this -> add( new Zend_Acl_Resource( 'category' ));
+        $this -> add( new Zend_Acl_Resource( 'question' ));
+        $this -> allow( 'manager' , 'test', array( 'view', 'edit', 'remove' ));
+        $this -> allow( 'manager' , 'category',
+            array( 'view', 'edit', 'remove' ));
+        $this -> allow( 'manager' , 'question',
+            array( 'edit', 'remove', 'up', 'down' ));
     }
 }
