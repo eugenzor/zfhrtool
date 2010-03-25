@@ -38,15 +38,17 @@ class QuestionController extends Controller_Action_Abstract
                     // Выполняем update (insert/update данных о вопросе)
                     $arrParams = $this->getRequest()->getParams();
     //                print_r($arrParams);
-                    $testId = (int) $objForm -> testId -> getValue();
+                    $testId = $objForm -> testId -> getValue();
                     $strQuestionText = $objForm -> questionText -> getValue();
 
                     $objQuestions = new Questions ();
-                    $intMaxSortIndex = $objQuestions -> getMaxSortIndex();
+                    $intMaxSortIndex =
+                            $objQuestions -> getMaxSortIndex( $testId );
 
                     $questionId = $objForm -> questionId -> getValue();
                     if ( !empty( $questionId)) {
-                        $objQuestion = $objQuestions -> getQuestionById( $questionId );
+                        $objQuestion = $objQuestions ->
+                            getQuestionById( $questionId );
                     } else {
                         $objQuestion = $objQuestions -> createRow();
                         $questionId = null;
@@ -55,18 +57,15 @@ class QuestionController extends Controller_Action_Abstract
                     $objQuestion -> setText( $strQuestionText );
                     $objQuestion -> setTestId( $testId );
                     $objQuestion -> setSortIndex( $intMaxSortIndex + 1 );
-                    if ( array_key_exists( 'answer', $arrParams ) ) {
-                        $intAnswerAmount = sizeof( $arrParams['answer'] );
+
+                    if (array_key_exists( 'answer', $arrParams)  &&
+                            !empty( $arrParams['answer'] ) ) {
+                        $intAnswerAmount =
+                            $objQuestions -> saveAnswerList($questionId,
+                            $arrParams['answer'] );
                         $objQuestion -> setAnswerAmount( $intAnswerAmount);
                     }
-
-                        $objQuestion -> save();
-                        if (array_key_exists( 'answer', $arrParams)  &&
-                                !empty( $arrParams['answer'] ) ) {
-                            $objQuestions -> saveAnswerList($questionId,
-                                $arrParams['answer'] );
-                        }
-
+                    $objQuestion -> save();
 
                     $this->_helper->redirector ( 'edit', 'test', null,
                         array( 'testId' => $testId ) );

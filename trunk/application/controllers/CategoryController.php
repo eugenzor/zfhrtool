@@ -56,7 +56,7 @@ class CategoryController extends Controller_Action_Abstract
                     $categoryId = $form -> categoryId -> getValue();
                     if ( !empty($categoryId)) {
                             $objCategory = $objCategories ->
-                            getCategoryById( ( int ) $categoryId );
+                            getCategoryById( $categoryId );
                         } else {
                             $objCategory = $objCategories -> createRow();
                         }
