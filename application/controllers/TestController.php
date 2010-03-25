@@ -84,9 +84,9 @@ class TestController extends Controller_Action_Abstract
                     $testName = $objForm -> testName -> getValue();
                         $objTest->setName ( $testName );
                     $objTest->setCategoryId (
-                        ( int ) $objForm -> categoryId -> getValue() );
+                        $objForm -> categoryId -> getValue() );
                     $objTest->setQuestionAmount (
-                        ( int ) $objForm -> testQuestionAmount -> getValue() );
+                        $objForm -> testQuestionAmount -> getValue() );
                     $objTest -> save();
 
                     if ( 'questionAdd' == $objForm -> formAction -> getValue() ) {
@@ -108,7 +108,8 @@ class TestController extends Controller_Action_Abstract
                     $objTest = $objTests->getTestById( $testId );
 
                     if ($objTest) {
-                        $arrQuestion = $objTests -> getQuestionListByTestId( $testId );
+                        $arrQuestion = $objTests ->
+                            getQuestionListByTestId( $testId );
 
                         $this -> view -> arrQuestion = $arrQuestion;
                         $this -> view -> testId = $testId;

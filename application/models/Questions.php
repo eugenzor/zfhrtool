@@ -25,10 +25,16 @@ class Questions extends Zht_Db_Table
     protected $_rowClass = 'Question';
 
     /**
+     * Первичный ключ
+     * @var string
+     */
+    protected $_primary = 'tq_id';
+
+    /**
      * Get Question By questionId
      *
-     * @param string $questionId
-     * @return Question | boolean
+     * @param int $questionId
+     * @return array $objQuestion | bool
      */
     public function getQuestionById($questionId)
     {
@@ -44,16 +50,13 @@ class Questions extends Zht_Db_Table
     /**
      * Get array of Answrs By questionId
      *
-     * @param string $questionId
-     * @return arrAnswer | array
+     * @param int $questionId
+     * @return array arrAnswer | bool  массив вариантов ответов
      */
     public function getAnswerListByQuestionId($questionId)
     {
-        $query = "SELECT * FROM mg_test_question_answer "
-               . "WHERE mg_test_question_answer.tq_id = $questionId";
-
-        $arrAnswer = $this -> getAdapter()-> fetchAll($query);
-
+        $objAnswers = new Answers();
+        $arrAnswer = $objAnswers -> getAnswerListByQuestionId( $questionId );
         if (is_null ( $arrAnswer )) {
             return false;
         }
@@ -63,32 +66,23 @@ class Questions extends Zht_Db_Table
     /**
      * Save array of Answers
      *
-     * @param array arrAnswer
-     * @return arrAnswer | array
+     * @param int $questionId
+     * @param array $arrAnswer массив вариантов ответов
+     * @return int $intAddedAnswerAmount количество внесенных в БД ответов
      */
     public function saveAnswerList( $questionId, array $arrAnswer = array() )
     {
-        if (!$questionId) {
-            $questionId =$this -> getAdapter()-> lastInsertId(); 
-        }
-        // Удаляем ответы для текущего вопроса
-        $this -> getAdapter()-> delete('mg_test_question_answer',
-            'tq_id = '.$questionId);
-        foreach ($arrAnswer as $arrAnswerItem) {
-            $data = array(
-                    'tqa_text'      =>  $arrAnswerItem['text'],
-                    'tqa_flag'      =>  $arrAnswerItem['flag']?1:0,
-                    'tq_id'         =>  $questionId
-            );
-            $this -> getAdapter()-> insert('mg_test_question_answer', $data );
-        }
-        return true;
+        $objAnswer = new Answers();
+        $intAddedAnswerAmount = $objAnswer ->
+            saveAnswerList( $questionId, $arrAnswer );
+        return $intAddedAnswerAmount;
     }
 
     /**
      * Removes Question By QuestionId
      *
      * @param string $questionId
+     * @return $intMaxSortIndex
      */
     public function removeQuestionById($questionId)
     {
@@ -96,8 +90,8 @@ class Questions extends Zht_Db_Table
         $intSortIndex = $objQuestion -> getSortIndex();
 
         // Удаляем ответы для текущего вопроса
-        $this -> getAdapter()-> delete('mg_test_question_answer',
-            'tq_id = '.$questionId);
+        $objAnswers = new Answers();
+        $objAnswers -> removeAnswersByQuestionId( $questionId );
 
         // Удаляем данные о вопросе из БД
         $where = array (
@@ -105,9 +99,11 @@ class Questions extends Zht_Db_Table
         $this -> delete( $where );
 
         // Обновляем порядок сортировки
-        $data = array('tq_sort_index' => new Zend_Db_Expr('tq_sort_index - 1'));
-        $this -> getAdapter() ->
-            update('mg_test_question', $data, "tq_sort_index > $intSortIndex");
+        $data = array(
+            'tq_sort_index' => new Zend_Db_Expr( 'tq_sort_index - 1' ) );
+        $where = $this -> getAdapter() ->
+            quoteInto('tq_sort_index > ?', $intSortIndex );
+        $this -> update( $data, $where );
 
     }
 
@@ -115,6 +111,7 @@ class Questions extends Zht_Db_Table
      * Moves Question Up (in sort order)
      *
      * @param string $questionId
+     * @return $intMaxSortIndex
      */
     public function moveQuestionUp($questionId)
     {
@@ -125,54 +122,128 @@ class Questions extends Zht_Db_Table
             $intNewSortIndex  = $intSortIndex - 1;
 
             // Обновляем инднекс сортировки предыдущего елемента
-            $data = array('tq_sort_index' => $intSortIndex);
-            $this -> getAdapter() -> update('mg_test_question', $data,
-                "tq_sort_index  = $intNewSortIndex" );
+            $data = array( 'tq_sort_index' => $intSortIndex );
+            $where = $this -> getAdapter() ->
+                quoteInto( 'tq_sort_index  = ?', $intNewSortIndex );
+            $this -> update( $data, $where );
 
             // Обновляем инднекс сортировки текущего елемента
-            $data = array('tq_sort_index' => $intSortIndex - 1);
-            $this -> getAdapter() -> update('mg_test_question', $data,
-                'tq_id  = '.$questionId );
+            $data = array( 'tq_sort_index' => $intSortIndex - 1 );
+            $where = $this -> getAdapter() ->
+                quoteInto( 'tq_id  = ?', $questionId );
+            $this -> update( $data, $where );
         }
     }
 
     /**
      * Moves Question Down (in sort order)
      *
-     * @param string $questionId
+     * @param int $questionId
+     * @return void
      */
     public function moveQuestionDown($questionId)
     {
         $objQuestion = $this -> getQuestionById( $questionId );
-        $query = 'SELECT max(tq_sort_index) from mg_test_question';
-        $intMaxSortIndex = $this -> getAdapter() -> fetchOne( $query );
+        $testId = $objQuestion -> t_id;
         $intSortIndex = $objQuestion -> getSortIndex();
+
+//        $query = 'SELECT max(tq_sort_index) from mg_test_question';
+//        $intMaxSortIndex = $this -> getAdapter() -> fetchOne( $query );
+        $intMaxSortIndex = $this -> getMaxSortIndex( $testId );
 
         if ($intSortIndex < $intMaxSortIndex) {
             $intNewSortIndex  = $intSortIndex + 1;
 
             // Обновляем инднекс сортировки следующего елемента
             $data = array('tq_sort_index' => $intSortIndex);
-            $this -> getAdapter() -> update('mg_test_question', $data,
-                "tq_sort_index  = $intNewSortIndex" );
+            $where = $this -> getAdapter() ->
+                quoteInto( 'tq_sort_index  = ?', $intNewSortIndex );
+            $this -> update( $data, $where );
 
             // Обновляем инднекс сортировки текущего елемента
             $data = array('tq_sort_index' => $intSortIndex + 1);
-            $this -> getAdapter() -> update('mg_test_question', $data,
-                'tq_id  = '.$questionId );
+            $where = $this -> getAdapter() ->
+                quoteInto( 'tq_id  = ?', $questionId );
+            $this -> update( $data, $where );
         }
     }
 
     /**
      * Get Maximum sort index
      *
-     * @return $intMaxSortIndex 
+     * @param int $testId
+     * @return $intMaxSortIndex
      */
-    public function getMaxSortIndex()
+    public function getMaxSortIndex( $testId )
     {
-        $query = 'SELECT max(tq_sort_index) from '.$this -> _name;
-        $intMaxSortIndex = $this -> getAdapter() -> fetchOne( $query );
+        $select = $this -> select();
+        $select -> from( $this -> _name, 'max(tq_sort_index) as maxIndex' ) ->
+                   where( 't_id = ?', $testId );
+        $arrResult = $this -> fetchAll( $select ) -> toArray();
+        $intMaxSortIndex = ( int ) $arrResult[0]['maxIndex'];
         return $intMaxSortIndex;
     }
-}
 
+    /**
+     * Удаление вопросов, соответсвующих заданному тесту (по $testId )
+     *
+     * @param int $testId
+     * @return void
+     */
+    public function removeQuestionsByTestId( $testId )
+    {
+        $arrQuestionsId = $this -> _getQuestionIdListByTestId( $testId );
+
+        if ( !empty( $arrQuestionsId ) ) {
+            // Удаляем ответы для вопросов теста
+            $objAnswers = new Answers();
+            $objAnswers -> removeAnswersByQuestionIdList( $arrQuestionsId );
+
+            // Удаляем вопросы теста
+            $where = array ( 'tq_id IN ( ? )' => implode(', ', $arrQuestionsId));
+            $this -> delete ( $where );
+        }
+    }
+    /**
+     * Get array of Questions by TestId
+     *
+     * @param string $testId
+     * @return array $arrQuestion массив вопросов
+     */
+    public function getQuestionListByTestId( $testId )
+    {
+        $select = $this -> select() ->
+                           where( 't_id = ?', $testId) ->
+                           order( 'tq_sort_index' );
+        $arrQuestion =  $this -> fetchAll( $select ) -> toArray();
+
+        if (is_null ( $arrQuestion )) {
+            return false;
+        }
+        return $arrQuestion;
+    }
+
+    /**
+     * Get array of Questions Id by TestId
+     *
+     * @param string $testId
+     * @return array $arrQuestionId массив id вопросов
+     */
+    protected function _getQuestionIdListByTestId($testId)
+    {
+        $select = $this -> select() ->
+                           from ( $this-> _name, 'tq_id' ) ->
+                           where( 't_id = ?', $testId);
+        $arrResult = $this -> fetchAll( $select ) -> toArray();
+        $arrQuestionId = array();
+        foreach ($arrResult as $arrRow)
+        {
+            $arrQuestionId[] = $arrRow['tq_id'];
+        }
+
+        if (is_null ( $arrQuestionId )) {
+            return false;
+        }
+        return $arrQuestionId;
+    }
+}

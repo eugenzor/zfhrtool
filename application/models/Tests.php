@@ -44,25 +44,23 @@ class Tests extends Zht_Db_Table
     /**
      * Get array of Tests By TestId
      *
-     * @param string $testId
-     * @return arrTest | array
+     * @param int $testId
+     * @param string $strTestFilter строка поиска (фильтрации)
+     * @return arrTest | array 
      */
     public function getTestListByCategoryId($categoryId, $strTestFilter = null)
     {
-        if ($categoryId != -1) {
-            $query = "SELECT * FROM $this->_name, mg_category "
-                   . "WHERE {$this->_name}.cat_id = mg_category.cat_id "
-                   . "AND {$this->_name}.cat_id = $categoryId";
-        } else {
-            $query = "SELECT * FROM $this->_name, mg_category "
-                   . "WHERE {$this->_name}.cat_id = mg_category.cat_id";
+        $select = $this -> getAdapter()-> select() -> from($this->_name);
+        if ( -1 != $categoryId ) {
+            $select -> where( 'cat_id = ?', $categoryId );
         }
-
+        $select -> join( 'mg_category', 'mg_category.cat_id = mg_test.cat_id' );
         if ($strTestFilter) {
-            $query .= " AND {$this->_name}.t_name LIKE '%$strTestFilter%'";
+            $select -> where( 't_name LIKE ?', "%$strTestFilter%" );
         }
 
-        $arrTest = $this -> getAdapter()-> fetchAll($query);
+        $stmt = $this -> getAdapter() -> query($select);
+        $arrTest = $stmt -> fetchAll(Zend_Db::FETCH_OBJ);
 
         if (is_null ( $arrTest )) {
             return false;
@@ -73,22 +71,13 @@ class Tests extends Zht_Db_Table
     /**
      * Removes Test By TestId
      *
-     * @param string $testId
-     * @return intResult | bool
+     * @param int $testId
+     * @return void
      */
     public function removeTestById($testId)
     {
-        $arrQuestionsId = $this -> getQuestionIdListByTestId( $testId );
-
-        if ( !empty( $arrQuestionsId ) ) {
-            // Удаляем ответы для вопросов теста
-            $this -> getAdapter()-> delete('mg_test_question_answer',
-                'tq_id IN( ' . implode(', ', $arrQuestionsId) . ' )' );
-
-            // Удаляем вопросы теста
-            $this -> getAdapter()-> delete('mg_test_question',
-                'tq_id IN( ' . implode(', ', $arrQuestionsId) . ' )' );
-        }
+        $objQuestions = new Questions();
+        $objQuestions -> removeQuestionsByTestId( $testId );
 
         // Удаляем информацию о тесте из БД
         $where = array (
@@ -96,31 +85,15 @@ class Tests extends Zht_Db_Table
         $this -> delete( $where );
     }
 
-    public function getQuestionListByTestId($testId)
+    /**
+     * Get array of Questions by TestId
+     *
+     * @param int $testId
+     * @return array $arrQuestion массив вопросов
+     */
+    public function getQuestionListByTestId( $testId )
     {
-        $query = "SELECT * FROM mg_test_question "
-               . "WHERE mg_test_question.t_id = {$testId} "
-               . "ORDER BY mg_test_question.tq_sort_index";
-
-        $arrQuestion = $this -> getAdapter()-> fetchAll($query);
-
-        if (is_null ( $arrQuestion )) {
-            return false;
-        }
-        return $arrQuestion;
-    }
-
-    public function getQuestionIdListByTestId($testId)
-    {
-        $query = "SELECT tq_id FROM mg_test_question "
-               . "WHERE mg_test_question.t_id = ?";
-
-        $arrQuestionId = $this -> getAdapter()->
-            fetchAll($query, $testId, Zend_Db::FETCH_COLUMN);
-
-        if (is_null ( $arrQuestionId )) {
-            return false;
-        }
-        return $arrQuestionId;
+        $objQuestions = new Questions();
+        return $objQuestions -> getQuestionListByTestId( $testId );
     }
 }

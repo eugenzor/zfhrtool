@@ -34,7 +34,7 @@ class Navigation extends Zend_Navigation
         array(
             'label'=>'Тесты',
             'controller'=>'test',
-            'action' => 'index'
+            'action' => 'index',
         ),
         array(
             'label'=>"Выйти",
