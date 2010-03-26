@@ -110,7 +110,7 @@ class CategoryController extends Controller_Action_Abstract
                 $objCategories -> removeCategoryById($arrParams['categoryId']);
             }
 
-            $this->_helper->redirector ( 'index', 'category' );
+            $this->_forward ( 'index', 'category' );
         }
     }
 }

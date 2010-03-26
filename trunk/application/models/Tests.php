@@ -50,9 +50,9 @@ class Tests extends Zht_Db_Table
      */
     public function getTestListByCategoryId($categoryId, $strTestFilter = null)
     {
-        $select = $this -> getAdapter()-> select() -> from($this->_name);
+        $select = $this -> getAdapter()-> select() -> from( $this->_name );
         if ( -1 != $categoryId ) {
-            $select -> where( 'cat_id = ?', $categoryId );
+            $select -> where( 'mg_test.cat_id = ?', $categoryId );
         }
         $select -> join( 'mg_category', 'mg_category.cat_id = mg_test.cat_id' );
         if ($strTestFilter) {

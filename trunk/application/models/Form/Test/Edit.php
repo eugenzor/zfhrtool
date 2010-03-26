@@ -28,7 +28,6 @@ class Form_Test_Edit extends Zend_Form
         $testName = $this->createElement ( 'text', 'testName' );
         $testName -> setLabel ( '[LS_FORM_FILTER_TEXT_LABEL]' );
         $testName -> setRequired ( true );
-        $testName -> setErrorMessages ( array ( '' ) );
         $testName -> addDecorator('Errors');
         $testName -> addFilters(array('StringTrim', 'HtmlEntities'));
         $this -> addElement ( $testName );
