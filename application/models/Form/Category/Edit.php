@@ -28,9 +28,6 @@ class Form_Category_Edit extends Zend_Form
         $nameText = $this->createElement ( 'text', 'categoryName' );
         $nameText -> setLabel ( 'Название категории :' );
         $nameText -> setRequired ( true );
-        $nameText -> setErrorMessages ( array ( '' ) );
-        $nameText -> setErrorMessages ( array (
-                '' ) );
         $nameText -> addDecorator('Errors');
         $nameText -> addFilters(array('StringTrim', 'HtmlEntities'));
         $this -> addElement ( $nameText );

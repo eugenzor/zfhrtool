@@ -98,6 +98,22 @@ class TestController extends Controller_Action_Abstract
                     } else {
                         $this->_helper->redirector ( 'index', 'test' );
                     }
+                } else {
+                    $testId = $this->getRequest()->getParam('testId');
+                    if ($testId != '')
+                    {
+                        // выбираем из базы данные о редактируемом тесте
+                        $objTests = new Tests ( );
+                        $objTest = $objTests->getTestById( $testId );
+
+                        if ($objTest) {
+                            $arrQuestion = $objTests ->
+                                getQuestionListByTestId( $testId );
+
+                            $this -> view -> arrQuestion = $arrQuestion;
+//                            $this -> view -> testId = $testId;
+                        }
+                    }
                 }
             } else {
                 $testId = $this->getRequest()->getParam('testId');
@@ -134,11 +150,11 @@ class TestController extends Controller_Action_Abstract
         if ( $this -> _authorize( 'test', 'remove')) {
             $objTests = new Tests ();
 
-            $arrParams = $this->getRequest()->getParams();
+            $arrParams = $this -> getRequest() -> getParams();
 
-            if (array_key_exists('testId', $arrParams) &&
-                    !empty($arrParams['testId'])) {
-                $objTests -> removeTestById( ( int ) $arrParams['testId']);
+            if (array_key_exists( 'testId', $arrParams ) &&
+                    !empty( $arrParams['testId'] ) ) {
+                $objTests -> removeTestById( ( int ) $arrParams['testId'] );
             }
 
             $this->_forward ( 'index', 'test' );

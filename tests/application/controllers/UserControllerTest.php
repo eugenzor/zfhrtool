@@ -164,20 +164,6 @@ class UserControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         );
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function testActivateInvalidId()
     {
         $this->dispatch('/user/activate/id/12345/code/e7d55174ad4a488c0884be6e8a5faaaa');

@@ -112,7 +112,7 @@ class QuestionController extends Controller_Action_Abstract
                                'testId'             => $testId));
                 }
                 $objForm -> addAnswersSubForm( $arrAnswer );
-                if ($testId != '') {
+                if ( !empty( $testId ) ) {
                     // выбираем из базы данные о редактируемом тесте
                     $objTests = new Tests ( );
                     $objTest = $objTests->getTestById( $testId );
