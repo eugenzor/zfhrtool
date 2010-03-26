@@ -140,14 +140,4 @@ INSERT INTO `mg_test_question_answer` (`tqa_id`, `tqa_text`, `tqa_flag`, `tq_id`
 (66, 'jjjj', 0, 23),
 (67, '1', 0, 24),
 (68, '2', 0, 24),
-(69, '3', 0, 24);
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `mg_test_question_answer`
---
-ALTER TABLE `mg_test_question_answer`
-  ADD CONSTRAINT `mg_test_question_answer_ibfk_1` FOREIGN KEY (`tq_id`) REFERENCES `mg_test_question` (`tq_id`);
+(69, '3', 0, 24)d
