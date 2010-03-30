@@ -114,7 +114,7 @@ class CategoryControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     public function testRemoveAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch('/category/remove/categoryId/15');
+        $this->dispatch('/category/remove/categoryId/3');
         $this->assertModule('default');
         $this->assertController('category');
         $this->assertAction('index');

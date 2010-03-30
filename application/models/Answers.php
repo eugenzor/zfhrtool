@@ -16,7 +16,7 @@ class Answers extends Zht_Db_Table
      * Имя таблицы
      * @var string
      */
-    protected $_name = 'mg_test_question_answer';
+    protected $_name = 'test_question_answer';
 
     /**
      * Row Class

@@ -17,10 +17,12 @@ class QuestionControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     /**
      * Prepares the environment before running a test.
      */
+/*
     protected function setUp() {
         $this -> setDbDump( dirname(__FILE__) . '/_files/setup.sql' );
         parent::setUp ();
     }
+*/
 
     protected function _doLogin( $email, $password )
     {
@@ -32,7 +34,7 @@ class QuestionControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     public function testAddingEditAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch("/question/edit/testId/10");
+        $this->dispatch("/question/edit/testId/1");
         $this->assertModule('default');
         $this->assertController('question');
         $this->assertAction('edit');
@@ -46,7 +48,7 @@ class QuestionControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     public function testEditingEditAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch('/question/edit/testId/11/questionId/24');
+        $this->dispatch('/question/edit/testId/1/questionId/1');
         $this->assertModule('default');
         $this->assertController('question');
         $this->assertAction('edit');
@@ -62,41 +64,41 @@ class QuestionControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
                 'questionText' => 'вопрос',
-                'testId' => '11',
-                'questionId' => '24',
+                'testId' => '1',
+                'questionId' => '1',
                 'answer' => array(
                                 array(
                                     'text' => '1',
                                     'flag' => '0' ),
                                 array(
                                     'text' => '2',
-                                    'flag' => '0' ),
+                                    'flag' => '1' ),
                                 array(
                                     'text' => '3',
-                                    'flag' => '1' ) ) ) );
+                                    'flag' => '0' ) ) ) );
         $this ->_doLogin('meestro@ukr.net', '123456');
         $this->dispatch('/question/edit');
         $this->assertModule('default');
         $this->assertController('question');
-        $this->assertRedirect('test/edit/testId/11');
+        $this->assertRedirect('test/edit/testId/1');
     }
 
     public function testUpdateInValidEditAction()
     {
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
-                'testId' => '11',
-                'questionId' => '24',
+                'testId' => '1',
+                'questionId' => '1',
                 'answer' => array(
                                 array(
                                     'text' => '1',
                                     'flag' => '0' ),
                                 array(
                                     'text' => '2',
-                                    'flag' => '0' ),
+                                    'flag' => '1' ),
                                 array(
                                     'text' => '3',
-                                    'flag' => '1' ) ) ) );
+                                    'flag' => '0' ) ) ) );
         $this ->_doLogin('meestro@ukr.net', '123456');
         $this->dispatch('/question/edit');
         $this->assertModule('default');
@@ -110,37 +112,37 @@ class QuestionControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
                 'questionText' => 'вопрос',
-                'testId' => '11',
+                'testId' => '1',
                 'answer' => array(
                                 array(
                                     'text' => '1',
                                     'flag' => '0' ),
                                 array(
                                     'text' => '2',
-                                    'flag' => '0' ),
+                                    'flag' => '1' ),
                                 array(
                                     'text' => '3',
-                                    'flag' => '1' ) ) ) );
+                                    'flag' => '0' ) ) ) );
         $this ->_doLogin('meestro@ukr.net', '123456');
         $this->dispatch('/question/edit');
         $this->assertModule('default');
         $this->assertController('question');
-        $this->assertRedirect('test/edit/testId/11');
+        $this->assertRedirect('test/edit/testId/1');
     }
 
     public function testRemoveAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch('/question/remove/testId/11/questionId/24');
+        $this->dispatch('/question/remove/testId/1/questionId/1');
         $this->assertModule('default');
         $this->assertController('question');
-        $this->assertRedirect('test/edit/testId/11');
+        $this->assertRedirect('test/edit/testId/1');
     }
 
     public function testWithoutTestIdRemoveAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch('/question/remove/questionId/25');
+        $this->dispatch('/question/remove/questionId/2');
         $this->assertModule('default');
         $this->assertController('question');
         $this->assertRedirect('test/');
@@ -149,28 +151,28 @@ class QuestionControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     public function testUpAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch('/question/up/testId/5/questionId/22');
+        $this->dispatch('/question/up/testId/2/questionId/10');
         $this->assertModule('default');
         $this->assertController('question');
         $this->assertAction('up');
-        $this->assertRedirect('test/edit/testId/5');
+        $this->assertRedirect('test/edit/testId/2');
     }
 
     public function testWithoutTestIdUpAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch('/question/up/questionId/22');
-        $this->assertModule('default');
-        $this->assertController('question');
-        $this->assertAction('up');
-        $this->assertRedirect('test/');
+        try {
+            $this->dispatch('/question/up/questionId/9');
+        } catch (Exception $e) {
+            $this->assertEquals($e->getMessage(), '[LS_REQUIRED_PARAM_FAILED]');
+        }
     }
 
     public function testWithoutQuestionIdUpAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
         try {
-            $this->dispatch('/question/up/testId/5');
+            $this->dispatch('/question/up/testId/2');
         } catch (Exception $e) {
             $this->assertEquals($e->getMessage(), '[LS_REQUIRED_PARAM_FAILED]');
         }
@@ -179,28 +181,28 @@ class QuestionControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     public function testDownAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch('/question/down/testId/5/questionId/22');
+        $this->dispatch('/question/down/testId/2/questionId/5');
         $this->assertModule('default');
         $this->assertController('question');
         $this->assertAction('down');
-        $this->assertRedirect('test/edit/testId/5');
+        $this->assertRedirect('test/edit/testId/2');
     }
 
     public function testWithoutTestIdDownAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch('/question/down/questionId/22');
-        $this->assertModule('default');
-        $this->assertController('question');
-        $this->assertAction('down');
-        $this->assertRedirect('test/');
+        try {
+            $this->dispatch('/question/down/questionId/5');
+        } catch (Exception $e) {
+            $this->assertEquals($e->getMessage(), '[LS_REQUIRED_PARAM_FAILED]');
+        }
     }
 
     public function testWithoutQuestionIdDownAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
         try {
-            $this->dispatch('/question/down/testId/5');
+            $this->dispatch('/question/down/testId/2');
         } catch (Exception $e) {
             $this->assertEquals($e->getMessage(), '[LS_REQUIRED_PARAM_FAILED]');
         }

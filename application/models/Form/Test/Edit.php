@@ -39,6 +39,7 @@ class Form_Test_Edit extends Zend_Form
 
         $testQuestionAmount = $this -> createElement( 'hidden',
             'testQuestionAmount' );
+        $testQuestionAmount -> addFilter('Digits');
         $this -> addElement( $testQuestionAmount );
 
         $testId = $this -> createElement( 'hidden', 'testId' );

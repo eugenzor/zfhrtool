@@ -37,7 +37,6 @@ class QuestionController extends Controller_Action_Abstract
                 if ( $objForm->isValid ( $_POST )) {
                     // Выполняем update (insert/update данных о вопросе)
                     $arrParams = $this->getRequest()->getParams();
-    //                print_r($arrParams);
                     $testId = $objForm -> testId -> getValue();
                     $strQuestionText = $objForm -> questionText -> getValue();
 
@@ -52,20 +51,30 @@ class QuestionController extends Controller_Action_Abstract
                     } else {
                         $objQuestion = $objQuestions -> createRow();
                         $questionId = null;
+                        $objQuestion -> setSortIndex( $intMaxSortIndex + 1 );
                     }
+
 
                     $objQuestion -> setText( $strQuestionText );
                     $objQuestion -> setTestId( $testId );
-                    $objQuestion -> setSortIndex( $intMaxSortIndex + 1 );
 
-                    if (array_key_exists( 'answer', $arrParams)  &&
-                            !empty( $arrParams['answer'] ) ) {
-                        $intAnswerAmount =
-                            $objQuestions -> saveAnswerList($questionId,
-                            $arrParams['answer'] );
+                    if (array_key_exists( 'answer', $arrParams) ) {
+                        $intAnswerAmount = sizeof ( $arrParams['answer'] );
                         $objQuestion -> setAnswerAmount( $intAnswerAmount);
                     }
                     $objQuestion -> save();
+
+                    // Вносим в базу варианты ответов и обг=новляем их количество,
+                    // поскольку не валидные в базу не добавляются и количество
+                    // элементов в массиве $arrParams['answer'] может не совпадать
+                    // с количеством ответов, фактически внесенных в БД
+                    if (array_key_exists( 'answer', $arrParams)  &&
+                            !empty( $arrParams['answer'] ) ) {
+                        $intAnswerAmount = $objQuestions ->
+                            saveAnswerList($questionId, $arrParams['answer'] );
+                        $objQuestion -> setAnswerAmount( $intAnswerAmount);
+                        $objQuestion -> save();
+                    }
 
                     $this->_helper->redirector ( 'edit', 'test', null,
                         array( 'testId' => $testId ) );
@@ -166,18 +175,21 @@ class QuestionController extends Controller_Action_Abstract
             } else {
                 throw new Exception ( '[LS_REQUIRED_PARAM_FAILED]' );
             }
+            if (array_key_exists('testId', $arrParams)  &&
+                    !empty($arrParams['testId'])) {
+                $testId = ( int ) $arrParams['testId'];
+            } else {
+                throw new Exception ( '[LS_REQUIRED_PARAM_FAILED]' );
+            }
 
             $objQuestions = new Questions();
-            $objQuestions -> moveQuestionUp( $questionId );
+            $objQuestions -> moveQuestionUp( $questionId, $testId );
 
 
             if (array_key_exists('testId', $arrParams)  &&
                     !empty($arrParams['testId'])) {
-                $testId = ( int ) $arrParams['testId'];
                 $this->_helper->redirector ( 'edit', 'test', null,
                     array( 'testId' => $testId ) );
-            } else {
-                $this->_helper->redirector ( 'index', 'test' );
             }
         }
     }
@@ -196,18 +208,21 @@ class QuestionController extends Controller_Action_Abstract
             } else {
                 throw new Exception ( '[LS_REQUIRED_PARAM_FAILED]' );
             }
+            if (array_key_exists('testId', $arrParams)  &&
+                    !empty($arrParams['testId'])) {
+                $testId = ( int ) $arrParams['testId'];
+            } else {
+                throw new Exception ( '[LS_REQUIRED_PARAM_FAILED]' );
+            }
 
             $objQuestions = new Questions();
-            $objQuestions -> moveQuestionDown( $questionId );
+            $objQuestions -> moveQuestionDown( $questionId, $testId );
 
 
             if (array_key_exists('testId', $arrParams)  &&
                     !empty($arrParams['testId'])) {
-                $testId = ( int ) $arrParams['testId'];
                 $this->_helper->redirector ( 'edit', 'test', null,
                     array( 'testId' => $testId ) );
-            } else {
-                $this->_helper->redirector ( 'index', 'test' );
             }
         }
     }

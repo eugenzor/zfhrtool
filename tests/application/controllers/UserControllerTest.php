@@ -19,10 +19,12 @@ class UserControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     /**
      * Prepares the environment before running a test.
      */
+/*
     protected function setUp() {
         $this->setDbDump(dirname(__FILE__) . '/_files/setup.sql');
         parent::setUp ();
     }
+*/
 
 
 

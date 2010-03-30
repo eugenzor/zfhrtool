@@ -5,7 +5,7 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          stopOnFailure="false"
-         syntaxCheck="true">
+         syntaxCheck="false">
     <testsuite name="zfhrtool Test Suite">
         <directory>./</directory>
     </testsuite>

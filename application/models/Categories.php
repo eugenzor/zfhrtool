@@ -16,7 +16,7 @@ class Categories extends Zht_Db_Table
      * Имя таблицы
      * @var string
      */
-    protected $_name = 'mg_category';
+    protected $_name = 'category';
 
     /**
      * Row Class
@@ -65,7 +65,7 @@ class Categories extends Zht_Db_Table
      */
     public function removeCategoryById($categoryId)
     {
-        $query = "SELECT count(t_id) from mg_test "
+        $query = "SELECT count(t_id) from test "
                . "WHERE cat_id = $categoryId";
         $intTestAmount = $this -> getAdapter() ->fetchOne( $query );
         if ( $intTestAmount > 0 ) {
