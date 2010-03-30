@@ -85,7 +85,7 @@ class TestController extends Controller_Action_Abstract
                         $objTest->setName ( $testName );
                     $objTest->setCategoryId (
                         $objForm -> categoryId -> getValue() );
-                    $objTest->setQuestionAmount (
+                    $objTest->setQuestionAmount ( ( int )
                         $objForm -> testQuestionAmount -> getValue() );
                     $objTest -> save();
 

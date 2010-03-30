@@ -17,10 +17,12 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     /**
      * Prepares the environment before running a test.
      */
+/*
     protected function setUp() {
         $this -> setDbDump( dirname(__FILE__) . '/_files/setup.sql' );
         parent::setUp ();
     }
+*/
 
     protected function _doLogin( $email, $password )
     {
@@ -69,8 +71,8 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this ->_doLogin('meestro@ukr.net', '123456');
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
-                'categoryId' => '1',
-                'strTestFilter ' => 'vv' ) );
+                'categoryId' => '2',
+                'strTestFilter ' => 'p' ) );
         $this->dispatch('/test');
         $this->assertModule('default');
         $this->assertController('test');
@@ -115,7 +117,7 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     public function testEditedEditAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch('/test/edit/testId/9');
+        $this->dispatch('/test/edit/testId/3');
         $this->assertModule('default');
         $this->assertController('test');
         $this->assertAction('edit');
@@ -130,10 +132,10 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     {
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
-                'testName' => 'fgdfgfdg (ed)',
-                'categoryId' => '5',
+                'testName' => 'PHP (ООП) (ed)',
+                'categoryId' => '2',
                 'testQuestionAmount' => '3',
-                'testId' => '9' ));
+                'testId' => '3' ));
         $this ->_doLogin('meestro@ukr.net', '123456');
         $this->dispatch('/test/edit');
         $this->assertModule('default');
@@ -147,10 +149,10 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
                 'testName' => '',
-                'categoryId ' => '5',
+                'categoryId ' => '2',
                 'testQuestionAmount' => '3'));
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch('/test/edit/testId/9');
+        $this->dispatch('/test/edit/testId/3');
         $this->assertModule('default');
         $this->assertController('test');
         $this->assertAction('edit');
@@ -161,25 +163,25 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     {
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
-                'testName' => 'fgdfgfdg (ed)',
-                'categoryId' => '5',
+                'testName' => 'PHP (ООП) (ed)',
+                'categoryId' => '2',
                 'testQuestionAmount' => '3',
                 'formAction' => 'questionAdd',
-                'testId' => '9' ));
+                'testId' => '3' ));
         $this ->_doLogin('meestro@ukr.net', '123456');
         $this->dispatch('/test/edit');
         $this->assertModule('default');
         $this->assertController('test');
         $this->assertAction('edit');
-        $this->assertRedirect('/question/edit/testId/9');
+        $this->assertRedirect('/question/edit/testId/3');
     }
 
     public function testQuestionAddButtonWithNewTestEditAction()
     {
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
-                'testName' => 'fgdfgfdg (ed)',
-                'categoryId' => '5',
+                'testName' => 'PHP (ООП) (ed)',
+                'categoryId' => '2',
                 'testQuestionAmount' => '3',
                 'formAction' => 'questionAdd'));
         $this ->_doLogin('meestro@ukr.net', '123456');
@@ -194,7 +196,7 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     public function testRemoveAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
-        $this->dispatch('/test/remove/testId/17');
+        $this->dispatch('/test/remove/testId/3');
         $this->assertModule('default');
         $this->assertController('test');
         $this->assertAction('index');

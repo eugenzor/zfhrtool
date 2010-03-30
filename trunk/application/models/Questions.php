@@ -16,7 +16,7 @@ class Questions extends Zht_Db_Table
      * Имя таблицы
      * @var string
      */
-    protected $_name = 'mg_test_question';
+    protected $_name = 'test_question';
 
     /**
      * Row Class
@@ -113,7 +113,7 @@ class Questions extends Zht_Db_Table
      * @param string $questionId
      * @return $intMaxSortIndex
      */
-    public function moveQuestionUp($questionId)
+    public function moveQuestionUp($questionId, $testId)
     {
         $objQuestion = $this -> getQuestionById( $questionId );
         $intSortIndex = $objQuestion -> getSortIndex();
@@ -124,7 +124,9 @@ class Questions extends Zht_Db_Table
             // Обновляем инднекс сортировки предыдущего елемента
             $data = array( 'tq_sort_index' => $intSortIndex );
             $where = $this -> getAdapter() ->
-                quoteInto( 'tq_sort_index  = ?', $intNewSortIndex );
+                quoteInto( 'tq_sort_index  = ? ', $intNewSortIndex ).
+                $this -> getAdapter() ->
+                quoteInto( 'AND t_id = ?', $testId );
             $this -> update( $data, $where );
 
             // Обновляем инднекс сортировки текущего елемента
@@ -141,13 +143,13 @@ class Questions extends Zht_Db_Table
      * @param int $questionId
      * @return void
      */
-    public function moveQuestionDown($questionId)
+    public function moveQuestionDown($questionId, $testId)
     {
         $objQuestion = $this -> getQuestionById( $questionId );
         $testId = $objQuestion -> t_id;
         $intSortIndex = $objQuestion -> getSortIndex();
 
-//        $query = 'SELECT max(tq_sort_index) from mg_test_question';
+//        $query = 'SELECT max(tq_sort_index) from test_question';
 //        $intMaxSortIndex = $this -> getAdapter() -> fetchOne( $query );
         $intMaxSortIndex = $this -> getMaxSortIndex( $testId );
 
@@ -157,7 +159,9 @@ class Questions extends Zht_Db_Table
             // Обновляем инднекс сортировки следующего елемента
             $data = array('tq_sort_index' => $intSortIndex);
             $where = $this -> getAdapter() ->
-                quoteInto( 'tq_sort_index  = ?', $intNewSortIndex );
+                quoteInto( 'tq_sort_index  = ? ', $intNewSortIndex).
+                $this -> getAdapter() ->
+                quoteInto( 'AND t_id = ?', $testId );
             $this -> update( $data, $where );
 
             // Обновляем инднекс сортировки текущего елемента

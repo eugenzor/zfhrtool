@@ -10,85 +10,86 @@ INSERT INTO `users` (`id`, `nickname`, `email`, `password`, `role`, `status`, `l
 (5, 'meestro', 'meestro@ukr.net', '7695596c92c750d6087d3be1a8c25147', 'manager', 'active', '2010-03-25 12:51:13');
 
 --
--- Table structure for table `mg_category`
+-- Table structure for table `category`
 --
 
-TRUNCATE TABLE `mg_category`;
+TRUNCATE TABLE `category`;
 
 --
--- Dumping data for table `mg_category`
+-- Dumping data for table `category`
 --
 
-INSERT INTO `mg_category` (`cat_id`, `cat_name`, `cat_descr`, `cat_test_amount`) VALUES
-(1, 'Common', 'Коммент1 edited one more time', 0),
-(2, 'PHP', 'Коментарий . 2', 0),
-(5, 'JavaScript ', 'Инфо ', 0),
-(13, 'апапап', 'hghjhj', 0);
+INSERT INTO `category` (`cat_id`, `cat_name`, `cat_descr`, `cat_test_amount`) VALUES
+(1, 'Общие', '', 0),
+(2, 'PHP', 'тесты по PHP', 0),
+(3, '.NET', '', 0);
 
 -- --------------------------------------------------------
 
-TRUNCATE TABLE `mg_test`;
+TRUNCATE TABLE `test`;
 
 --
--- Dumping data for table `mg_test`
+-- Dumping data for table `test`
 --
 
-INSERT INTO `mg_test` (`t_id`, `t_name`, `t_quest_amount`, `t_date`, `cat_id`) VALUES
-(5, 'Продвинутый тест по PHP 5 (ООП)', 8, '2010-03-18 03:51:09', 2),
-(9, 'fgdfgfdg', 1, '2010-03-19 02:29:01', 13),
-(10, 'test 1', 0, '2010-03-19 03:59:16', 1),
-(11, 'еще тест', 1, '2010-03-19 03:59:29', 1);
+INSERT INTO `test` (`t_id`, `t_name`, `t_quest_amount`, `t_date`, `cat_id`) VALUES
+(1, 'Психологический тест', 3, '2010-03-30 01:26:49', 1),
+(2, 'Общий тест по PHP', 4, '2010-03-30 01:36:19', 2),
+(3, 'PHP (ООП)', 3, '2010-03-30 01:41:57', 2);
 
 -- --------------------------------------------------------
 
-TRUNCATE TABLE `mg_test_question_answer`;
+TRUNCATE TABLE `test_question_answer`;
 
 --
--- Dumping data for table `mg_test_question_answer`
+-- Dumping data for table `test_question_answer`
 --
 
-INSERT INTO `mg_test_question_answer` (`tqa_id`, `tqa_text`, `tqa_flag`, `tq_id`) VALUES
-(40, 'не знаю', 0, 9),
-(41, 'не доставайте меня ', 0, 9),
-(42, 'Объектно ориентированное программирование', 1, 9),
-(43, 'Ajax ', 0, 10),
-(44, 'JQuery', 0, 10),
-(45, 'Zend Framework', 1, 10),
-(54, '1', 0, 14),
-(55, '2', 0, 14),
-(56, '3', 1, 14),
-(57, '4', 0, 14),
-(58, '5', 1, 14),
-(59, '6', 0, 14),
-(60, '7', 0, 14),
-(61, 'ww', 1, 15),
-(62, 'ee', 1, 15),
-(63, 'rrr', 0, 15),
-(64, 'gggg', 0, 23),
-(65, 'hhhh', 1, 23),
-(66, 'jjjj', 0, 23),
-(67, '1', 0, 24),
-(68, '2', 0, 24),
-(69, '3', 0, 24);
+INSERT INTO `test_question_answer` (`tqa_id`, `tqa_text`, `tqa_flag`, `tq_id`) VALUES
+(18, '1', 0, 1),
+(19, '2', 1, 1),
+(20, '3', 0, 1),
+(21, '2 1', 1, 2),
+(22, '2 2', 1, 2),
+(23, '3 1', 0, 3),
+(24, '3 2', 0, 3),
+(25, 'ООП', 0, 6),
+(26, 'Объектно=ориенторованное программирование', 1, 6),
+(27, 'Ого-го!!!', 0, 6),
+(33, 'implements', 0, 7),
+(34, 'function', 0, 7),
+(35, 'discinct', 0, 7),
+(36, 'className', 0, 7),
+(37, 'class', 1, 7),
+(38, 'вид', 0, 8),
+(39, 'контроллер', 0, 8),
+(40, 'объект', 1, 8),
+(47, 'ответ по php 2 1', 0, 5),
+(48, 'ответ по php 2 2', 1, 5),
+(49, 'ответ по php 2 3', 1, 5),
+(54, 'отв 5', 0, 10),
+(55, 'отв 6', 1, 10),
+(56, 'sds', 0, 9),
+(57, 'sdsd', 0, 9);
 
 -- --------------------------------------------------------
 
-TRUNCATE TABLE `mg_test_question`;
+TRUNCATE TABLE `test_question`;
 
 --
--- Dumping data for table `mg_test_question`
+-- Dumping data for table `test_question`
 --
 
-INSERT INTO `mg_test_question` (`tq_id`, `tq_text`, `tq_answer_amount`, `tq_sort_index`, `t_id`) VALUES
-(9, 'что такое ООП?', 3, 1, 5),
-(10, 'что является php фреймворком?\r\nAjax \r\nJQuery\r\nZend Framework', 3, 2, 5),
-(14, 'вопрос', 7, 3, 5),
-(15, 'new', 3, 6, 5),
-(19, 'aaaaa', 0, 4, 5),
-(20, 'ssssss', 0, 5, 5),
-(21, 'dddddd', 0, 7, 5),
-(22, 'fffff', 0, 8, 5),
-(23, 'fff', 3, 9, 9),
-(24, 'вопрос', 3, 10, 11);
+INSERT INTO `test_question` (`tq_id`, `tq_text`, `tq_answer_amount`, `tq_sort_index`, `t_id`) VALUES
+(1, 'Первый психологический вопрос', 3, 1, 1),
+(2, 'Второй психологический вопрос', 2, 2, 1),
+(3, 'Третий психологический вопрос', 2, 3, 1),
+(4, 'Ворос по PHP 1', 2, 1, 2),
+(5, 'Вопрос по PHP 2', 3, 2, 2),
+(6, 'что такое ООП ?', 3, 1, 3),
+(7, 'какое ключевое слово используют для объявления класса?', 5, 2, 3),
+(8, 'как называется экземпляр класса', 3, 3, 3),
+(9, 'Вопрос по PHP 4', 2, 4, 2),
+(10, 'Вопрос по PHP 3', 2, 3, 2);
 
 -- --------------------------------------------------------

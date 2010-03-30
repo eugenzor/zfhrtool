@@ -16,7 +16,7 @@ class Tests extends Zht_Db_Table
      * Имя таблицы
      * @var string
      */
-    protected $_name = 'mg_test';
+    protected $_name = 'test';
 
     /**
      * Row Class
@@ -52,9 +52,9 @@ class Tests extends Zht_Db_Table
     {
         $select = $this -> getAdapter()-> select() -> from( $this->_name );
         if ( -1 != $categoryId ) {
-            $select -> where( 'mg_test.cat_id = ?', $categoryId );
+            $select -> where( 'test.cat_id = ?', $categoryId );
         }
-        $select -> join( 'mg_category', 'mg_category.cat_id = mg_test.cat_id' );
+        $select -> join( 'category', 'category.cat_id = test.cat_id' );
         if ($strTestFilter) {
             $select -> where( 't_name LIKE ?', "%$strTestFilter%" );
         }
