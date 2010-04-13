@@ -167,3 +167,26 @@ INSERT INTO `test_question_answer` (`tqa_id`, `tqa_text`, `tqa_flag`, `tq_id`) V
 (57, 'sdsd', 0, 9);
 
 -- --------------------------------------------------------
+
+--
+-- Table structure for table `vacancies`
+--
+
+CREATE TABLE IF NOT EXISTS `vacancies` (
+  `v_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `v_num` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `v_name` varchar(255) NOT NULL,
+  `v_duties` text,
+  `v_requirements` text,
+  PRIMARY KEY (`v_id`),
+  UNIQUE KEY `index_vacancy_name` (`v_name`) USING BTREE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Vacancies list table' AUTO_INCREMENT=3 ;
+
+
+--
+-- Dumping data for table `vacancies`
+--
+
+INSERT INTO `vacancies` (`v_id`, `v_num`, `v_name`, `v_duties`, `v_requirements`) VALUES
+(1, 2, 'PHP программист', 'писать php код', '- Уверенные знания php (OOП для php5)\r\n- Уверенные знания mysql (объединения, вложенные запросы, триггеры)\r\n- Уверенные знания javascript\r\n- Хорошие знания xhtml, css, навыки верстки\r\n- Навыки работы в unix-системах\r\n- Аналитическое мышление, способность решать сложные задачи \r\n- Знание английского языка'),
+(2, 1, 'Верстальщик', 'Верстать сайт', 'Знание css, html');

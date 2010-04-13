@@ -1,0 +1,42 @@
+<?php
+/**
+ * List Vacancies page view
+ *
+ * Страница вида: список вакансий
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+$this->headTitle($this->translate('[LS_PAGE_TITLE_VACANCIES]'));
+?>
+
+<div id="main">
+	<!-- Таблица категорий -->
+	<table width="100%" border="1" cellpadding="0" cellspacing="0">
+		<tr class="head">
+			<td>№</td>
+			<td>Вакансия</td>
+			<td>К-во</td>
+			<td class="action">Действия</td>
+		</tr>
+<?php if (!empty($this -> arrVacancies)): ?>
+    <?php foreach ($this -> arrVacancies as $vacancy): ?>
+		<tr class="item_row">
+            <td><?php echo $this->escape( $vacancy['v_id'] ); ?></td>
+			<td><?php echo $this->escape( $vacancy['v_name'] ); ?></td>
+			<td><?php echo $this->escape( $vacancy['v_num'] ); ?></td>
+			<td class="action">
+                <a href="<?php echo $this -> url ( array ( 'controller' => 'vacancy', 'action' => 'edit', 'vacancyId' => $vacancy['v_id']) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a><br />
+                <a href="<?php echo $this -> url ( array ( 'controller' => 'vacancy', 'action' => 'remove', 'vacancyId' => $vacancy['v_id']) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $vacancy['v_name'] ); ?>\'');"><?php echo $this->translate('[LS_LINK_REMOVE]'); ?></a><br />
+			</td>
+		</tr>
+    <?php endforeach; ?>
+<?php else: ?>
+		<tr class="item_row">
+			<td></td>
+			<td colspan="5">пока нет вакансий. <a href="<?php echo $this->url(array('controller' => 'vacancy', 'action' => 'edit')); ?>">добавить?</a></td>
+		</tr>
+<?php endif;?>
+	</table>
+	<!-- End of Таблица тестов-->
+</div>
