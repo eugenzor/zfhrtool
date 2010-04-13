@@ -29,6 +29,7 @@ abstract class Controller_Action_Abstract extends Zend_Controller_Action
         $this->view->headTitle ()->setSeparator ( ' :: ' );
         $this->view->headTitle('HR');
         $this->view->addHelperPath('Zend/Dojo/View/Helper/', 'Zend_Dojo_View_Helper');
+        $this->view->addHelperPath('../application/Views/Helpers/', 'Helper');
 
         $this->_setNavigation();
     }
