@@ -37,6 +37,40 @@ class Navigation extends Zend_Navigation
             'action' => 'index',
         ),
         array(
+            'label'=>'Вакансии',
+            'controller'=>'vacancy',
+            'action' => 'index',
+            'pages' => array(
+                array(
+                    'label'=>'Список вакансий',
+                    'controller'=>'vacancy',
+                    'action' => 'index',
+                ),
+                array(
+                    'label'=>'Добавить вакансию',
+                    'controller'=>'vacancy',
+                    'action' => 'edit',
+                ),
+            )
+        ),
+        array(
+            'label'=>'Соискатели',
+            'controller'=>'applicant',
+            'action' => 'index',
+            'pages' => array(
+                array(
+                    'label'=>'Показать список',
+                    'controller'=>'applicant',
+                    'action' => 'index',
+                ),
+                array(
+                    'label'=>'Добавить соискателя',
+                    'controller'=>'applicant',
+                    'action' => 'edit',
+                ),
+            )
+            ),
+        array(
             'label'=>"Выйти",
             'controller'=>'user',
             'action' => 'signout'

@@ -15,12 +15,20 @@ echo $this->doctype(),PHP_EOL;
     <?= $this->headTitle()?>
     <?= $this->headLink() ?>
     <?= $this->headScript(); ?>
+<?php
+    if ($this->dojo()->isEnabled()):
+        $this->dojo()//->setLocalPath('/scripts/dojo/dojo/dojo.js')
+            ->addStyleSheetModule('dijit.themes.tundra');
+        echo $this->dojo();
+    endif;
+?>
 </head>
 
 <body>
-    <div class="menu-h">
+    <div class="menu-h-d">
         <?php echo $this->navigation()->menu(); ?>
     </div>
+    <br><br>
     <div class="content">
         <?php echo $this->layout()->content; ?>
     </div>

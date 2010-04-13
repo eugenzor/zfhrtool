@@ -318,5 +318,89 @@
  <tu tuid='[LS_PAGE_TITLE_QUESTION]'>
   <tuv xml:lang="ru"><seg>Добавить/редактировать вопрос :: Вопросы :: Тесты :: Система тестирования MarketGid</seg></tuv>
  </tu>
+ <tu tuid='[LS_PAGE_TITLE_VACANCIES]'>
+  <tuv xml:lang="ru"><seg>Вакансии</seg></tuv>
+ </tu>
+ <tu tuid='[LS_PAGE_TITLE_VACANCIES_EDIT]'>
+  <tuv xml:lang="ru"><seg>Редактирование/добавление</seg></tuv>
+ </tu>
+ <tu tuid='Zend_Validate_Int::NOT_INT'>
+  <tuv xml:lang="ru"><seg>Значение %value% не является целым числом</seg></tuv>
+ </tu>
+ <tu tuid='[LS_PAGE_TITLE_APPLICANTS]'>
+  <tuv xml:lang="ru"><seg>Cоискатели</seg></tuv>
+ </tu>
+ <tu tuid='[LS_PAGE_TITLE_APPLICANTS_EDIT]'>
+  <tuv xml:lang="ru"><seg>Редактирование/добавление</seg></tuv>
+ </tu>
+ <tu tuid='[LS_PAGE_TITLE_APPLICANTS_INFO]'>
+  <tuv xml:lang="ru"><seg>Информация о соискателе</seg></tuv>
+ </tu>
+ <tu tuid='[LS_PAGE_TITLE_APPLICANTS_STATUS]'>
+  <tuv xml:lang="ru"><seg>Изменение статуса</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_EDIT_LASTNAME_LABEL]'>
+  <tuv xml:lang="ru"><seg>Фамилия</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_EDIT_NAME_LABEL]'>
+  <tuv xml:lang="ru"><seg>Имя</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_EDIT_PATRONYMIC_LABEL]'>
+  <tuv xml:lang="ru"><seg>Отчество</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_EDIT_VACANCY_LABEL]'>
+  <tuv xml:lang="ru"><seg>Вакансия</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_EDIT_BIRTH_LABEL]'>
+  <tuv xml:lang="ru"><seg>Дата рождения</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_EDIT_EMAIL_LABEL]'>
+  <tuv xml:lang="ru"><seg>Электронная почта</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_EDIT_PHONE_LABEL]'>
+  <tuv xml:lang="ru"><seg>Контактный телефон</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_EDIT_RESUME_LABEL]'>
+  <tuv xml:lang="ru"><seg>Резюме</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_EDIT_STATUS_LABEL]'>
+  <tuv xml:lang="ru"><seg>Статус</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_EDIT_PHOTO_LABEL]'>
+  <tuv xml:lang="ru"><seg>Фото</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_EDIT_NUMBER_LABEL]'>
+  <tuv xml:lang="ru"><seg>Табельный номер</seg></tuv>
+ </tu>
+ <tu tuid='[LS_STATUS_ALL]'>
+  <tuv xml:lang="ru"><seg>Все статусы</seg></tuv>
+ </tu>
+ <tu tuid='[LS_STATUS_NEW]'>
+  <tuv xml:lang="ru"><seg>Вновь добавленный соискатель</seg></tuv>
+ </tu>
+ <tu tuid='[LS_STATUS_INVITED]'>
+  <tuv xml:lang="ru"><seg>Приглашен на собеседование</seg></tuv>
+ </tu>
+ <tu tuid='[LS_STATUS_INTERVIEWED]'>
+  <tuv xml:lang="ru"><seg>Прошел собеседование</seg></tuv>
+ </tu>
+ <tu tuid='[LS_STATUS_REJECTED]'>
+  <tuv xml:lang="ru"><seg>Отклонен</seg></tuv>
+ </tu>
+ <tu tuid='[LS_STATUS_TAKEN]'>
+  <tuv xml:lang="ru"><seg>Взят на испытательный срок</seg></tuv>
+ </tu>
+ <tu tuid='[LS_STATUS_STAFF]'>
+  <tuv xml:lang="ru"><seg>Штатный сотрудник</seg></tuv>
+ </tu>
+ <tu tuid='[LS_STATUS_DISMISSED]'>
+  <tuv xml:lang="ru"><seg>Уволен</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_STATUS_STATUS_LABEL]'>
+  <tuv xml:lang="ru"><seg>Статус</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_STATUS_COMMENT_LABEL]'>
+  <tuv xml:lang="ru"><seg>Комментарий</seg></tuv>
+ </tu>
  </body>
 </tmx>

@@ -34,8 +34,6 @@ class Acl extends Zend_Acl
                 'signin',
                 'signup' ) );
 
-
-
         $this->allow ( 'administrator' );
 
         // Систма тестов (для юзера с правами manager-a)
@@ -49,5 +47,17 @@ class Acl extends Zend_Acl
             array( 'view', 'edit', 'remove' ));
         $this -> allow( 'manager' , 'question',
             array( 'edit', 'remove', 'up', 'down' ));
+ 
+        // Ресурсы
+        $this -> add( new Zend_Acl_Resource( 'vacancies' ));
+        $this -> add( new Zend_Acl_Resource( 'applicants' ));
+        $this -> add( new Zend_Acl_Resource( 'comments' ));
+        
+        // Права
+        $this -> allow( 'recruit' , 'applicants', array( 'view', 'add'));
+        $this -> allow( 'recruit' , 'comments', array( 'view', 'add'));
+
+        $this -> allow( 'staff' , 'applicants', array( 'view'));
+        $this -> allow( 'staff' , 'comments', array( 'view', 'add'));
     }
 }

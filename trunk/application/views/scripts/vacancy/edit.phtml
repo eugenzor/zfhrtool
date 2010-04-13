@@ -1,0 +1,19 @@
+<?php
+/**
+ * Edit Category page view
+ *
+ * Страница добавление/ редактирования вакансий системы тестирования
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+$this->headTitle($this->translate('[LS_PAGE_TITLE_VACANCIES]'));
+$this->headTitle($this->translate('[LS_PAGE_TITLE_VACANCIES_EDIT]'));
+?>
+
+<div id="main">
+    <h1 class="title" style="display:inline; border:0">
+	Вакансии :: добавление/редактирование
+    </h1>
+    <?php echo $this -> objVacancyEditForm; ?>
+</div>
