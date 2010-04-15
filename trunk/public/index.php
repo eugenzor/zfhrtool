@@ -4,6 +4,10 @@
 defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 
+// Define path to application directory
+defined('UPLOAD_PATH')
+    || define('UPLOAD_PATH', realpath(dirname(__FILE__) . '/../upload'));
+
 // Define application environment
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));

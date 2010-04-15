@@ -86,7 +86,7 @@ class Vacancy extends Zend_Db_Table_Row_Abstract {
     *
     * @return string
     */
-   public function getNumber() {
+   public function getNum() {
       return $this->v_num;
    }
    /**
@@ -94,7 +94,7 @@ class Vacancy extends Zend_Db_Table_Row_Abstract {
     *
     * @param string $duties
     */
-   public function setNumber($number) {
+   public function setNum($number) {
       $this->v_num = $number;
    }
 }

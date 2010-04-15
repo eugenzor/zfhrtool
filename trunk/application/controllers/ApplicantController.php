@@ -99,17 +99,14 @@ class ApplicantController extends Controller_Action_Abstract
             $arrVacancy = $objVacancies -> getVacancies();
             $objForm -> setSelectOptions( $arrVacancy );
 
-            if ($this->getRequest ()->isPost ()) {
-                if ( $objForm->isValid ( $_POST )) {
-                    // Выполняем update (insert/update данных о категории)
+            if ( $this -> getRequest() -> isPost() ) {
+                if ( $objForm -> isValid ( $_POST ) ) {
                     $objApplicants = new Applicants ();
-
                     $applicantId = $objForm -> applicantId -> getValue();
                     if ( !empty($applicantId)) {
                         $objApplicant = $objApplicants -> getApplicantById( $applicantId );
                     } else {
                         $applicantId = null;
-                        $objForm -> Email -> addValidator('Db_NoRecordExists', true, array('applicants', 'email'));
                         $objApplicant = $objApplicants -> createRow();
                         $objApplicant->setStatus("new");
                     }
@@ -142,7 +139,7 @@ class ApplicantController extends Controller_Action_Abstract
                         $comment -> setUserId( Auth::getInstance() -> getIdentity() );
                         $comment -> setApplicantId($applicantId);
                         $comment -> setMessage("Applicant added to base");
-                        $comment->save();
+                        $comment -> save();
                     }
                     if ($objForm -> Photo -> getValue() != "") {
                         if ($objForm -> Photo -> receive()) {
@@ -153,33 +150,7 @@ class ApplicantController extends Controller_Action_Abstract
                             );
                         }
                     }
-
                     $this->_helper->redirector ( 'index', 'applicant' );
-                } else {
-                    $applicantId = $this->getRequest()->getParam('applicantId');
-                    if ($applicantId != '')
-                    {
-                        // выбираем из базы данные о редактируемом соискателе
-                        $objApplicants = new Applicants ( );
-                        $objApplicant = $objApplicants->getApplicantById( $applicantId );
-
-                        if ($objApplicant) {
-                            $this -> view -> objApplicant = $objApplicant;
-                            $objForm -> populate(
-                                array( 'LastName'   =>  $objForm -> LastName,
-                                       'Name'       =>  $objForm -> Name,
-                                       'Patronymic' =>  $objForm -> Patronymic,
-                                       'Birth'      =>  $objForm -> Birth,
-                                       'VacancyId'  =>  $objForm -> VacancyId,
-                                       'Email'      =>  $objForm -> Email,  
-                                       'Phone'      =>  $objForm -> Phone,  
-                                       'Resume'     =>  $objForm -> Resume,
-                                       'Number'     =>  $objForm -> Number,
-                                       'applicantId'=>  $applicantId
-                                )
-                            );
-                        }
-                    }
                 }
             } else {
                 $applicantId = $this->getRequest()->getParam('applicantId');
@@ -310,12 +281,11 @@ class ApplicantController extends Controller_Action_Abstract
                         $this -> _helper -> redirector ( 'index', 'applicant' );
                     }
                 }
-            }
-
+            } else {
                 // выбираем из базы данные о соискателе
+                
                 $objApplicant = $objApplicants->getApplicantById( $applicantId );
                 if ($objApplicant) {
-                    $this -> view -> applicant = $objApplicant;
                     $form -> populate(
                         array(
                             'Status' =>  $objApplicant -> getStatus(),
@@ -323,7 +293,8 @@ class ApplicantController extends Controller_Action_Abstract
                         )
                     );
                 }
-                $this -> view -> form = $form;
+            }
+            $this -> view -> form = $form;
         }
     }    
 

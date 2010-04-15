@@ -63,8 +63,8 @@ class UserController extends Controller_Action_Abstract
                         $this -> _helper -> redirector ( 'index', 'user' );
                     }
                 }
-                else {
-                    $this->populate($this->getRequest());
+                else  {
+                    $form -> populate( $this -> getRequest() -> getParams() );
                     $this -> view -> form = $form;
                 }
             }

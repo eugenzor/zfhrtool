@@ -56,9 +56,10 @@ class Applicants extends Zht_Db_Table
             $select -> where( $this->_name . '.v_id = ?', $vacancyId );
         }
         if ( -1 != $status ) {
-            $select -> where( 'status = ?', $status );
+            $select -> where( 'applicants.status = ?', $status );
         }
         $select -> join( 'vacancies', ' vacancies.v_id = applicants.v_id' );
+        
         if ($order == 'Name') $order = 'last_name';
         elseif ($order == 'NameDesc') $order = 'last_name DESC';
         elseif ($order == 'Status') $order = 'status';
@@ -71,7 +72,7 @@ class Applicants extends Zht_Db_Table
         
         if ($order != '')
             $select -> order($order);
-
+            
         $stmt = $this -> getAdapter() -> query($select);
         $arrApplicants = $stmt -> fetchAll(Zend_Db::FETCH_OBJ);
 
@@ -101,11 +102,7 @@ class Applicants extends Zht_Db_Table
         
         // Удаляем фото        
         $validator = new Zend_Validate_File_Exists($_SERVER['DOCUMENT_ROOT'] . '/public/images/photos/');
-        if ($validator -> isValid($applicantId . '.jpg')) {
-            echo "00000";
+        if ($validator -> isValid($applicantId . '.jpg'))
             unlink($_SERVER['DOCUMENT_ROOT'] . '/public/images/photos/' . $applicantId . '.jpg');
-        }
-        echo "11";
-        
     }
 }
