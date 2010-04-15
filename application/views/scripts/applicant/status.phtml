@@ -12,15 +12,5 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS_STATUS]'));
 ?>
 
 <div id="main">
-    <?php if (!empty($this -> applicant)): ?>
-	<h1>
-	    <?php echo $this->escape( $this -> applicant -> last_name ); ?>
-	    <?php echo $this->escape( $this -> applicant -> name ); ?>
-	    <?php echo $this->escape( $this -> applicant -> patronymic ); ?>
-	</h1>
-        <?php echo $this -> form; ?>
-	
-    <?php else: ?>
-        не найден
-    <?php endif;?>
+    <?php echo $this -> form; ?>
 </div>

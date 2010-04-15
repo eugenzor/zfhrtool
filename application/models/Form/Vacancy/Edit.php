@@ -30,7 +30,6 @@ class Form_Vacancy_Edit extends Zend_Form
         $nameText -> setLabel ( 'Название вакансии :' );
         $nameText -> setRequired ( true );
         $nameText -> addDecorator('Errors');
-        $nameText -> addValidator('Db_NoRecordExists', true, array('vacancies', 'v_name'));
         $nameText -> addFilters(array('StringTrim', 'HtmlEntities'));
         $this -> addElement ( $nameText );
 

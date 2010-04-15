@@ -19,14 +19,18 @@ class UserControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     /**
      * Prepares the environment before running a test.
      */
-/*
+
     protected function setUp() {
         $this->setDbDump(dirname(__FILE__) . '/_files/setup.sql');
         parent::setUp ();
     }
-*/
 
-
+    protected function _doLogin( $email, $password )
+    {
+        $auth = Auth::getInstance ();
+        $result = $auth ->
+            authenticate ( new Auth_Adapter ( $email, $password ) );
+    }
 
     public function testSignup()
     {
@@ -498,4 +502,113 @@ class UserControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
              Auth_Adapter::getEncodedPassword('fedor@zfhrtool.net', 'qwerty'),
              $db->fetchOne("SELECT password FROM users WHERE id = 2"));
     }
+    
+    public function testIndexAction()
+    {
+        $this ->_doLogin('ostapiuk@gmail.com', '654321');
+        $this->dispatch('/user');
+        $this->assertModule('default');
+        $this->assertController('user');
+        $this->assertAction('index');
+        $this->assertResponseCode(200);
+        $this->assertQueryContentContains('div#main', '<table');
+    }
+
+    public function testShowEditAction()
+    {
+        $this ->_doLogin('ostapiuk@gmail.com', '654321');
+        $this->dispatch('/user/edit/Id/1');
+        $this->assertModule('default');
+        $this->assertController('user');
+        $this->assertAction('edit');
+        $this->assertResponseCode(200);
+        $this->assertQueryCount('#userId', 1);
+        $this->assertQueryCount('#Email', 1);
+        $this->assertQueryCount('#Nickname', 1);
+        $this->assertQueryCount('#Role', 1);
+    }
+
+    public function testIncorrectSubmitEditAction()
+    {
+        $this -> _request -> setMethod( 'post' ) -> setPost(
+            array(
+                'userId' => '1',
+                'Email' => '--!@Nickname@!--', // incorrect
+                'Nickname' => '--!@Nickname@!--',
+                'Role' => 'staff'
+            )
+        );
+        $this ->_doLogin('ostapiuk@gmail.com', '654321');
+        $this->dispatch('/user/edit/Id/1');
+        $this->assertModule('default');
+        $this->assertController('user');
+        $this->assertAction('edit');
+        $this->assertQueryCount('ul.errors', 1);
+        $this->assertQueryContentContains('ul.errors', '<li>\'!--');
+    }
+
+    public function testCorrectSubmitEditAction()
+    {
+        $this -> _request -> setMethod( 'post' ) -> setPost(
+            array(
+                'userId' => '1',
+                'Email' => 'test_mail@gmail.com',
+                'Nickname' => '--!@Nickname@!--',
+                'Role' => 'staff'
+            )
+        );
+        $this ->_doLogin('ostapiuk@gmail.com', '654321');
+        $this->dispatch('/user/edit/Id/1');
+        $this->assertModule('default');
+        $this->assertController('user');
+        $this->assertAction('edit');
+        $this->assertRedirect('/user');
+    }
+
+    public function testShowRoleAction()
+    {
+        $this ->_doLogin('ostapiuk@gmail.com', '654321');
+        $this->dispatch('/user/role/Id/1');
+        $this->assertModule('default');
+        $this->assertController('user');
+        $this->assertAction('role');
+        $this->assertResponseCode(200);
+        $this->assertQueryCount('#userId', 1);
+        $this->assertQueryCount('#Role', 1);
+    }
+
+    public function testIncorrectSubmitRoleAction()
+    {
+        $this -> _request -> setMethod( 'post' ) -> setPost(
+            array(
+                'userId' => '',
+                'Role' => 'lkjsdlkj'
+            )
+        );
+        $this ->_doLogin('ostapiuk@gmail.com', '654321');
+        $this->dispatch('/user/role/Id/1');
+        $this->assertModule('default');
+        $this->assertController('user');
+        $this->assertAction('role');
+        $this->assertQueryCount('ul.errors', 1);
+        $this->assertQueryContentContains('ul.errors', '<li>\'lkjsdlkj');
+    }
+
+    public function testCorrectSubmitRoleAction()
+    {
+        $this -> _request -> setMethod( 'post' ) -> setPost(
+            array(
+                'userId' => '1',
+                'Role' => 'staff'
+            )
+        );
+        $this ->_doLogin('ostapiuk@gmail.com', '654321');
+        $this->dispatch('/user/role/Id/1');
+        $this->assertModule('default');
+        $this->assertController('user');
+        $this->assertAction('role');
+        $this->assertRedirect('/user');
+    }
+
+
 }

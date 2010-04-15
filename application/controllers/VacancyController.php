@@ -50,16 +50,13 @@ class VacancyController extends Controller_Action_Abstract
             $form = new Form_Vacancy_Edit();
             if ($this->getRequest ()->isPost ()){
                 if ( $form->isValid ( $_POST )) {
-                    
-                    echo str_replace("\n", "<br>", str_replace("\t", str_repeat("&nbsp;", 4), (string)$form));
-                    
                     // Выполняем update (insert/update данных о вакансии)
                     $objVacancies = new Vacancies();
 
                     $vacancyId = $form -> vacancyId -> getValue();
                     if ( !empty($vacancyId)) {
-                            $objVacancy = $objVacancy ->
-                            getVacancyById( $vacancyId );
+                            $objVacancy = $objVacancies ->
+                                getVacancyById( $vacancyId );
                         } else {
                             $objVacancy = $objVacancies -> createRow();
                         }
@@ -70,12 +67,13 @@ class VacancyController extends Controller_Action_Abstract
                     $Requirements = $form -> Requirements -> getValue();
                     // trim и htmlEnteties делают фильтры zend_form
                     $objVacancy -> setName ( $Name );
-                    $objVacancy -> setNumber ( $Number );
+                    $objVacancy -> setNum ( $Number );
                     $objVacancy -> setDuties ( $Duties );
                     $objVacancy -> setRequirements ( $Requirements );
                     $objVacancy -> save();
 
-                    $this->_redirect('vacancy');
+//                    $this->_helper->redirector ( 'index', 'vacancy' );
+                    $this->_forward('index', 'vacancy');
                 }
             } else {
                 $vacancyId = ( int ) $this->getRequest()->getParam('vacancyId');
@@ -83,21 +81,19 @@ class VacancyController extends Controller_Action_Abstract
                 {
                     // выбираем из базы данные о редактируемой вакансии
                     $vacancies = new Vacancies( );
-                    $objVacancy = $vacancies->getVacancies( $vacancyId );
+                    $objVacancy = $vacancies->getVacancyById( $vacancyId );
 
                     if ($objVacancy) {
                         $this -> view -> objVacancy = $objVacancy;
                         $form -> populate(
-                            array( 'v_name'   =>  $objVacancy -> v_name,
-                                   'v_number' =>  $objVacancy -> v_num,
-                                   'v_duties' =>  $objVacancy -> v_duties,
-                                   'v_requrements' =>  $objVacancy -> v_requrements,
-                                   'v_id'     =>  $objVacancy -> v_id) );
+                            array( 'Name'   =>  $objVacancy -> v_name,
+                                   'Number' =>  $objVacancy -> v_num,
+                                   'Duties' =>  $objVacancy -> v_duties,
+                                   'Requirements' =>  $objVacancy -> v_requirements,
+                                   'vacancyId'     =>  $objVacancy -> v_id) );
                     }
                 }
             }
-    //        print_r( $form->getErrors());
-            //  @todo: НЕ выводит сообщения об ошибках в форму
             $this -> view -> objVacancyEditForm = $form;
         }
     }
