@@ -331,7 +331,10 @@
   <tuv xml:lang="ru"><seg>Cоискатели</seg></tuv>
  </tu>
  <tu tuid='[LS_PAGE_TITLE_APPLICANTS_EDIT]'>
-  <tuv xml:lang="ru"><seg>Редактирование/добавление</seg></tuv>
+  <tuv xml:lang="ru"><seg>Редактирование</seg></tuv>
+ </tu>
+ <tu tuid='[LS_PAGE_TITLE_APPLICANTS_ADD]'>
+  <tuv xml:lang="ru"><seg>Добавление</seg></tuv>
  </tu>
  <tu tuid='[LS_PAGE_TITLE_APPLICANTS_INFO]'>
   <tuv xml:lang="ru"><seg>Информация о соискателе</seg></tuv>
@@ -401,6 +404,33 @@
  </tu>
  <tu tuid='[LS_FORM_STATUS_COMMENT_LABEL]'>
   <tuv xml:lang="ru"><seg>Комментарий</seg></tuv>
+ </tu>
+ <tu tuid='[LS_PAGE_TITLE_USERS]'>
+  <tuv xml:lang="ru"><seg>Пользователи</seg></tuv>
+ </tu>
+ <tu tuid='[LS_PAGE_TITLE_USERS_EDIT]'>
+  <tuv xml:lang="ru"><seg>Изменение роли</seg></tuv>
+ </tu>
+ <tu tuid='[LS_ROLE_GUEST]'>
+  <tuv xml:lang="ru"><seg>Гость</seg></tuv>
+ </tu>
+ <tu tuid='[LS_ROLE_MANAGER]'>
+  <tuv xml:lang="ru"><seg>Менеджер</seg></tuv>
+ </tu>
+ <tu tuid='[LS_ROLE_RECRUIT]'>
+  <tuv xml:lang="ru"><seg>Рекрутер</seg></tuv>
+ </tu>
+ <tu tuid='[LS_ROLE_STAFF]'>
+  <tuv xml:lang="ru"><seg>Специалист</seg></tuv>
+ </tu>
+ <tu tuid='[LS_ROLE_DISMISSED]'>
+  <tuv xml:lang="ru"><seg>DISSMISSED</seg></tuv>
+ </tu>
+ <tu tuid='[LS_ROLE_ADMINISTRATOR]'>
+  <tuv xml:lang="ru"><seg>Администратор</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_ROLE_ROLE_LABEL]'>
+  <tuv xml:lang="ru"><seg>Роль</seg></tuv>
  </tu>
  </body>
 </tmx>

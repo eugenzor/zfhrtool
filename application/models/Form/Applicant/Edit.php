@@ -50,12 +50,12 @@ class Form_Applicant_Edit extends Zend_Form
 
         $Birth = new Zend_Dojo_Form_Element_DateTextBox('Birth',
             array(
-                'datePattern' => 'dd.MM.yyyy',
                 'required'  =>  true,
                 'label' => '[LS_FORM_EDIT_BIRTH_LABEL]'
             )
         );
-        $Birth->addValidator('Date', true, array('yyyy-MM-dd'));
+        $Birth -> setDatePattern('dd.MM.yyyy');
+        $Birth -> addValidator('Date');
         $this -> addElement ( $Birth );
 
         $vacancySelect = $this -> createElement( 'select', 'VacancyId' );
@@ -95,17 +95,9 @@ class Form_Applicant_Edit extends Zend_Form
         $Photo -> setDestination($_SERVER['DOCUMENT_ROOT'] . '/upload');
         $this -> addElement ( $Photo );
 
-        if (!is_null($this->getView()->objApplicant)
-            && $this->getView()->objApplicant->getStatus() == "staff") {
-            $Number = $this->createElement ( 'text', 'Number' );
-            $Number -> setLabel ( '[LS_FORM_EDIT_NUMBER_LABEL]' );
-            $Number -> addValidator('Int', true);
-            $this -> addElement ( $Number );
-        }
-
         $applicantId = $this -> createElement( 'hidden', 'applicantId' );
         $this -> addElement( $applicantId );
-
+        
         $submit = $this -> createElement ( 'submit', 'save', array (
                 'label' => '[LS_FORM_SUBMMIT_SAVE]' ) );
         $this->addElement ( $submit );
@@ -131,4 +123,23 @@ class Form_Applicant_Edit extends Zend_Form
             $vacancySelect -> addMultiOptions ( $arrFormattedOptions );
         }
     }
+
+    /**
+     * показывает поле для номера штатного сотрудника
+     *
+     * @return void
+     */
+    public function showNumber()
+    {
+        $Number = $this->createElement ( 'text', 'Number' );
+        $Number -> setLabel ( '[LS_FORM_EDIT_NUMBER_LABEL]' );
+        $Number -> addValidator('Int', true);
+        $this -> addElement ( $Number );
+
+        $this -> removeElement('save');
+        $submit = $this -> createElement ( 'submit', 'save', array (
+                'label' => '[LS_FORM_SUBMMIT_SAVE]' ) );
+        $this->addElement ( $submit );
+    }
+    
 }

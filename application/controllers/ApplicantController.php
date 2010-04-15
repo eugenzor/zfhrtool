@@ -47,10 +47,18 @@ class ApplicantController extends Controller_Action_Abstract
             }
 
             $objApplicants = new Applicants();
-            $arrApplicants = $objApplicants -> getApplicants($vacancyId, $status);
+            $arrApplicants = $objApplicants -> getApplicants(
+                $vacancyId, $status,
+                $this -> getRequest() -> getParam('orderBy')
+            );
 
+            $this -> view -> orderBy = $this -> getRequest() -> getParam('orderBy');
             $this -> view -> arrApplicants = $arrApplicants;
             $this -> view -> objFilterForm = $objFilterForm;
+            
+            $this -> view -> can_edit = $this -> isAllowed( 'applicants', 'edit' );
+            $this -> view -> can_remove = $this -> isAllowed( 'applicants', 'remove' );
+            $this -> view -> can_change_status = $this -> isAllowed( 'applicants', 'change_status' );
         }
     }
 
@@ -61,7 +69,7 @@ class ApplicantController extends Controller_Action_Abstract
     public function addAction()
     {
         if ( $this -> _authorize( 'applicants', 'add') )
-            $this -> edit();
+            $this -> edit('add');
     }
 
     /**
@@ -71,18 +79,22 @@ class ApplicantController extends Controller_Action_Abstract
     public function editAction()
     {
         if ( $this -> _authorize( 'applicants', 'edit') )
-            $this -> edit();
+            $this -> edit('edit');
     }
 
     /**
      * Добавление/обновление соискателя
      * @return void
      */
-    private function edit()
+    private function edit($action)
     {
-        if ( $this -> _authorize( 'applicants', 'edit')
-            || $this -> _authorize( 'applicants', 'add') ) {
+        if ( ($action == 'edit' && $this -> isAllowed( 'applicants', 'edit'))
+            || ($action == 'add' && $this -> isAllowed( 'applicants', 'add')) ) {
             $objForm = new Form_Applicant_Edit();
+            $objForm -> setAction ( $this-> view -> url ( array (
+                'controller' => 'applicant',
+                'action' => $action
+            ) ) );
             $objVacancies = new Vacancies ();
             $arrVacancy = $objVacancies -> getVacancies();
             $objForm -> setSelectOptions( $arrVacancy );
@@ -120,7 +132,7 @@ class ApplicantController extends Controller_Action_Abstract
                     $objApplicant->setPhone ( $Phone );
                     $objApplicant->setResume ( $Resume );
                     if ($objApplicant->getStatus() == "staff")
-                        $objApplicant->setResume( $objForm -> Number -> getValue() );
+                        $objApplicant->setNumber( $this -> getRequest() -> getParam('Number') );
                     $objApplicant -> save();
                     
                     if ($applicantId == null) {
@@ -153,7 +165,6 @@ class ApplicantController extends Controller_Action_Abstract
 
                         if ($objApplicant) {
                             $this -> view -> objApplicant = $objApplicant;
-                            echo "00" . $objApplicant -> birth;
                             $objForm -> populate(
                                 array( 'LastName'   =>  $objForm -> LastName,
                                        'Name'       =>  $objForm -> Name,
@@ -179,12 +190,14 @@ class ApplicantController extends Controller_Action_Abstract
                     $objApplicant = $objApplicants->getApplicantById( $applicantId );
                     if ($objApplicant) {
                         $this -> view -> applicantId = $applicantId;
+                        if ($objApplicant -> getStatus() == "staff")
+                            $objForm -> showNumber();
                         $objForm -> populate(
                             array(
 				'LastName'   =>  $objApplicant -> last_name,
 				'Name'       =>  $objApplicant -> name,
 				'Patronymic' =>  $objApplicant -> patronymic,
-				'Birth'      =>  $this->view->toDate( $objApplicant -> birth),
+				'Birth'      =>  substr($objApplicant -> birth, 0 , 10),
 				'VacancyId'  =>  $objApplicant -> v_id,
 				'Email'      =>  $objApplicant -> email,  
 				'Phone'      =>  $objApplicant -> phone,  
@@ -235,7 +248,7 @@ class ApplicantController extends Controller_Action_Abstract
                 if ($objApplicant) {
                     $this -> view -> applicant = $objApplicant;
                     $comments = new Comments();
-                    if ( $this -> _authorize( 'comments', 'add')) {
+                    if ( $this -> isAllowed( 'comments', 'add')) {
                         $form = new Form_Applicant_Comment();
                         $this -> view -> commentForm = $form;
                         if ($this->getRequest () -> isPost ()) {
@@ -248,9 +261,8 @@ class ApplicantController extends Controller_Action_Abstract
                             }
                         }
                     }
-                    if ( $this -> _authorize( 'comments', 'view'))
+                    if ( $this -> isAllowed( 'comments', 'view'))
                         $this -> view -> comments = $comments -> getComments($applicantId);
-                    // @todo Comment form
                 }
             }
         }
@@ -272,7 +284,7 @@ class ApplicantController extends Controller_Action_Abstract
                     $objApplicant = $objApplicants->getApplicantById( $form -> applicantId -> getValue());
                     if ($objApplicant
                         && $form -> Status -> getValue() != $objApplicant -> getStatus()) {
-                        
+                        $status = $objApplicant -> getStatus();
                         $objApplicant -> setStatus( $form -> Status -> getValue() );
                         $objApplicant -> save();
 
@@ -281,8 +293,16 @@ class ApplicantController extends Controller_Action_Abstract
                         $comment -> setUserId( Auth::getInstance() -> getIdentity() );
                         $comment -> setApplicantId( $objApplicant -> id );
                         $comment -> setMessage(
-                            'Applicant status changed to "'
-                            . $form -> Status -> getValue()
+                            'Applicant status changed from "'
+                            . $this-> view -> translate(
+                                '[LS_STATUS_'
+                                . strtoupper($status)
+                                . ']')
+                            .'" to "'
+                            . $this-> view -> translate(
+                                '[LS_STATUS_'
+                                . strtoupper($form -> Status -> getValue())
+                                . ']')
                             . '"<br>'
                             . $form -> Comment -> getValue()
                         );

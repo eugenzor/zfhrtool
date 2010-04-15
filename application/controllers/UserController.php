@@ -25,6 +25,129 @@ class UserController extends Controller_Action_Abstract
     }
 
     /**
+     * Список пользователей
+     *
+     * возвращает список всех пользователей системы
+     * @return void
+     */
+    public function indexAction()
+    {
+        if ($this -> _authorize('users', 'view')) {
+            $Users = new Users();
+            $this -> view -> users = $Users -> getUsers();
+        }
+    }
+
+    /**
+     * Изменение роли
+     *
+     * изменяет роль пользователя
+     * @return void
+     */
+    public function roleAction()
+    {
+        if ($this -> _authorize('users', 'change_role')) {
+            $userId = $this -> getRequest() -> getParam('Id');
+            $form = new Form_User_Role();
+            $form -> setAction ( $this->view->url ( array (
+                'controller' => 'user',
+                'action' => 'role'
+            ) ) );
+            $Users = new Users();
+            if ($this -> getRequest() -> isPost()) {
+                if ($form -> isValid($_POST)) {
+                    $user = $Users -> getUserById( $form -> userId -> getValue() );
+                    if ($user) {
+                        $user -> setRole( $form -> Role -> getValue() );
+                        $user -> save();
+                        $this -> _helper -> redirector ( 'index', 'user' );
+                    }
+                }
+                else {
+                    $this->populate($this->getRequest());
+                    $this -> view -> form = $form;
+                }
+            }
+            elseif ($userId > 0) {
+                $user = $Users -> getUserById($userId);
+                if ($user) {
+                    $form -> populate ( array(
+                        'userId' => $user -> getId(),
+                        'Role' => $user -> getRole()
+                    ));
+                    $this -> view -> form = $form;
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Редактирование пользователя
+     *
+     * изменяет ник, почту, роль
+     * @return void
+     */
+    public function editAction()
+    {
+        if ($this -> _authorize('users', 'edit')) {
+            $userId = $this -> getRequest() -> getParam('Id');
+            $form = new Form_User_Edit();
+            $Users = new Users();
+            if ($this -> getRequest() -> isPost()) {
+                if ($form -> isValid($_POST)) {
+                    $user = $Users -> getUserById( $form -> userId -> getValue() );
+                    if ($user) {
+                        $user -> setRole( $form -> Role -> getValue() );
+                        $user -> setNickname( $form -> Nickname -> getValue() );
+                        $user -> setEmail( $form -> Email -> getValue() );
+                        $user -> save();
+                        $this -> _helper -> redirector ( 'index', 'user' );
+                    }
+                }
+                else {
+                    $form -> populate($this->getRequest()->getParams());
+                    $this -> view -> form = $form;
+                }
+            }
+            elseif ($userId > 0) {
+                $user = $Users -> getUserById($userId);
+                if ($user) {
+                    $form -> populate ( array(
+                        'userId' => $user -> getId(),
+                        'Role' => $user -> getRole(),
+                        'Nickname' => $user -> getNickname(),
+                        'Email' => $user -> getEmail()
+                    ));
+                    $this -> view -> form = $form;
+                }
+            }
+        }
+    }
+
+    /**
+     * Удаление пользователя
+     * @return void
+     */
+    public function removeAction()
+    {
+        if ( $this -> _authorize( 'users', 'remove')) {
+            $objUsers = new Users ();
+
+            $arrParams = $this->getRequest()->getParams();
+
+            if (array_key_exists('userId', $arrParams) &&
+                    !empty($arrParams['userId'])) {
+                //$objUsers -> removeUserById($arrParams['userId']);
+            }
+
+            $this->_forward ( 'index', 'users' );
+        }
+    }
+
+
+
+    /**
      * Регистрация пользователя
      *
      * Пользователи должны сами себя регистрировать в системе

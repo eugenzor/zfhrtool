@@ -48,7 +48,7 @@ class Applicants extends Zht_Db_Table
      * @param string $status
      * @return arrTest | array 
      */
-    public function getApplicants($vacancyId = -1, $status = -1)
+    public function getApplicants($vacancyId = -1, $status = -1, $order = '')
     {
         $select = $this -> getAdapter()-> select();
         $select -> from( $this->_name );
@@ -59,6 +59,18 @@ class Applicants extends Zht_Db_Table
             $select -> where( 'status = ?', $status );
         }
         $select -> join( 'vacancies', ' vacancies.v_id = applicants.v_id' );
+        if ($order == 'Name') $order = 'last_name';
+        elseif ($order == 'NameDesc') $order = 'last_name DESC';
+        elseif ($order == 'Status') $order = 'status';
+        elseif ($order == 'StatusDesc') $order = 'status DESC';
+        elseif ($order == 'Vacancy') $order = 'v_name';
+        elseif ($order == 'VacancyDesc') $order = 'v_name DESC';
+        elseif ($order == 'Email') $order = 'email';
+        elseif ($order == 'EmailDesc') $order = 'email DESC';
+        else $order = '';
+        
+        if ($order != '')
+            $select -> order($order);
 
         $stmt = $this -> getAdapter() -> query($select);
         $arrApplicants = $stmt -> fetchAll(Zend_Db::FETCH_OBJ);
@@ -77,10 +89,23 @@ class Applicants extends Zht_Db_Table
      */
     public function removeApplicantById($applicantId)
     {
-        // Удаляем информацию о тесте из БД
+        
+        // Удаляем информацию о соискателе из БД
         $where = array (
                 'id=?' => $applicantId );
         $this -> delete( $where );
-        // @todo Надо удалить файл фото из ФС
+        
+        // Удаляем комменты о соискателе из БД
+        $Comments = new Comments();
+        $Comments -> removeCommentsByApplicantId($applicantId);
+        
+        // Удаляем фото        
+        $validator = new Zend_Validate_File_Exists($_SERVER['DOCUMENT_ROOT'] . '/public/images/photos/');
+        if ($validator -> isValid($applicantId . '.jpg')) {
+            echo "00000";
+            unlink($_SERVER['DOCUMENT_ROOT'] . '/public/images/photos/' . $applicantId . '.jpg');
+        }
+        echo "11";
+        
     }
 }

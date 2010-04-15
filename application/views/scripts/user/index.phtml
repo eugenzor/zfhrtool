@@ -1,1 +1,57 @@
-<br /><br /><center>View script for controller <b>User</b> and script/action name <b>index</b></center>
+<?php
+/**
+ * Index Users page view
+ *
+ * Страница списка пользователей системы
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+$this->headTitle($this->translate('[LS_PAGE_TITLE_USERS]'));
+?>
+
+<div id="main">
+	<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tablesorter">
+	<thead>
+		<tr>
+			<th>№</th>
+			<th>Пользователь</th>
+			<th>E-mail</th>
+			<th>Роль</th>
+		</tr>
+	</thead>
+	<tbody>
+<?php if (!empty($this -> users)): ?>
+    <?php foreach ($this -> users as $user): ?>
+		<tr class="item_row">
+            <td><?php echo $this->escape( $user -> id ); ?></td>
+			<td>
+				<a href="<?php echo $this -> url ( array (
+					'controller' => 'user',
+					'action' => 'edit',
+					'Id' => $user -> id
+				) ); ?>">
+					<?php echo $this->escape( $user -> nickname ); ?></td>
+				</a>
+			<td><?php echo $this->escape( $user -> email ); ?></td>
+			<td>
+				<a href="<?php echo $this -> url ( array (
+					'controller' => 'user',
+					'action' => 'role',
+					'Id' => $user -> id
+				) ); ?>">
+					<?php echo $this->translate('[LS_ROLE_'.strtoupper($user->role).']'); ?>
+				</a>
+			</td>
+		</tr>
+    <?php endforeach; ?>
+<?php else: ?>
+		<tr class="item_row">
+			<td></td>
+			<td colspan="5">нет пользователей</td>
+		</tr>
+<?php endif;?>
+	</tbody>
+	</table>
+	<!-- End of Таблица тестов-->
+</div>

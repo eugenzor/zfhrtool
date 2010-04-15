@@ -9,24 +9,110 @@
  */
 $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS]'));
 ?>
-
+<?php /*
+    // Получение разрешения экрана
+    if(isset($_COOKIE["users_resolution"])) {
+	// В зависимости от разрешения экрана
+	$res = split("x", $_COOKIE["users_resolution"]);
+	$client_width = $res[0];
+	$delta = $client_width - 1024;
+	if ($delta > 100) $this -> show_photo = true;
+	if ($delta > 150) $this -> show_number = true;
+	if ($delta > 300) $this -> show_resume = true;
+	
+    } else {
+?)
+    <script type="text/javascript">
+    //<![CDATA[
+        function writeCookie() 
+        {
+         var today = new Date();
+         var the_date = new Date("December 31, 2023");
+         var the_cookie_date = the_date.toGMTString();
+         var the_cookie = "users_resolution="+ screen.width +"x"+ screen.height;
+         var the_cookie = the_cookie + ";expires=" + the_cookie_date;
+         document.cookie=the_cookie
+        }
+        writeCookie();
+    //]]>
+    </script>
+(?php } */ ?>
 <div id="main">
-
     <div id="filter-form">
         <?php echo $this -> objFilterForm; ?>
     </div>
 	<!-- Таблица соискателей -->
-	<table width="100%" border="1" cellpadding="0" cellspacing="0" id="tableApplicants" class="tablesorter">
+	<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tablesorter">
     <thead>
 		<tr>
 		    <th>№</th>
-		    <th>Фамилия Имя Отчество</th>
+		    <th class="header<?php
+			if ($this->orderBy=='Name') echo ' headerSortUp';
+			elseif ($this->orderBy=='NameDesc') echo ' headerSortDown';
+			?>">
+			<a href="<?php echo $this -> url( array(
+				'controller' => 'applicant',
+				'orderBy' => ($this->orderBy != 'Name') ?
+				    'Name' : 'NameDesc'
+			    ));
+			?>" onclick="return subm(this.href);">
+			    Фамилия Имя Отчество
+			</a>
+		    </th>
 		    <th>Дата рождения</th>
-		    <th class=''>Должность / вакансия</th>
-		    <th>Электроннай почта</th>
+		    <th class="header<?php
+			if ($this->orderBy=='Vacancy') echo ' headerSortUp';
+			if ($this->orderBy=='VacancyDesc') echo ' headerSortDown';
+			?>">
+			<a href="<?php echo $this -> url( array(
+				'controller' => 'applicant',
+				'orderBy' => ($this->orderBy != 'Vacancy') ?
+				    'Vacancy' : 'VacancyDesc'
+			    ));
+			?>" onclick="return subm(this.href)">
+			    Должность / вакансия
+			</a>
+		    </th>
+		    <th class="header<?php
+			if ($this->orderBy=='Email') echo ' headerSortUp';
+			if ($this->orderBy=='EmailDesc') echo ' headerSortDown';
+			?>">
+			<a href="<?php echo $this -> url( array(
+				'controller' => 'applicant',
+				'orderBy' => ($this->orderBy != 'Email') ?
+				    'Email' : 'EmailDesc'
+			    ));
+			?>" onclick="return subm(this.href)">
+			    Электроннай почта
+			</a>
+		    </th>
 		    <th>Контактный номер</th>
-		    <th>Статус</th>
-		    <th>Действия</th>
+		    <?php if ($this->show_photo): ?>
+			<th width="100px">Фото</th>
+		    <?php endif; ?>
+		    <?php if ($this->show_number): ?>
+			<th width="50px">Номер</th>
+		    <?php endif; ?>
+		    <?php if ($this->show_resume): ?>
+			<th width="100%">Резюме</th>
+		    <?php endif; ?>
+		    <th class="header<?php
+			if ($this->orderBy=='Status') echo ' headerSortUp';
+			elseif ($this->orderBy=='StatusDesc') echo ' headerSortDown';
+			?>">
+			<a href="<?php echo $this -> url( array(
+				'controller' => 'applicant',
+				'orderBy' => ($this->orderBy != 'Status') ?
+				    'Status' : 'StatusDesc'
+			    ));
+			?>" onclick="return subm(this.href)">
+			    Статус
+			</a>
+		    </th>
+		    
+		    <?php if ($this -> can_edit || $this -> can_remove): ?>
+			<th>Действия</th>
+		    <?php endif; ?>
 		</tr>
     </thead>
     <tbody>
@@ -50,20 +136,46 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS]'));
 			<td><?php echo $this->escape( $applicant -> v_name ); ?></td>
 			<td><?php echo $this->escape( $applicant -> email ); ?></td>
 			<td><?php echo $this->escape( $applicant -> phone ); ?></td>
+		    <?php if ($this->show_photo): ?>
+			<td><?php echo $this->toImg(
+				'photos/' . $applicant->id . '.jpg',
+				'100px'
+			    ); ?>
+			</td>
+		    <?php endif; ?>
+		    <?php if ($this->show_number): ?>
+			<td><?php echo $this -> escape( $applicant -> number ); ?></td>
+		    <?php endif; ?>
+		    <?php if ($this->show_resume): ?>
 			<td>
+			    <div class="resume_small">
+				<?php echo $this->special($this->resume); ?>
+			    </div>
+			</td>
+		    <?php endif; ?>
+			<td>
+			    <?php if ($this -> can_change_status): ?>
     			    <a href="<?php echo $this -> url ( array (
 				'controller' => 'applicant',
 				'action' => 'status',
 				'applicantId' => $applicant->id
 			    ) ); ?>">
+			    <?php endif; ?>
 				<?php echo $this->translate('[LS_STATUS_' . strtoupper($this->escape( $applicant -> status )) . ']'); ?>
-			    </a>
+			    <?php if ($this -> can_change_status): ?></a><?php endif; ?>
+			    
 			</td>
+			<?php if ($this -> can_edit || $this -> can_remove): ?>
 			<td>
+			    <?php if ($this -> can_edit): ?>
 				<a href="<?php echo $this -> url ( array ( 'controller' => 'applicant', 'action' => 'edit', 'applicantId' => $applicant->id) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a><br />
-				<a href="<?php echo $this -> url ( array ( 'controller' => 'applicant', 'action' => 'remove', 'applicantId' => $applicant->id) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $applicant->t_name ); ?>\'');"><?php echo $this->translate('[LS_LINK_REMOVE]'); ?></a><br />
+			    <?php endif; ?>
+			    <?php if ($this -> can_remove): ?>
+				<a href="<?php echo $this -> url ( array ( 'controller' => 'applicant', 'action' => 'remove', 'applicantId' => $applicant->id) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $applicant->last_name . ' ' . $applicant->name ); ?>\'');"><?php echo $this->translate('[LS_LINK_REMOVE]'); ?></a><br />
+			    <?php endif; ?>
 			</td>
-		</tr>
+			<?php endif; ?>
+</tr>
 	    <?php endforeach; ?>
     <?php else: ?>
     	<tr>

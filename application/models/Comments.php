@@ -49,13 +49,27 @@ class Comments extends Zht_Db_Table
     /**
      * Removes Comment By CommentId
      *
-     * @param int $applicantId
+     * @param int $commentId
      * @return void
      */
     public function removeCommentById($commentId)
     {
         $where = array (
-                'id=?' => $commentId );
+                'c_id=?' => $commentId );
         $this -> delete( $where );
     }
+
+    /**
+     * Removes Comments By ApplicantId
+     *
+     * @param int $applicantId
+     * @return void
+     */
+    public function removeCommentsByApplicantId($applicantId)
+    {
+        $where = array (
+                'c_applicant_id=?' => $applicantId );
+        $this -> delete( $where );
+    }
+
 }

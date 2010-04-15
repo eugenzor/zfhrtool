@@ -7,6 +7,15 @@
  */
 
 $this->headLink()->appendStylesheet("/styles/main.css");
+$this->headLink()->appendStylesheet("/styles/tablesorter.css");
+
+$this->headScript()->appendScript('
+    function subm(href) {
+        document.getElementById("AFF").action = href;
+        document.getElementById("vacancyId").form.submit();
+        return false;
+    }
+');
 echo $this->doctype(),PHP_EOL;
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
