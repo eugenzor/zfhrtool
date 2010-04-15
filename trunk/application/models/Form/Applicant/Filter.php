@@ -25,8 +25,10 @@ class Form_Applicant_Filter extends Zend_Form
             url ( array ('controller'=>'applicant') ) );
         $this->setMethod ( 'post' );
         $this->setAttrib('class', 'filter-form');
+	$this->setAttrib('id', 'AFF');
 
         $vacancySelect = $this -> createElement( 'select', 'vacancyId' );
+        $vacancySelect -> setAttrib( 'id', 'vacancyId' );
         $vacancySelect -> setLabel( 'Вакансия: ' );
         $vacancySelect -> addMultiOptions( array('-1' => 'Все вакансии'));
         $vacancySelect -> setAttrib( 'onchange', 'this.form.submit();' );
@@ -48,11 +50,6 @@ class Form_Applicant_Filter extends Zend_Form
         );
         $statusSelect -> setAttrib( 'onchange', 'this.form.submit();' );
         $this -> addElement($statusSelect);
-
-        $hiddenOrder = $this -> createElement( 'hidden', 'order' );
-        $statusSelect -> setAttrib( 'onchange', 'this.form.submit();' );
-        $this -> addElement($hiddenOrder);
-	
     }
 
     /**

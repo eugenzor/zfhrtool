@@ -213,17 +213,4 @@ class Applicant extends Zend_Db_Table_Row_Abstract {
       $this->number = $number;
    }
 
-   /**
-    * Get Photo if exists
-    *
-    * @return string
-    */
-   public function getPhoto() {
-
-      $validator = new Zend_Validate_File_Exists($_SERVER['DOCUMENT_ROOT'] . '/public/images/photos/');
-      if (! $validator -> isValid($this->getId() . '.jpg'))
-        return '';
-      return '/images/photos/' . $this->getId() . '.jpg';
-   }
-
 }

@@ -40,6 +40,8 @@ class Navigation extends Zend_Navigation
             'label'=>'Вакансии',
             'controller'=>'vacancy',
             'action' => 'index',
+            'resource' => 'vacancies',
+            'privilege' => 'view',
             'pages' => array(
                 array(
                     'label'=>'Список вакансий',
@@ -49,6 +51,8 @@ class Navigation extends Zend_Navigation
                 array(
                     'label'=>'Добавить вакансию',
                     'controller'=>'vacancy',
+                    'resource' => 'vacancies',
+                    'privilege' => 'add',
                     'action' => 'edit',
                 ),
             )
@@ -57,6 +61,8 @@ class Navigation extends Zend_Navigation
             'label'=>'Соискатели',
             'controller'=>'applicant',
             'action' => 'index',
+            'resource' => 'applicants',
+            'privilege' => 'view',
             'pages' => array(
                 array(
                     'label'=>'Показать список',
@@ -66,10 +72,19 @@ class Navigation extends Zend_Navigation
                 array(
                     'label'=>'Добавить соискателя',
                     'controller'=>'applicant',
-                    'action' => 'edit',
+                    'resource' => 'applicants',
+                    'privilege' => 'add',
+                    'action' => 'add',
                 ),
             )
             ),
+        array(
+            'label' => 'Пользователи',
+            'controller' => 'user',
+            'resource' => 'users',
+            'privilege' => 'view',
+            'action' => 'index',
+        ),
         array(
             'label'=>"Выйти",
             'controller'=>'user',

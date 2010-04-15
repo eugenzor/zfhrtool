@@ -52,6 +52,7 @@ class Acl extends Zend_Acl
         $this -> add( new Zend_Acl_Resource( 'vacancies' ));
         $this -> add( new Zend_Acl_Resource( 'applicants' ));
         $this -> add( new Zend_Acl_Resource( 'comments' ));
+        $this -> add( new Zend_Acl_Resource( 'users' ));
         
         // Права
         $this -> allow( 'recruit' , 'applicants', array( 'view', 'add'));

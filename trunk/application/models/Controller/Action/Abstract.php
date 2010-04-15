@@ -23,13 +23,17 @@ abstract class Controller_Action_Abstract extends Zend_Controller_Action
         $this->_baseUrl = $this->getFrontController ()->getBaseUrl ();
 
         $auth = Auth::getInstance();
-        $auth->setAcl(new Acl());
+        $acl = new Acl();
+        $auth->setAcl($acl);
 
         $this->view->doctype ( 'XHTML1_TRANSITIONAL' );
         $this->view->headTitle ()->setSeparator ( ' :: ' );
         $this->view->headTitle('HR');
         $this->view->addHelperPath('Zend/Dojo/View/Helper/', 'Zend_Dojo_View_Helper');
         $this->view->addHelperPath('../application/Views/Helpers/', 'Helper');
+
+        Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
+        Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole('guest');
 
         $this->_setNavigation();
     }
@@ -121,5 +125,16 @@ abstract class Controller_Action_Abstract extends Zend_Controller_Action
             ->setAcl($auth->getAcl())
             ->setRole($auth->getUser()->getRole());
         parent::preDispatch();
+    }
+
+    /**
+     * Проверка на наличие прав доступа
+     * @param string $resource запрашиваемый ресурс
+     * @param string|null $privilege запрашиваемая привилегия
+     * @return bool
+     */
+    protected function isAllowed($resource, $privilege = null) {
+        $auth = Auth::getInstance();
+        return $auth->isAllowed ( $resource, $privilege );
     }
 }
