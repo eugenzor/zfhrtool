@@ -32,8 +32,15 @@ class VacancyController extends Controller_Action_Abstract
     public function indexAction()
     {
 
+
+
         if ( $this -> _authorize( 'vacancies', 'view')) {
             $objVacancies = new Vacancies();
+        //TODO лучше так:
+        //$this->view->vacancies = $objVacancies->fetchAll();
+        // И потом в виде мы сможем использовать объект вакансии
+        // а не просто массив
+
             $arrVacancies = $objVacancies -> getVacancies();
 
             $this -> view -> arrVacancies = $arrVacancies;
@@ -107,6 +114,18 @@ class VacancyController extends Controller_Action_Abstract
         if ( $this -> _authorize( 'vacancies', 'remove')) {
             $objVacancies = new Vacancies();
 
+
+            // Этот участок лучше и прозрачнее записать так:
+//            $vacancy = $objVacancies->getObjectById($this->_request->getParam('vacancyId'));
+//            if (!($vacancy instanceof Vacancy)){
+//                throw new Zend_Exception('...');
+//            }
+//            $vacancy->delete();
+
+            // Потом в классе Vacancy описываем метод _delete() который будет запущен
+            // перед удалением вакансии, в котором и будет проверка - нет ли
+            // связанных данных
+
             $arrParams = $this->getRequest()->getParams();
 
             if (array_key_exists('vacancyId', $arrParams) &&
@@ -114,6 +133,10 @@ class VacancyController extends Controller_Action_Abstract
                 $objVacancies -> removeVacancyById($arrParams['vacancyId']);
             }
 
+            // Это не очень удачное решение, так как при повторном обновлении
+            // страницы снова произойдет попытка очистки вакансий
+            // Если какое-либо серъезое действие производится методом get
+            // То после его успешного выполнения принято делать редирект
             $this->_forward ( 'index', 'vacancy' );
         }
     }
