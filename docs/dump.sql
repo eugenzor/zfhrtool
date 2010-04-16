@@ -173,6 +173,8 @@ INSERT INTO `test_question_answer` (`tqa_id`, `tqa_text`, `tqa_flag`, `tq_id`) V
 -- Table structure for table `vacancies`
 --
 
+-- TODO префиксы в полях не нужны, они только будут мешать разработке
+
 CREATE TABLE IF NOT EXISTS `vacancies` (
   `v_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `v_num` smallint(5) unsigned NOT NULL DEFAULT '0',

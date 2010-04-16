@@ -19,7 +19,13 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_VACANCIES]'));
 			<td>К-во</td>
 			<td class="action">Действия</td>
 		</tr>
-<?php if (!empty($this -> arrVacancies)): ?>
+<?php
+// TODO здесь не самый лучший способ использовать массивы
+// Если мы был передан объект Zend_Db_Table_Rowset мы бы
+// после прохода по нему foreach смогли бы использовать класс Vacancy
+// Со всеми его методами
+
+if (!empty($this -> arrVacancies)): ?>
     <?php foreach ($this -> arrVacancies as $vacancy): ?>
 		<tr class="item_row">
             <td><?php echo $this->escape( $vacancy['v_id'] ); ?></td>

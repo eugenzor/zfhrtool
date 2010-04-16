@@ -30,6 +30,8 @@ class Vacancies extends Zht_Db_Table
      * @param string $vacancyId
      * @return Category | boolean
      */
+    // TODO Этот метод здесь лишний. В классе Zht_Db_Table есть метод
+    // getObjectById, который делает тоже самое
     public function getVacancyById($vacancyId)
     {
         $where = array (
@@ -46,6 +48,8 @@ class Vacancies extends Zht_Db_Table
      *
      * @return Vacancy | boolean
      */
+
+    //TODO в Zend_Db_Table есть метод fetchAll который делает тоже самое
     public function getVacancies()
     {
         $arrCategory = $this -> getAdapter()->
@@ -63,6 +67,10 @@ class Vacancies extends Zht_Db_Table
      * @param string $vacancyId
      * @return boolean
      */
+
+    // TODO в данной ситуации лучше воспользоваться стандартным методом
+    // удаления объекта в классе Vacancy
+    // Как это лучше сделать - я покажу в контроллере
     public function removeVacancyById($vacancyId)
     {
         $query = "SELECT count(id) from applicants "
