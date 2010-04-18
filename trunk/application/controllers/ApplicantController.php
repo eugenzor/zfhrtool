@@ -33,10 +33,11 @@ class ApplicantController extends Controller_Action_Abstract
         if ( $this -> _authorize( 'applicants', 'view')) {
             $objFilterForm = new Form_Applicant_Filter();
             $objVacancies = new Vacancies();
-            $arrVacancies = $objVacancies -> getVacancies();
-            $objFilterForm -> setVacancies( $arrVacancies );
+            $objFilterForm -> setVacancies(
+                $objVacancies -> fetchAll() -> toArray()
+            );
 
-            if ($this->getRequest()->isPost()) {
+            if ($this -> getRequest() -> isPost()) {
                 $arrParams = $this -> _request -> getPost();
                 $vacancyId = ( int ) $arrParams['vacancyId'];
                 $status = $arrParams['status'];
@@ -95,20 +96,20 @@ class ApplicantController extends Controller_Action_Abstract
                 'controller' => 'applicant',
                 'action' => $action
             ) ) );
-            $objVacancies = new Vacancies ();
-            $arrVacancy = $objVacancies -> getVacancies();
-            $objForm -> setSelectOptions( $arrVacancy );
+            $objVacancies = new Vacancies();
+            $objForm -> setSelectOptions(
+                $objVacancies -> fetchAll() -> toArray()
+            );
 
             if ( $this -> getRequest() -> isPost() ) {
-                if ( $objForm -> isValid ( $_POST ) ) {
+                if ( $objForm -> isValid ( $_POST ) ) {                  
                     $objApplicants = new Applicants ();
                     $applicantId = $objForm -> applicantId -> getValue();
-                    if ( !empty($applicantId)) {
-                        $objApplicant = $objApplicants -> getApplicantById( $applicantId );
-                    } else {
+                    $objApplicant = $objApplicants -> getObjectById( $applicantId );
+                    if (!($objApplicant instanceof Applicant)) {
                         $applicantId = null;
                         $objApplicant = $objApplicants -> createRow();
-                        $objApplicant->setStatus("new");
+                        $objApplicant -> status = "new";
                     }
 
                     $LastName = $objForm -> LastName -> getValue();
@@ -120,25 +121,25 @@ class ApplicantController extends Controller_Action_Abstract
                     $Phone = $objForm -> Phone -> getValue();
                     $Resume = $objForm -> Resume -> getValue();
 
-                    $objApplicant->setLastName ( $LastName );
-                    $objApplicant->setName ( $Name );
-                    $objApplicant->setPatronymic ( $Patronymic );
-                    $objApplicant->setBirth ( $Birth );
-                    $objApplicant->setVacancyId ( $VacancyId );
-                    $objApplicant->setEmail ( $Email );
-                    $objApplicant->setPhone ( $Phone );
-                    $objApplicant->setResume ( $Resume );
-                    if ($objApplicant->getStatus() == "staff")
-                        $objApplicant->setNumber( $this -> getRequest() -> getParam('Number') );
+                    $objApplicant -> last_name = $LastName;
+                    $objApplicant -> name = $Name;
+                    $objApplicant -> patronymic = $Patronymic;
+                    $objApplicant -> birth = $Birth;
+                    $objApplicant -> vacancy_id = $VacancyId;
+                    $objApplicant -> email = $Email;
+                    $objApplicant -> phone = $Phone;
+                    $objApplicant -> resume = $Resume;
+                    if ($objApplicant -> status == "staff")
+                        $objApplicant -> number = $this -> getRequest() -> getParam('Number');
                     $objApplicant -> save();
                     
                     if ($applicantId == null) {
                         $applicantId = $objApplicants -> getAdapter() -> lastInsertId();
                         $comments = new Comments();
                         $comment = $comments -> createRow();
-                        $comment -> setUserId( Auth::getInstance() -> getIdentity() );
-                        $comment -> setApplicantId($applicantId);
-                        $comment -> setMessage("Applicant added to base");
+                        $comment -> user_id = Auth::getInstance() -> getIdentity();
+                        $comment -> applicant_id = $applicantId;
+                        $comment -> comment = "Applicant added to base";
                         $comment -> save();
                     }
                     if ($objForm -> Photo -> getValue() != "") {
@@ -150,15 +151,17 @@ class ApplicantController extends Controller_Action_Abstract
                             );
                         }
                     }
-                    $this->_helper->redirector ( 'index', 'applicant' );
-                }
+                    $this -> _helper -> redirector ( 'index', 'applicant' );
+                } 
+                else
+                    $objForm -> populate( $this-> getRequest() -> getParams() );
             } else {
                 $applicantId = $this->getRequest()->getParam('applicantId');
                 if ($applicantId != '')
                 {
                     // выбираем из базы данные о редактируемом соискателе
                     $objApplicants = new Applicants ( );
-                    $objApplicant = $objApplicants->getApplicantById( $applicantId );
+                    $objApplicant = $objApplicants->getObjectById( $applicantId );
                     if ($objApplicant) {
                         $this -> view -> applicantId = $applicantId;
                         if ($objApplicant -> getStatus() == "staff")
@@ -192,15 +195,15 @@ class ApplicantController extends Controller_Action_Abstract
     {
         if ( $this -> _authorize( 'applicants', 'remove')) {
             $objApplicants = new Applicants ();
-
             $arrParams = $this -> getRequest() -> getParams();
-
-            if (array_key_exists( 'applicantId', $arrParams ) &&
-                    !empty( $arrParams['applicantId'] ) ) {
-                $objApplicants -> removeApplicantById( $arrParams['applicantId'] );
-            }
-            // @todo Удаление комментариев
-            $this->_forward ( 'index', 'applicant' );
+            $applicant = $objApplicants -> getObjectById(
+                $this -> getRequest() -> getParam('applicantId')
+            );
+            
+            if ( !($applicant instanceof Applicant) )
+                throw new Zend_Exception('Error while deleting applicant.');
+            $applicant -> delete();
+            $this -> _helper -> redirector ( 'index', 'applicant' );
         }
     }
     
@@ -214,8 +217,8 @@ class ApplicantController extends Controller_Action_Abstract
             $applicantId = $this->getRequest()->getParam('applicantId');
             if ($applicantId != '')
             {
-                $objApplicants = new Applicants ( );
-                $objApplicant = $objApplicants->getApplicantById( $applicantId );
+                $objApplicants = new Applicants ();
+                $objApplicant = $objApplicants->getObjectById( $applicantId );
                 if ($objApplicant) {
                     $this -> view -> applicant = $objApplicant;
                     $comments = new Comments();
@@ -225,10 +228,13 @@ class ApplicantController extends Controller_Action_Abstract
                         if ($this->getRequest () -> isPost ()) {
                             if ( $form -> isValid ( $_POST )) {
                                 $comment = $comments -> createRow();
-                                $comment -> setUserId( Auth::getInstance() -> getIdentity() );
-                                $comment -> setApplicantId($applicantId);
-                                $comment -> setMessage( $form -> Comment -> getValue() );
+                                $comment -> user_id = Auth::getInstance() -> getIdentity();
+                                $comment -> applicant_id = $applicantId;
+                                $comment -> comment = $form -> Comment -> getValue();
                                 $comment -> save();
+                                $this -> _helper -> redirector('show', 'applicant', 'default',
+                                    array( 'applicantId' => $applicantId)
+                                );
                             }
                         }
                     }
@@ -252,18 +258,18 @@ class ApplicantController extends Controller_Action_Abstract
 
             if ($this -> getRequest () -> isPost ()) {
                 if ( $form -> isValid ( $_POST )) {
-                    $objApplicant = $objApplicants->getApplicantById( $form -> applicantId -> getValue());
+                    $objApplicant = $objApplicants->getObjectById( $form -> applicantId -> getValue());
                     if ($objApplicant
-                        && $form -> Status -> getValue() != $objApplicant -> getStatus()) {
-                        $status = $objApplicant -> getStatus();
-                        $objApplicant -> setStatus( $form -> Status -> getValue() );
+                        && $form -> Status -> getValue() != $objApplicant -> status) {
+                        $status = $objApplicant -> status;
+                        $objApplicant -> status = $form -> Status -> getValue();
                         $objApplicant -> save();
 
                         $comments = new Comments();
                         $comment = $comments -> createRow();
-                        $comment -> setUserId( Auth::getInstance() -> getIdentity() );
-                        $comment -> setApplicantId( $objApplicant -> id );
-                        $comment -> setMessage(
+                        $comment -> user_id = Auth::getInstance() -> getIdentity();
+                        $comment -> applicant_id = $objApplicant -> id;
+                        $comment -> comment =
                             'Applicant status changed from "'
                             . $this-> view -> translate(
                                 '[LS_STATUS_'
@@ -275,8 +281,7 @@ class ApplicantController extends Controller_Action_Abstract
                                 . strtoupper($form -> Status -> getValue())
                                 . ']')
                             . '"<br>'
-                            . $form -> Comment -> getValue()
-                        );
+                            . $form -> Comment -> getValue();
                         $comment->save();
                         $this -> _helper -> redirector ( 'index', 'applicant' );
                     }
@@ -284,11 +289,11 @@ class ApplicantController extends Controller_Action_Abstract
             } else {
                 // выбираем из базы данные о соискателе
                 
-                $objApplicant = $objApplicants->getApplicantById( $applicantId );
+                $objApplicant = $objApplicants->getObjectById( $applicantId );
                 if ($objApplicant) {
                     $form -> populate(
                         array(
-                            'Status' =>  $objApplicant -> getStatus(),
+                            'Status' =>  $objApplicant -> status,
                             'applicantId' =>  $objApplicant -> id
                         )
                     );

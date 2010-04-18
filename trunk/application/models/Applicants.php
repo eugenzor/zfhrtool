@@ -25,23 +25,6 @@ class Applicants extends Zht_Db_Table
     protected $_rowClass = 'Applicant';
 
     /**
-     * Get Applicant By ApplicantId
-     *
-     * @param string $applicantId
-     * @return Applicant | boolean
-     */
-    public function getApplicantById($applicantId)
-    {
-        $where = array (
-                'id=?' => $applicantId );
-        $objApplicant = $this->fetchRow ( $where );
-        if (is_null ( $objApplicant )) {
-            return false;
-        }
-        return $objApplicant;
-    }
-
-    /**
      * Get array of Applicants By vacancyId and status
      *
      * @param int $vacancyId
@@ -53,12 +36,18 @@ class Applicants extends Zht_Db_Table
         $select = $this -> getAdapter()-> select();
         $select -> from( $this->_name );
         if ( -1 != $vacancyId ) {
-            $select -> where( $this->_name . '.v_id = ?', $vacancyId );
+            $select -> where( $this->_name . '.vacancy_id = ?', $vacancyId );
         }
         if ( -1 != $status ) {
             $select -> where( 'applicants.status = ?', $status );
         }
-        $select -> join( 'vacancies', ' vacancies.v_id = applicants.v_id' );
+        $select -> join(
+            'vacancies',
+            'vacancies.id = '
+                . $this->_name
+                . '.vacancy_id',
+            array('name as v_name')
+        );
         
         if ($order == 'Name') $order = 'last_name';
         elseif ($order == 'NameDesc') $order = 'last_name DESC';
@@ -80,29 +69,5 @@ class Applicants extends Zht_Db_Table
             return false;
         }
         return $arrApplicants;
-    }
-
-    /**
-     * Removes Applicant By ApplicantId
-     *
-     * @param int $applicantId
-     * @return void
-     */
-    public function removeApplicantById($applicantId)
-    {
-        
-        // Удаляем информацию о соискателе из БД
-        $where = array (
-                'id=?' => $applicantId );
-        $this -> delete( $where );
-        
-        // Удаляем комменты о соискателе из БД
-        $Comments = new Comments();
-        $Comments -> removeCommentsByApplicantId($applicantId);
-        
-        // Удаляем фото        
-        $validator = new Zend_Validate_File_Exists($_SERVER['DOCUMENT_ROOT'] . '/public/images/photos/');
-        if ($validator -> isValid($applicantId . '.jpg'))
-            unlink($_SERVER['DOCUMENT_ROOT'] . '/public/images/photos/' . $applicantId . '.jpg');
     }
 }

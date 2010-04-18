@@ -65,8 +65,8 @@ class Form_Applicant_Filter extends Zend_Form
             $arrFormattedOptions = array();
             foreach ($arrOptions as $arrOption)
             {
-                $arrFormattedOptions[ $arrOption[ 'v_id' ] ] =
-                        $arrOption['v_name'];
+                $arrFormattedOptions[ $arrOption[ 'id' ] ] =
+                        $arrOption['name'];
             }
             $vacancySelect = $this -> getElement( 'vacancyId' );
             $vacancySelect -> addMultiOptions ( $arrFormattedOptions );

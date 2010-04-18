@@ -34,8 +34,8 @@ class Comments extends Zht_Db_Table
     {
         $select = $this -> getAdapter()-> select();
         $select -> from( $this->_name );
-        $select -> where( 'c_applicant_id = ?', $applicantId );
-        $select -> join( 'users', 'c_user_id = users.id');
+        $select -> where( 'applicant_id = ?', $applicantId );
+        $select -> join( 'users', 'user_id = users.id');
 
         $stmt = $this -> getAdapter() -> query($select);
         $arrComments = $stmt -> fetchAll(Zend_Db::FETCH_OBJ);
@@ -47,19 +47,6 @@ class Comments extends Zht_Db_Table
     }
 
     /**
-     * Removes Comment By CommentId
-     *
-     * @param int $commentId
-     * @return void
-     */
-    public function removeCommentById($commentId)
-    {
-        $where = array (
-                'c_id=?' => $commentId );
-        $this -> delete( $where );
-    }
-
-    /**
      * Removes Comments By ApplicantId
      *
      * @param int $applicantId
@@ -68,7 +55,7 @@ class Comments extends Zht_Db_Table
     public function removeCommentsByApplicantId($applicantId)
     {
         $where = array (
-                'c_applicant_id=?' => $applicantId );
+                'applicant_id=?' => $applicantId );
         $this -> delete( $where );
     }
 

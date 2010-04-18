@@ -21,7 +21,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS_INFO]'));
 <table border="1" width="500px;">
     <tr>
 	<td><?php echo $this->translate( '[LS_FORM_EDIT_LASTNAME_LABEL]' ); ?></td>
-	<td><?php echo $this->escape( $this->applicant->getLastName() ); ?></td>
+	<td><?php echo $this->escape( $this -> applicant -> last_name ); ?></td>
 	<td rowspan="7">
 	    <?php echo $this -> toImg(
 		'photos/' . $this-> applicant -> id . '.jpg',
@@ -29,69 +29,68 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS_INFO]'));
 		'100px');
 	    ?>
 	    <?php
-		if ($this -> applicant -> getNumber() != 0) {
+		if ($this -> applicant -> number != 0
+		    && $this -> applicant -> status == "staff") {
 		    echo "<br>";
 		    echo $this->translate( '[LS_FORM_EDIT_NUMBER_LABEL]' ) . ': ';
-		    echo $this->escape( $this->applicant->getNumber() );
+		    echo $this->escape( $this -> applicant -> number );
 		}
 	    ?>
 	</td>
     </tr>
     <tr>
 	<td><?php echo $this->translate( '[LS_FORM_EDIT_NAME_LABEL]' ); ?></td>
-	<td><?php echo $this->escape( $this->applicant->getName() ); ?></td>
+	<td><?php echo $this->escape( $this->applicant->name ); ?></td>
     </tr>
     <tr>
 	<td><?php echo $this->translate( '[LS_FORM_EDIT_PATRONYMIC_LABEL]' ); ?></td>
-	<td><?php echo $this->escape( $this->applicant->getPatronymic() ); ?></td>
+	<td><?php echo $this->escape( $this->applicant->patronymic ); ?></td>
     </tr>
     <tr>
 	<td><?php echo $this->translate( '[LS_FORM_EDIT_BIRTH_LABEL]' ); ?></td>
-	<td><?php echo $this->toDate( $this->applicant->getBirth() ); ?></td>
+	<td><?php echo $this->toDate( $this->applicant->birth ); ?></td>
     </tr>
     <tr>
 	<td><?php echo $this->translate( '[LS_FORM_EDIT_VACANCY_LABEL]' ); ?></td>
-	<td><?php echo $this->escape( $this->applicant->getVacancyId() ); ?></td>
+	<td><?php echo $this->escape( $this->applicant->vacancy_id ); ?></td>
     </tr>
     <tr>
 	<td><?php echo $this->translate( '[LS_FORM_EDIT_EMAIL_LABEL]' ); ?></td>
 	<td>
-	    <a href="mailto:<?php echo $this->escape( $this->applicant->getEmail() ); ?>">
-	        <?php echo $this->escape( $this->applicant->getEmail() ); ?>
+	    <a href="mailto:<?php echo $this->escape( $this->applicant->email ); ?>">
+	        <?php echo $this->escape( $this->applicant->email ); ?>
 	    </a>
 	</td>
     </tr>
     <tr>
 	<td><?php echo $this->translate( '[LS_FORM_EDIT_PHONE_LABEL]' ); ?></td>
-	<td><?php echo $this->escape( $this->applicant->getPhone() ); ?></td>
+	<td><?php echo $this->escape( $this->applicant->phone ); ?></td>
     </tr>
 </table>
 <div class="resume">
     <strong><?php echo $this->translate( '[LS_FORM_EDIT_RESUME_LABEL]' ); ?></strong><br>
-    <?php echo $this->special($this->applicant->getResume()); ?>
+    <?php echo $this->special($this->applicant->resume); ?>
 </div>
 <strong>Комментарии</strong>
-    <?php if (!empty($this -> comments)): ?>
-	<table border="0" width="500px">
-        <?php foreach ($this -> comments as $comment): ?>
-	    <tr>
-		<td><?php echo $this->escape( $comment -> nickname ); ?></td>
-		<td align="right"><?php echo $this->toDate( $comment -> c_date, true ); ?></td>
-	    </tr>
-	    <tr>
-		<td colspan="2" style="padding-bottom: 10px; border-bottom: dotted thin;">
-		    <?php echo $this->special($comment -> c_comment); ?>
-		</td>
-	    </tr>
-	<?php endforeach; ?>
-	</table>
-    <?php endif; ?>
-    
-    <?php if (!empty($this -> commentForm)): ?>
-    <?php echo $this -> commentForm ?>
-    <?php endif; ?>
-    
+	<?php if (!empty($this -> comments)): ?>
+	    <table border="0" width="500px">
+	    <?php foreach ($this -> comments as $comment): ?>
+		<tr>
+		    <td><?php echo $this->escape( $comment -> nickname ); ?></td>
+		    <td align="right"><?php echo $this->toDate( $comment -> date, true ); ?></td>
+		</tr>
+		<tr>
+		    <td colspan="2" style="padding-bottom: 10px; border-bottom: dotted thin;">
+			<?php echo $this->special($comment -> comment); ?>
+		    </td>
+		</tr>
+	    <?php endforeach; ?>
+	    </table>
+	<?php endif; ?>
 
+	<?php if (!empty($this -> commentForm)): ?>
+	<?php echo $this -> commentForm ?>
+	<?php endif; ?>
     <?php else: ?>
 	не найден
     <?php endif;?>

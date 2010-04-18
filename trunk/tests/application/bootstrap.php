@@ -5,6 +5,9 @@
     defined('APPLICATION_PATH')
         || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../../application'));
 
+    defined('UPLOAD_PATH')
+        || define('UPLOAD_PATH', realpath(dirname(__FILE__) . '/../../upload'));
+
     defined('APPLICATION_ENV')
         || define('APPLICATION_ENV', 'testing');
 
