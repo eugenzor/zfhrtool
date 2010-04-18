@@ -91,8 +91,8 @@ class Form_Applicant_Edit extends Zend_Form
         $Photo -> setMaxFileSize(1024000);
         $Photo -> addValidator('Count', false, 1);
         $Photo -> addValidator('Size', false, 1024000);
-        $Photo -> addValidator('Extension', false, 'jpg,png,gif');        
-        $Photo -> setDestination($_SERVER['DOCUMENT_ROOT'] . '/upload');
+        $Photo -> addValidator('Extension', false, 'jpg,png,gif');
+        $Photo -> setDestination(UPLOAD_PATH);
         $this -> addElement ( $Photo );
 
         $applicantId = $this -> createElement( 'hidden', 'applicantId' );
@@ -116,8 +116,8 @@ class Form_Applicant_Edit extends Zend_Form
             $arrFormattedOptions = array();
             foreach ($arrOptions as $arrOption)
             {
-                $arrFormattedOptions[ $arrOption[ 'v_id' ] ] =
-                        $arrOption['v_name'];
+                $arrFormattedOptions[ $arrOption[ 'id' ] ] =
+                        $arrOption['name'];
             }
             $vacancySelect = $this -> getElement( 'VacancyId' );
             $vacancySelect -> addMultiOptions ( $arrFormattedOptions );

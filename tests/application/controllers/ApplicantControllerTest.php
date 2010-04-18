@@ -74,7 +74,7 @@ class ApplicantControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->assertResponseCode(200);
         $this->assertQueryContentContains('div#main', '<table');
     }
-*/        
+*/     
     // проверяем что данный экшен доступен
     public function testAddAction()
     {
@@ -128,34 +128,32 @@ class ApplicantControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->assertQueryCount('#Resume', 1);
         $this->assertQueryCount('#applicantId', 1);
     }
+
 /*
- // не работает изВалид() для формы, хотя должен((
+ // isValid ??
     public function testUpdateValidAddAction()
     {
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
-                'LastName' => 'Surname',
+                'LastName' => 'LastName',
                 'Name' => 'Name',
                 'Patronymic' => 'Patronymic',
-                'Birth' => '1987-10-11',
+                'Birth' => '1987-10-10',
                 'VacancyId' => '1',
                 'Email' => 'ihor@ukr.net',
                 'Phone' => '0987654321',
-                'Resume' => 'Resume',
-                'MAX_FILE_SIZE' => '1024000',
-                'Photo' => '',
-                'applicantId' => '16',
-                'save' => 'Save'
-            )
-        );
+                'Resume' => 'Resume'
+            ) );
         $this ->_doLogin('ostapiuk@gmail.com', '654321');
         $this->dispatch('/applicant/add');
+
         $this->assertModule('default');
         $this->assertController('applicant');
         $this->assertAction('add');
         $this->assertRedirect('/applicant');
-    }
-/*
+        $this->assertQueryCount('#LastName', 1);
+}
+
     public function testUpdateValidEditAction()
     {
         $this -> _request -> setMethod( 'post' ) -> setPost(
@@ -164,7 +162,7 @@ class ApplicantControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
                 'Name' => 'Name',
                 'Patronymic' => 'Patronymic',
                 'Email' => 'email@host.com',
-                'Birth' => '10.11.1987',
+                'Birth' => '1987-10-11',
                 'VacancyId' => '1',
                 'Phone' => '0971234561',
                 'Resume' => 'Resume',
@@ -178,7 +176,6 @@ class ApplicantControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->assertRedirect('/applicant');
     }
 */
-
     public function testUpdateInValidEditAction()
     {
         $this -> _request -> setMethod( 'post' ) -> setPost(
@@ -202,17 +199,6 @@ class ApplicantControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->assertQueryContentContains('ul.errors', '<li>Value');
     }
 
-    public function testShowAction()
-    {
-        $this ->_doLogin('ostapiuk@gmail.com', '654321');
-        $this->dispatch('/applicant/show/applicantId/16');
-        
-        $this->assertModule('default');
-        $this->assertController('applicant');
-        $this->assertAction('show');
-        $this->assertQueryContentContains('div#main', '<table');
-    }
-
     public function testAddingComment()
     {
         $this -> _request -> setMethod( 'post' ) -> setPost(
@@ -221,6 +207,17 @@ class ApplicantControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
                 'applicantId' => '16'
             )
         );
+        $this ->_doLogin('ostapiuk@gmail.com', '654321');
+        $this->dispatch('/applicant/show/applicantId/16');
+        
+        $this->assertModule('default');
+        $this->assertController('applicant');
+        $this->assertAction('show');
+        $this->assertRedirect('/applicant/show/applicantId/16');
+    }
+
+    public function testShowAction()
+    {
         $this ->_doLogin('ostapiuk@gmail.com', '654321');
         $this->dispatch('/applicant/show/applicantId/16');
         
@@ -287,6 +284,7 @@ class ApplicantControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->dispatch('/applicant/remove/applicantId/16');
         $this->assertModule('default');
         $this->assertController('applicant');
-        $this->assertAction('index');
+        $this->assertAction('remove');
+        $this->assertRedirect('/applicant');
     }
 }

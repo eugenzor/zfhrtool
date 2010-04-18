@@ -34,7 +34,7 @@ class UserController extends Controller_Action_Abstract
     {
         if ($this -> _authorize('users', 'view')) {
             $Users = new Users();
-            $this -> view -> users = $Users -> getUsers();
+            $this -> view -> users = $Users -> fetchAll();
         }
     }
 
@@ -56,9 +56,9 @@ class UserController extends Controller_Action_Abstract
             $Users = new Users();
             if ($this -> getRequest() -> isPost()) {
                 if ($form -> isValid($_POST)) {
-                    $user = $Users -> getUserById( $form -> userId -> getValue() );
-                    if ($user) {
-                        $user -> setRole( $form -> Role -> getValue() );
+                    $user = $Users -> getObjectById( $form -> userId -> getValue() );
+                    if ($user instanceof User) {
+                        $user -> role = $form -> Role -> getValue();
                         $user -> save();
                         $this -> _helper -> redirector ( 'index', 'user' );
                     }
@@ -69,11 +69,11 @@ class UserController extends Controller_Action_Abstract
                 }
             }
             elseif ($userId > 0) {
-                $user = $Users -> getUserById($userId);
+                $user = $Users -> getObjectById($userId);
                 if ($user) {
                     $form -> populate ( array(
-                        'userId' => $user -> getId(),
-                        'Role' => $user -> getRole()
+                        'userId' => $user -> id,
+                        'Role' => $user -> role
                     ));
                     $this -> view -> form = $form;
                 }
@@ -96,11 +96,11 @@ class UserController extends Controller_Action_Abstract
             $Users = new Users();
             if ($this -> getRequest() -> isPost()) {
                 if ($form -> isValid($_POST)) {
-                    $user = $Users -> getUserById( $form -> userId -> getValue() );
+                    $user = $Users -> getObjectById( $form -> userId -> getValue() );
                     if ($user) {
-                        $user -> setRole( $form -> Role -> getValue() );
-                        $user -> setNickname( $form -> Nickname -> getValue() );
-                        $user -> setEmail( $form -> Email -> getValue() );
+                        $user -> role = $form -> Role -> getValue();
+                        $user -> nickname = $form -> Nickname -> getValue();
+                        $user -> email = $form -> Email -> getValue();
                         $user -> save();
                         $this -> _helper -> redirector ( 'index', 'user' );
                     }
@@ -111,13 +111,13 @@ class UserController extends Controller_Action_Abstract
                 }
             }
             elseif ($userId > 0) {
-                $user = $Users -> getUserById($userId);
+                $user = $Users -> getObjectById($userId);
                 if ($user) {
                     $form -> populate ( array(
-                        'userId' => $user -> getId(),
-                        'Role' => $user -> getRole(),
-                        'Nickname' => $user -> getNickname(),
-                        'Email' => $user -> getEmail()
+                        'userId' => $user -> id,
+                        'Role' => $user -> role,
+                        'Nickname' => $user -> nickname,
+                        'Email' => $user -> email
                     ));
                     $this -> view -> form = $form;
                 }

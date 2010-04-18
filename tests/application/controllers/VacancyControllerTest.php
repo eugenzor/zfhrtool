@@ -51,7 +51,7 @@ class VacancyControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
 
         $this->assertQueryCount('form', 1);
         $this->assertQueryCount('#Name', 1);
-        $this->assertQueryCount('#Number', 1);
+        $this->assertQueryCount('#Num', 1);
         $this->assertQueryCount('#Duties', 1);
         $this->assertQueryCount('#Requirements', 1);
     }
@@ -67,7 +67,7 @@ class VacancyControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
 
         $this->assertQueryCount('form', 1);
         $this->assertQueryCount('#Name', 1);
-        $this->assertQueryCount('#Number', 1);
+        $this->assertQueryCount('#Num', 1);
         $this->assertQueryCount('#Duties', 1);
         $this->assertQueryCount('#Requirements', 1);
         $this->assertQueryCount('#vacancyId', 1);
@@ -79,7 +79,7 @@ class VacancyControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
             array(
                 'Name' => 'Проверка',
                 'vacancyId' => '1',
-                'Number' => '2',
+                'Num' => '2',
                 'Duties' => 'Обязанности',
                 'Requirements' => 'Требования',
             ) );
@@ -87,7 +87,8 @@ class VacancyControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->dispatch('/vacancy/edit');
         $this->assertModule('default');
         $this->assertController('vacancy');
-        $this->assertAction('index');
+        $this->assertAction('edit');
+        $this->assertRedirect('/applicant');
     }
 
     public function testUpdateInValidEditAction()
@@ -95,7 +96,7 @@ class VacancyControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
                 'vacancyId' => '1',
-                'Number' => '2',
+                'Num' => '2',
                 'Duties' => 'Обязанности',
                 'Requirements' => 'Требования'
             )
@@ -115,6 +116,22 @@ class VacancyControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->dispatch('/vacancy/remove/vacancyId/3');
         $this->assertModule('default');
         $this->assertController('vacancy');
-        $this->assertAction('index');
+        $this->assertAction('remove');
+        $this->assertRedirect('/vacancy');
     }
+
+    // проверяем что данный экшен доступен
+    public function testInvalidRemoveAction()
+    {
+        try {
+            $this ->_doLogin('ostapiuk@gmail.com', '654321');
+            $this->dispatch('/vacancy/remove/vacancyId/1');
+        } catch (Exception $ex) {
+            $this->assertModule('default');
+            $this->assertController('vacancy');
+            $this->assertAction('remove');
+            $this->assertNotRedirect();
+        }
+    }
+
 }

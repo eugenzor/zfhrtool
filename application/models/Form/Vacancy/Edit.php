@@ -33,7 +33,7 @@ class Form_Vacancy_Edit extends Zend_Form
         $nameText -> addFilters(array('StringTrim', 'HtmlEntities'));
         $this -> addElement ( $nameText );
 
-        $numberText = $this->createElement ( 'text', 'Number' );
+        $numberText = $this->createElement ( 'text', 'Num' );
         $numberText -> setLabel ( 'Количество вакансий :' );
         $numberText -> setRequired ( true );
         $numberText -> addDecorator('Errors');

@@ -31,19 +31,11 @@ class VacancyController extends Controller_Action_Abstract
      */
     public function indexAction()
     {
-
-
-
         if ( $this -> _authorize( 'vacancies', 'view')) {
             $objVacancies = new Vacancies();
-        //TODO лучше так:
-        //$this->view->vacancies = $objVacancies->fetchAll();
-        // И потом в виде мы сможем использовать объект вакансии
-        // а не просто массив
-
-            $arrVacancies = $objVacancies -> getVacancies();
-
-            $this -> view -> arrVacancies = $arrVacancies;
+            $vacancies = $objVacancies->fetchAll();
+            //echo "dump: " . var_dump($vacancies);
+            $this->view->vacancies = $objVacancies->fetchAll();
         }
     }
 
@@ -61,26 +53,18 @@ class VacancyController extends Controller_Action_Abstract
                     $objVacancies = new Vacancies();
 
                     $vacancyId = $form -> vacancyId -> getValue();
-                    if ( !empty($vacancyId)) {
-                            $objVacancy = $objVacancies ->
-                                getVacancyById( $vacancyId );
-                        } else {
-                            $objVacancy = $objVacancies -> createRow();
-                        }
+                    $objVacancy = $objVacancies -> getObjectById( $vacancyId );
+                    if (! $objVacancy instanceof Vacancy) {
+                        $objVacancy = $objVacancies -> createRow();
+                    }
 
-                    $Name = $form -> Name -> getValue();
-                    $Number = $form -> Number -> getValue();
-                    $Duties = $form -> Duties -> getValue();
-                    $Requirements = $form -> Requirements -> getValue();
-                    // trim и htmlEnteties делают фильтры zend_form
-                    $objVacancy -> setName ( $Name );
-                    $objVacancy -> setNum ( $Number );
-                    $objVacancy -> setDuties ( $Duties );
-                    $objVacancy -> setRequirements ( $Requirements );
+                    $objVacancy -> name = $form -> Name -> getValue();
+                    $objVacancy -> num = $form -> Num -> getValue();
+                    $objVacancy -> duties = $form -> Duties -> getValue();
+                    $objVacancy -> requirements = $form -> Requirements -> getValue();
                     $objVacancy -> save();
 
-//                    $this->_helper->redirector ( 'index', 'vacancy' );
-                    $this->_forward('index', 'vacancy');
+                    $this -> _helper -> redirector ( 'index', 'vacancy' );
                 }
             } else {
                 $vacancyId = ( int ) $this->getRequest()->getParam('vacancyId');
@@ -88,16 +72,16 @@ class VacancyController extends Controller_Action_Abstract
                 {
                     // выбираем из базы данные о редактируемой вакансии
                     $vacancies = new Vacancies( );
-                    $objVacancy = $vacancies->getVacancyById( $vacancyId );
+                    $objVacancy = $vacancies->getObjectById( $vacancyId );
 
-                    if ($objVacancy) {
+                    if ($objVacancy instanceof Vacancy) {
                         $this -> view -> objVacancy = $objVacancy;
                         $form -> populate(
-                            array( 'Name'   =>  $objVacancy -> v_name,
-                                   'Number' =>  $objVacancy -> v_num,
-                                   'Duties' =>  $objVacancy -> v_duties,
-                                   'Requirements' =>  $objVacancy -> v_requirements,
-                                   'vacancyId'     =>  $objVacancy -> v_id) );
+                            array( 'Name'   =>  $objVacancy -> name,
+                                   'Num' =>  $objVacancy -> num,
+                                   'Duties' =>  $objVacancy -> duties,
+                                   'Requirements' =>  $objVacancy -> requirements,
+                                   'vacancyId'     =>  $objVacancy -> id) );
                     }
                 }
             }
@@ -113,31 +97,12 @@ class VacancyController extends Controller_Action_Abstract
     {
         if ( $this -> _authorize( 'vacancies', 'remove')) {
             $objVacancies = new Vacancies();
-
-
-            // Этот участок лучше и прозрачнее записать так:
-//            $vacancy = $objVacancies->getObjectById($this->_request->getParam('vacancyId'));
-//            if (!($vacancy instanceof Vacancy)){
-//                throw new Zend_Exception('...');
-//            }
-//            $vacancy->delete();
-
-            // Потом в классе Vacancy описываем метод _delete() который будет запущен
-            // перед удалением вакансии, в котором и будет проверка - нет ли
-            // связанных данных
-
-            $arrParams = $this->getRequest()->getParams();
-
-            if (array_key_exists('vacancyId', $arrParams) &&
-                    !empty($arrParams['vacancyId'])) {
-                $objVacancies -> removeVacancyById($arrParams['vacancyId']);
+            $vacancy = $objVacancies->getObjectById($this->_request->getParam('vacancyId'));
+            if (!($vacancy instanceof Vacancy)){
+                throw new Zend_Exception('Error while deleting vacancy.');
             }
-
-            // Это не очень удачное решение, так как при повторном обновлении
-            // страницы снова произойдет попытка очистки вакансий
-            // Если какое-либо серъезое действие производится методом get
-            // То после его успешного выполнения принято делать редирект
-            $this->_forward ( 'index', 'vacancy' );
+            $vacancy->delete();
+            $this->_helper->redirector( 'index', 'vacancy' );
         }
     }
 }

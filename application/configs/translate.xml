@@ -432,5 +432,8 @@
  <tu tuid='[LS_FORM_ROLE_ROLE_LABEL]'>
   <tuv xml:lang="ru"><seg>Роль</seg></tuv>
  </tu>
+ <tu tuid='[LS_VACANCY_HAS_APPLICANTS]'>
+  <tuv xml:lang="ru"><seg>Еще есть соискатели по этой вакансии</seg></tuv>
+ </tu>
  </body>
 </tmx>

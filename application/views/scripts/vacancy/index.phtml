@@ -9,7 +9,6 @@
  */
 $this->headTitle($this->translate('[LS_PAGE_TITLE_VACANCIES]'));
 ?>
-
 <div id="main">
 	<!-- Таблица категорий -->
 	<table width="100%" border="1" cellpadding="0" cellspacing="0">
@@ -19,21 +18,15 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_VACANCIES]'));
 			<td>К-во</td>
 			<td class="action">Действия</td>
 		</tr>
-<?php
-// TODO здесь не самый лучший способ использовать массивы
-// Если мы был передан объект Zend_Db_Table_Rowset мы бы
-// после прохода по нему foreach смогли бы использовать класс Vacancy
-// Со всеми его методами
-
-if (!empty($this -> arrVacancies)): ?>
-    <?php foreach ($this -> arrVacancies as $vacancy): ?>
+<?php if (!empty($this -> vacancies)): ?>
+    <?php foreach ($this -> vacancies as $vacancy): ?>
 		<tr class="item_row">
-            <td><?php echo $this->escape( $vacancy['v_id'] ); ?></td>
-			<td><?php echo $this->escape( $vacancy['v_name'] ); ?></td>
-			<td><?php echo $this->escape( $vacancy['v_num'] ); ?></td>
+            <td><?php echo $this->escape( $vacancy->id ); ?></td>
+			<td><?php echo $this->escape( $vacancy->name ); ?></td>
+			<td><?php echo $this->escape( $vacancy->num ); ?></td>
 			<td class="action">
-                <a href="<?php echo $this -> url ( array ( 'controller' => 'vacancy', 'action' => 'edit', 'vacancyId' => $vacancy['v_id']) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a><br />
-                <a href="<?php echo $this -> url ( array ( 'controller' => 'vacancy', 'action' => 'remove', 'vacancyId' => $vacancy['v_id']) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $vacancy['v_name'] ); ?>\'');"><?php echo $this->translate('[LS_LINK_REMOVE]'); ?></a><br />
+                <a href="<?php echo $this -> url ( array ( 'controller' => 'vacancy', 'action' => 'edit', 'vacancyId' => $vacancy -> id) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a><br />
+                <a href="<?php echo $this -> url ( array ( 'controller' => 'vacancy', 'action' => 'remove', 'vacancyId' => $vacancy -> id) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $vacancy -> name ); ?>\'');"><?php echo $this->translate('[LS_LINK_REMOVE]'); ?></a><br />
 			</td>
 		</tr>
     <?php endforeach; ?>
