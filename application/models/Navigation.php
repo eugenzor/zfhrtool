@@ -24,16 +24,22 @@ class Navigation extends Zend_Navigation
         array(
             'label'=>'Войти',
             'controller'=>'user',
+            'resource' => 'autharea',
+            'privilege' => 'signin',
             'action' => 'signin'
         ),
         array(
             'label'=>'Зарегистрироваться',
             'controller'=>'user',
+            'resource' => 'autharea',
+            'privilege' => 'signup',
             'action' => 'signup'
         ),
         array(
             'label'=>'Тесты',
             'controller'=>'test',
+            'resource' => 'test',
+            'privilege' => 'view',
             'action' => 'index',
         ),
         array(
@@ -88,7 +94,9 @@ class Navigation extends Zend_Navigation
         array(
             'label'=>"Выйти",
             'controller'=>'user',
-            'action' => 'signout'
+            'action' => 'signout',
+            'resource' => 'autharea',
+            'privilege' => 'signout'
         )
     );
 

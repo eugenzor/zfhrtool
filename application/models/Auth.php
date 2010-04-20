@@ -99,6 +99,10 @@ class Auth extends Zend_Auth {
      */
     public function setAcl($acl)
     {
+        if ($this->hasIdentity()) {
+            $acl->allow('guest','autharea','signout');
+            $acl->deny('guest','autharea', array('signin', 'signup'));
+        }
         $this->_acl = $acl;
         return $this;
     }

@@ -98,11 +98,16 @@ class VacancyController extends Controller_Action_Abstract
         if ( $this -> _authorize( 'vacancies', 'remove')) {
             $objVacancies = new Vacancies();
             $vacancy = $objVacancies->getObjectById($this->_request->getParam('vacancyId'));
-            if (!($vacancy instanceof Vacancy)){
-                throw new Zend_Exception('Error while deleting vacancy.');
+            try {
+                if (!($vacancy instanceof Vacancy)){
+                    throw new Zend_Exception('Error while deleting vacancy.');
+                }
+                $vacancy->delete();
             }
-            $vacancy->delete();
-            $this->_helper->redirector( 'index', 'vacancy' );
+            catch (Exception $ex) {
+                $this -> view -> error = $ex-> getMessage();
+                $this -> _forward( 'index', 'vacancy' );
+            }
         }
     }
 }

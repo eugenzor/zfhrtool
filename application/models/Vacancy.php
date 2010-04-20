@@ -23,7 +23,7 @@ class Vacancy extends Zend_Db_Table_Row_Abstract {
       $Applicants = new Applicants();
       $res = $Applicants -> getApplicants( $this->id );
       if ( $res != false) {
-         throw new Exception ( '[LS_VACANCY_HAS_APPLICANTS]' . var_dump($res) );
+         throw new Zend_Exception ( '[LS_VACANCY_HAS_APPLICANTS]' );
       }
    }
 }

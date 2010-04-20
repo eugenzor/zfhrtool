@@ -10,7 +10,11 @@
 $this->headTitle($this->translate('[LS_PAGE_TITLE_VACANCIES]'));
 ?>
 <div id="main">
-	<!-- Таблица категорий -->
+	<?php if ($this -> error != ""): ?>
+		<div class="error">
+			<?php echo $this -> translate( $this -> error ); ?>
+		</div>
+	<?php endif; ?>
 	<table width="100%" border="1" cellpadding="0" cellspacing="0">
 		<tr class="head">
 			<td>№</td>
