@@ -144,10 +144,13 @@ class ApplicantController extends Controller_Action_Abstract
                     }
                     if ($objForm -> Photo -> getValue() != "") {
                         if ($objForm -> Photo -> receive()) {
-                            rename( $objForm -> Photo -> getFileName(),
-                                $_SERVER['DOCUMENT_ROOT'] .
+                            $filename = $_SERVER['DOCUMENT_ROOT'] .
                                 '/public/images/photos/' .
-                                $applicantId . '.jpg'
+                                $applicantId . '.jpg';
+                            @unlink( $filename );
+                            rename(
+                                $objForm -> Photo -> getFileName(),
+                                $filename
                             );
                         }
                     }
@@ -164,7 +167,7 @@ class ApplicantController extends Controller_Action_Abstract
                     $objApplicant = $objApplicants->getObjectById( $applicantId );
                     if ($objApplicant) {
                         $this -> view -> applicantId = $applicantId;
-                        if ($objApplicant -> getStatus() == "staff")
+                        if ($objApplicant -> status == "staff")
                             $objForm -> showNumber();
                         $objForm -> populate(
                             array(
@@ -172,7 +175,7 @@ class ApplicantController extends Controller_Action_Abstract
 				'Name'       =>  $objApplicant -> name,
 				'Patronymic' =>  $objApplicant -> patronymic,
 				'Birth'      =>  substr($objApplicant -> birth, 0 , 10),
-				'VacancyId'  =>  $objApplicant -> v_id,
+				'VacancyId'  =>  $objApplicant -> vacancy_id,
 				'Email'      =>  $objApplicant -> email,  
 				'Phone'      =>  $objApplicant -> phone,  
 				'Resume'     =>  $objApplicant -> resume,

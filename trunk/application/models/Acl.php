@@ -30,9 +30,8 @@ class Acl extends Zend_Acl
 
 
         // Guest acl
-        $this->allow ( 'guest', 'autharea', array (
-                'signin',
-                'signup' ) );
+        $this->allow ( 'guest', 'autharea', array ( 'signin', 'signup' ) );
+        $this->allow ( 'recruit', 'autharea', array ('signout') );
 
         $this->allow ( 'administrator' );
 

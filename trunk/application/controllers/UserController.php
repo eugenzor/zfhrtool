@@ -181,7 +181,7 @@ class UserController extends Controller_Action_Abstract
                 $user->setEmail ( $form->email->getValue () );
                 $user->setPassword ( Auth_Adapter::getEncodedPassword ( $form->email->getValue (), $form->password->getValue () ) );
                 $user->setStatus ( User::STATUS_VERIFYING );
-                $user->setRole ( 'editor' );
+                $user->setRole ( 'guest' );
                 $user->setLastLoginAt ();
                 $user->save ();
 

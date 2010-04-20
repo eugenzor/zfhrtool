@@ -424,7 +424,7 @@
   <tuv xml:lang="ru"><seg>Специалист</seg></tuv>
  </tu>
  <tu tuid='[LS_ROLE_DISMISSED]'>
-  <tuv xml:lang="ru"><seg>DISSMISSED</seg></tuv>
+  <tuv xml:lang="ru"><seg>Уволен</seg></tuv>
  </tu>
  <tu tuid='[LS_ROLE_ADMINISTRATOR]'>
   <tuv xml:lang="ru"><seg>Администратор</seg></tuv>
