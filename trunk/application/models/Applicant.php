@@ -36,7 +36,8 @@ class Applicant extends Zend_Db_Table_Row_Abstract {
         $Comments = new Comments();
         $Comments -> removeCommentsByApplicantId($this->id);
         
-        // Удаляем фото        
+        // Удаляем фото  
+        $applicantId = $this->id;   
         $validator = new Zend_Validate_File_Exists($_SERVER['DOCUMENT_ROOT'] . '/public/images/photos/');
         if ($validator -> isValid($applicantId . '.jpg'))
             unlink($_SERVER['DOCUMENT_ROOT'] . '/public/images/photos/' . $this -> id . '.jpg');

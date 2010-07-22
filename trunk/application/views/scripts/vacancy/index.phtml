@@ -20,6 +20,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_VACANCIES]'));
 			<td>№</td>
 			<td>Вакансия</td>
 			<td>К-во</td>
+                        <td>Тесты</td>
 			<td class="action">Действия</td>
 		</tr>
 <?php if (!empty($this -> vacancies)): ?>
@@ -28,6 +29,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_VACANCIES]'));
             <td><?php echo $this->escape( $vacancy->id ); ?></td>
 			<td><?php echo $this->escape( $vacancy->name ); ?></td>
 			<td><?php echo $this->escape( $vacancy->num ); ?></td>
+			<td><?php if(isset($this -> tests[$vacancy->id])) foreach ($this -> tests[$vacancy->id] as $test) echo $this->escape($test['t_name'] ).'<br />'; ?></td>
 			<td class="action">
                 <a href="<?php echo $this -> url ( array ( 'controller' => 'vacancy', 'action' => 'edit', 'vacancyId' => $vacancy -> id) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a><br />
                 <a href="<?php echo $this -> url ( array ( 'controller' => 'vacancy', 'action' => 'remove', 'vacancyId' => $vacancy -> id) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $vacancy -> name ); ?>\'');"><?php echo $this->translate('[LS_LINK_REMOVE]'); ?></a><br />

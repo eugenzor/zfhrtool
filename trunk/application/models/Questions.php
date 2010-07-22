@@ -19,6 +19,12 @@ class Questions extends Zht_Db_Table
     protected $_name = 'test_question';
 
     /**
+     * Имя таблицы, которое изпользуеться при join
+     * @var string
+     */
+    const  NAME = 'test_question';
+
+    /**
      * Row Class
      * @var string
      */
@@ -250,4 +256,20 @@ class Questions extends Zht_Db_Table
         }
         return $arrQuestionId;
     }
+    
+    /**
+     * Возвращает вопросы, отсортированых по tq_sort_index
+     *
+     * @param int $testId Id теста
+     * @return array массив вопросов
+     */
+    public function getQuestions($testId)
+    {
+        $questions = $this -> fetchAll($this -> select()
+                        -> where('t_id = ?', (int) $testId)
+                        -> order('tq_sort_index'))
+                    ->toArray();
+        return $questions;
+    }
+
 }

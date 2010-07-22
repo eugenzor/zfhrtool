@@ -53,8 +53,11 @@ class ApplicantController extends Controller_Action_Abstract
                 $this -> getRequest() -> getParam('orderBy')
             );
 
+            $objVT = new VacanciesTest();
+
             $this -> view -> orderBy = $this -> getRequest() -> getParam('orderBy');
             $this -> view -> arrApplicants = $arrApplicants;
+            $this -> view -> arrTests= $objVT -> getTestsA();
             $this -> view -> objFilterForm = $objFilterForm;
             
             $this -> view -> can_edit = $this -> isAllowed( 'applicants', 'edit' );

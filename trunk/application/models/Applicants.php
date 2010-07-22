@@ -19,6 +19,12 @@ class Applicants extends Zht_Db_Table
     protected $_name = 'applicants';
 
     /**
+     * Имя таблицы, которое изпользуеться при join
+     * @var string
+     */
+    const  NAME = 'applicants';
+
+    /**
      * Row Class
      * @var string
      */
@@ -69,5 +75,19 @@ class Applicants extends Zht_Db_Table
             return false;
         }
         return $arrApplicants;
+    }
+
+    /**
+     * Возвращает имя Соискателя
+     *
+     * @param int $applicantId Id Соискателя
+     * @return string
+     */
+    public function getName( $applicantId)
+    {
+        $applicant = $this -> find($applicantId) -> current();
+        $name = "{$applicant->last_name} {$applicant->name} {$applicant->patronymic}";
+        return $name;
+
     }
 }

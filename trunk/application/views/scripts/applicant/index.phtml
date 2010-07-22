@@ -109,6 +109,12 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS]'));
 			    Статус
 			</a>
 		    </th>
+                    <th>
+                        Ссылки на тесты
+                    </th>
+                    <th>
+                        Результаты сдачи тестов
+                    </th>
 		    
 		    <?php if ($this -> can_edit || $this -> can_remove): ?>
 			<th>Действия</th>
@@ -165,8 +171,44 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS]'));
 			    <?php if ($this -> can_change_status): ?></a><?php endif; ?>
 			    
 			</td>
+                        <td>
+                            <?php foreach($this -> arrTests[$applicant -> id] as $test): ?>
+                                <?php if (($test['link'])): ?>
+                                <a href="<?php echo $this -> url ( array (
+                                    'controller' => 'test',
+                                    'action' => 'testing',
+                                    'link' => $test['link']
+                                ) ); ?>">
+                                <?php echo $this->escape($test['name'])?></a><br />
+                                <?php endif; ?>
+                            <?php endforeach; ?>			    
+			</td>
+                        <td>
+                            <?php foreach($this -> arrTests[$applicant -> id] as $test): ?>
+                                <?php if (($test['percentMax'])): ?>
+                                <a href="<?php echo $this -> url ( array (
+                                    'controller' => 'test',
+                                    'action' => 'testing',
+                                    'link' => $test['linkMaxPercent']
+                                ) ); ?>">
+
+                                <?php echo $this->escape($test['name'])?>:&nbsp;
+                                <?php echo $this->escape($test['percentMax'].'%')?></a><br />
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </td>
+
 			<?php if ($this -> can_edit || $this -> can_remove): ?>
 			<td>
+                            <?php foreach($this -> arrTests[$applicant -> id] as $test): ?>
+                            <a href="<?php echo $this -> url ( array (
+				'controller' => 'test',
+				'action' => 'newLink',
+				'applicantId' => $applicant->id,
+                                'testId' => $test['id'],
+			    ) ); ?>">
+			    Создать ссылку для "<?php echo $this->escape($test['name'])?>"</a><br />
+                            <?php endforeach; ?>
 			    <?php if ($this -> can_edit): ?>
 				<a href="<?php echo $this -> url ( array ( 'controller' => 'applicant', 'action' => 'edit', 'applicantId' => $applicant->id) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a><br />
 			    <?php endif; ?>

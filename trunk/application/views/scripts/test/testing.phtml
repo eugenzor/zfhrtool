@@ -1,0 +1,67 @@
+<?php
+/**
+ * Edit Test page view
+ *
+ * Страница прохождение и просмотра результатов теста
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+$this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
+?>
+<script type="text/javascript" language="javascript">
+<!--
+//<![CDATA[
+    var min = 20;
+    var sec = 00;
+    function timer()
+    {
+        if( !((sec == 0) && (min == 0))) {            
+            if(sec == 0) {
+                sec = 60;
+                min -= 1;
+            }
+            sec -= 1;
+            document.getElementById("timer").innerHTML = min + ':' + (sec<10?'0'+sec:sec);
+            window.setTimeout("timer()", 1000);
+        } else {
+            document.getElementById("send").form.submit();
+        }
+    }
+    window.setTimeout('timer()', 1000);
+//]]>
+-->
+</script>
+
+
+<div id="main">
+
+    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+    <h1 class="title" style="display:inline; border:0">ФИО: <?php echo $this->applicantName; ?></h1>
+    <br />
+    <h1 class="title" style="display:inline; border:0">Тест: <?php echo $this->testName; ?></h1>
+    <br />
+    <?php if (isset($this->objForm)): ?>
+    <h1 class="title" style="display:inline; border:0">До конца теста осталось: <font id="timer" color=#FF0000>00:00</font></h1>
+    <?php endif ?>
+    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+    <?php if (isset($this->objForm)): ?>
+        <?php echo $this->objForm; ?>
+    <?php else: ?>
+    <?php //print_r($this->failAnswerQuestions);print_r($this->newRows);die; ?>
+    Количество вопросов: <?php echo (int) $this->countQuestions; ?><br />
+    Неверных ответов: <?php echo $this->countQuestionFail; ?><br /><br />
+        <?php foreach ($this->failAnswerQuestions as $failAnswerQuestions): ?>
+            <b><?php echo $this->escape($failAnswerQuestions['tq_text']); ?></b><br />
+            <?php if (isset($this->newRows[$failAnswerQuestions['tq_id']])): ?>
+                <?php foreach ($this->newRows[$failAnswerQuestions['tq_id']] as $newRows): ?>
+                    <b>*</b>&nbsp;<?php echo $this->escape($newRows['tqa_text']); ?><br />
+                <?php endforeach; ?>
+            <?php else: ?>
+                    &nbsp;Нет ответа<br />
+            <?php endif ?>
+            <br />
+        <?php endforeach; ?>
+    <?php endif ?>
+
+</div>

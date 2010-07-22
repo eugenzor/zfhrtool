@@ -19,6 +19,12 @@ class Vacancies extends Zht_Db_Table
     protected $_name = 'vacancies';
 
     /**
+     * Имя таблицы, которое изпользуеться при join
+     * @var string
+     */
+    const  NAME = 'vacancies';
+
+    /**
      * Row Class
      * @var string
      */
