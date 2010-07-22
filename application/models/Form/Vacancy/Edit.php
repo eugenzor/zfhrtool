@@ -61,9 +61,25 @@ class Form_Vacancy_Edit extends Zend_Form
 
         $vacancyId = $this -> createElement( 'hidden', 'vacancyId' );
         $this -> addElement( $vacancyId );
-
-        $submit = $this -> createElement ( 'submit', 'save', array (
-                'label' => 'Сохранить' ) );
-        $this->addElement ( $submit );
     }
+
+    /**
+     * Добавляет названия тестов на форму
+     *
+     * @param array $tests Массив тестов
+     * @return void
+     */
+    public function addElementsForm (array $tests) {
+        if (!empty($tests)) {
+            foreach ($tests as $test) {
+                $elemText = $this->createElement('checkbox', 'test_' . $test['t_id'])
+                                ->setLabel($test['t_name']);
+                $this->addElement($elemText);
+            }
+        }
+        $submit = $this->createElement('submit', 'save', array(
+                    'label' => 'Сохранить'));
+        $this->addElement($submit);
+    }
+
 }

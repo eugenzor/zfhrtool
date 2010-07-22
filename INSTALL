@@ -13,11 +13,12 @@ svn co https://zfhrtool.googlecode.com/svn/trunk/ zfhrtool --username {Ваш л
 	SetEnv APPLICATION_ENV development
 </VirtualHost>
 
-3. Папке zfhrtool/public/images/captcha/
+3. Папке zfhrtool/public/images/captcha/ и zfhrtool/public/images/photos/
 
 Установить права, которые позволили бы apache записывать файлы. Это можно сделать выполнив следующие команды:
 cd zfhrtool;
 chmod 777 ./public/images/captcha/
+chmod 777 ./public/images/photos/
 
 
 4. Создать 2 базы данных - для проекта и для его тестов, например такие: zfhrtool и test_zfhrtool.

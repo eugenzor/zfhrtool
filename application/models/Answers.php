@@ -19,6 +19,12 @@ class Answers extends Zht_Db_Table
     protected $_name = 'test_question_answer';
 
     /**
+     * Имя таблицы, которое изпользуеться при join
+     * @var string
+     */
+    const  NAME = 'test_question_answer';
+
+    /**
      * Row Class
      * @var string
      */
@@ -107,4 +113,21 @@ class Answers extends Zht_Db_Table
             $this -> delete( $where );
         }
     }
+
+    /**
+     * Возвращает варианты ответов
+     *
+     * @param array $questionIds массив с Id вопросов
+     * @return array массив вариантов ответов
+     */
+    public function getAnswers( $questionIds )
+    {
+        $answers = $this -> fetchAll($this -> select()
+                    -> where('tq_id IN (?)', $questionIds))
+                -> toArray();
+        return (array) $answers;
+
+
+    }
+
 }

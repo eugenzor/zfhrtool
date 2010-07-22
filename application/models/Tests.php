@@ -19,6 +19,12 @@ class Tests extends Zht_Db_Table
     protected $_name = 'test';
 
     /**
+     * Имя таблицы, которое изпользуеться при join
+     * @var string
+     */
+    const  NAME = 'test';
+
+    /**
      * Row Class
      * @var string
      */
