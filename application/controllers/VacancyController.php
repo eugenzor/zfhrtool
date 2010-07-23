@@ -139,8 +139,9 @@ class VacancyController extends Controller_Action_Abstract
             }
             catch (Exception $ex) {
                 $this -> view -> error = $ex-> getMessage();
+                $this -> _forward( 'index', 'vacancy' );
             }
-            $this -> _forward( 'index', 'vacancy' );
+            $this ->_redirect( 'vacancy');
         }
     }
 

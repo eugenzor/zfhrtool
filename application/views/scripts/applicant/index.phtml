@@ -172,7 +172,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS]'));
 			    
 			</td>
                         <td>
-                            <?php foreach($this -> arrTests[$applicant -> id] as $test): ?>
+                            <?php if( isset($this -> arrTests[$applicant -> id])) foreach($this -> arrTests[$applicant -> id] as $test): ?>
                                 <?php if (($test['link'])): ?>
                                 <a href="<?php echo $this -> url ( array (
                                     'controller' => 'test',
@@ -184,7 +184,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS]'));
                             <?php endforeach; ?>			    
 			</td>
                         <td>
-                            <?php foreach($this -> arrTests[$applicant -> id] as $test): ?>
+                            <?php if(isset($this -> arrTests[$applicant -> id])) foreach($this -> arrTests[$applicant -> id] as $test): ?>
                                 <?php if (($test['percentMax'])): ?>
                                 <a href="<?php echo $this -> url ( array (
                                     'controller' => 'test',
@@ -200,7 +200,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS]'));
 
 			<?php if ($this -> can_edit || $this -> can_remove): ?>
 			<td>
-                            <?php foreach($this -> arrTests[$applicant -> id] as $test): ?>
+                            <?php if(isset($this -> arrTests[$applicant -> id])) foreach($this -> arrTests[$applicant -> id] as $test): ?>
                             <a href="<?php echo $this -> url ( array (
 				'controller' => 'test',
 				'action' => 'newLink',
