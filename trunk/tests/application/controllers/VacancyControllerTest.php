@@ -54,6 +54,9 @@ class VacancyControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->assertQueryCount('#Num', 1);
         $this->assertQueryCount('#Duties', 1);
         $this->assertQueryCount('#Requirements', 1);
+        $this->assertQueryCount('#test_1', 1);
+        $this->assertQueryCount('#test_2', 1);
+        $this->assertQueryCount('#test_3', 1);
     }
 
     public function testEditingEditAction()
@@ -71,6 +74,9 @@ class VacancyControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->assertQueryCount('#Duties', 1);
         $this->assertQueryCount('#Requirements', 1);
         $this->assertQueryCount('#vacancyId', 1);
+        $this->assertQueryCount('#test_1', 1);
+        $this->assertQueryCount('#test_2', 1);
+        $this->assertQueryCount('#test_3', 1);
     }
 
     public function testUpdateValidEditAction()
