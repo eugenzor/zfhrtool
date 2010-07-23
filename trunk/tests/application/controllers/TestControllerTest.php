@@ -201,4 +201,22 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->assertController('test');
         $this->assertAction('index');
     }
+
+    public function testTestingAction()
+    {
+        $this ->_doLogin('meestro@ukr.net', '123456');
+        $this->dispatch('/test/testing/link/016960a3b0f7e1bd75ce8fe4b7057e89');
+        $this->assertModule('default');
+        $this->assertController('test');
+        $this->assertAction('testing');
+    }
+
+    public function testNewLinkAction()
+    {
+        $this ->_doLogin('meestro@ukr.net', '123456');
+        $this->dispatch('/test/newLink/applicantId/16/testId/1');
+        $this->assertModule('default');
+        $this->assertController('test');
+        $this->assertAction('newLink');
+    }
 }
