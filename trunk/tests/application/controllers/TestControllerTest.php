@@ -201,11 +201,42 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->assertController('test');
         $this->assertAction('index');
     }
+    
 
-    public function testTestingAction()
+    public function testViewTestingAction()
     {
         $this ->_doLogin('meestro@ukr.net', '123456');
         $this->dispatch('/test/testing/link/016960a3b0f7e1bd75ce8fe4b7057e89');
+        $this->assertModule('default');
+        $this->assertController('test');
+        $this->assertAction('testing');
+    }
+
+    public function testNewTestingAction()
+    {
+        $this ->_doLogin('meestro@ukr.net', '123456');
+        $this->dispatch('/test/testing/link/92c2bc7eb520710774a9d2963c0899f7');
+        $this->assertModule('default');
+        $this->assertController('test');
+        $this->assertAction('testing');
+    }
+
+    public function testSendTestingAction()
+    {
+        $this -> _request -> setMethod( 'post' ) -> setPost(
+            array(
+                'answer_67' => 0,
+                'answer_68' => 1,
+                'answer_47' => 0,
+                'answer_48' => 0,
+                'answer_49' => 0,
+                'answer_54' => 0,
+                'answer_55' => 0,
+                'answer_69' => 0,
+                'answer_70' => 0,
+                'answer_49' => 0,));
+        $this ->_doLogin('meestro@ukr.net', '123456');
+        $this->dispatch('/test/testing/link/92c2bc7eb520710774a9d2963c0899f7');
         $this->assertModule('default');
         $this->assertController('test');
         $this->assertAction('testing');
