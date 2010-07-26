@@ -202,8 +202,8 @@ class TestController extends Controller_Action_Abstract
             $applicantTestId = $applicantTest->id;
 
             $objTests = new Tests();
-            $test = $objTests -> find($testId) -> current();
-            $testName = $test -> t_name;
+            $test = $objTests -> find($testId) -> current() -> toArray();
+            $testName = $test['t_name'];
 
             $objApplicants = new Applicants();
             $applicantName = $objApplicants -> getName($applicantId);            

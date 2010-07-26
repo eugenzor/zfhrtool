@@ -42,10 +42,12 @@ class Form_Test_Testing extends Zend_Form {
             $this->addElement($elemQuestion);
 
             $i = 1;
-            foreach ($answers[$id] as $answer) {
-                $elemAnswer = $this->createElement('checkbox', 'answer_' . $answer['tqa_id'])
-                                ->setLabel($i++ . ') ' . $answer['tqa_text']);
-                $this->addElement($elemAnswer);
+            if (isset($answers[$id])) {
+                foreach ($answers[$id] as $answer) {
+                    $elemAnswer = $this->createElement('checkbox', 'answer_' . $answer['tqa_id'])
+                                    ->setLabel($i++ . ') ' . $answer['tqa_text']);
+                    $this->addElement($elemAnswer);
+                }
             }
         }
 
