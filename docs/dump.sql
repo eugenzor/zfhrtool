@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июл 22 2010 г., 13:02
+-- Время создания: Июл 26 2010 г., 19:25
 -- Версия сервера: 5.1.41
 -- Версия PHP: 5.3.2-1ubuntu4.2
 
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `applicant_tests` (
   PRIMARY KEY (`id`),
   KEY `link` (`link`),
   KEY `atd` (`applicant_id`,`test_id`,`date`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;
 
 --
 -- Дамп данных таблицы `applicant_tests`
@@ -169,11 +169,13 @@ INSERT INTO `applicant_tests` (`id`, `date`, `applicant_id`, `test_id`, `percent
 (14, '2010-07-20 16:43:08', 16, 1, NULL, '24ba7a1d9e5c707b0cbdff2b0189f229'),
 (19, '2010-07-21 10:19:43', 16, 1, 67, '9a1df9e7773d7f9990c092a9ea1500ba'),
 (20, '2010-07-21 11:10:14', 16, 1, 100, '8ef6373cad9e2fe506f4c628df6ee588'),
-(25, NULL, 18, 3, NULL, 'b63335f3ae5d9baf033fc0c202e1de04'),
+(25, '2010-07-26 17:59:08', 18, 3, NULL, 'b63335f3ae5d9baf033fc0c202e1de04'),
 (27, '2010-07-22 07:54:32', 18, 1, 33, 'da0b70a92d0f87a053d5b191a5db2b50'),
 (28, '2010-07-22 12:53:28', 16, 1, 0, 'c1470e681591569c57926a399df3f814'),
 (29, '2010-07-22 12:22:21', 17, 1, 33, 'a55a53f3137bff5437dad4b48e747fdf'),
-(31, '2010-07-22 12:53:46', 17, 1, 67, '016960a3b0f7e1bd75ce8fe4b7057e89');
+(31, '2010-07-22 12:53:46', 17, 1, 67, '016960a3b0f7e1bd75ce8fe4b7057e89'),
+(32, NULL, 17, 2, NULL, '92c2bc7eb520710774a9d2963c0899f7'),
+(33, NULL, 18, 3, NULL, '2551dad1661d671a7eed3055f487526a');
 
 -- --------------------------------------------------------
 
@@ -300,7 +302,7 @@ CREATE TABLE IF NOT EXISTS `test_question_answer` (
   `tqa_flag` tinyint(1) NOT NULL,
   `tq_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`tqa_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=71 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=74 ;
 
 --
 -- Дамп данных таблицы `test_question_answer`
@@ -323,9 +325,6 @@ INSERT INTO `test_question_answer` (`tqa_id`, `tqa_text`, `tqa_flag`, `tq_id`) V
 (49, 'ответ по php 2 3', 1, 5),
 (54, 'отв 5', 0, 10),
 (55, 'отв 6', 1, 10),
-(60, '1', 0, 1),
-(61, '2', 1, 1),
-(62, '3', 0, 1),
 (63, '3 1', 1, 3),
 (64, '3 2', 0, 3),
 (65, '2 1', 0, 2),
@@ -333,7 +332,10 @@ INSERT INTO `test_question_answer` (`tqa_id`, `tqa_text`, `tqa_flag`, `tq_id`) V
 (67, '1', 0, 4),
 (68, '2', 1, 4),
 (69, 'sds', 1, 9),
-(70, 'sdsd', 0, 9);
+(70, 'sdsd', 0, 9),
+(71, '1', 0, 1),
+(72, '2', 1, 1),
+(73, '3', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -365,7 +367,7 @@ INSERT INTO `users` (`id`, `nickname`, `email`, `password`, `role`, `status`, `l
 (3, 'Петров Петр Петрович', 'peter@zfhrtool.net', '69b36922923cb75e65d407bd8e8913d3', 'staff', 'active', '2010-03-10 19:34:06'),
 (4, 'meestro', 'meestro@ukr.net', '7695596c92c750d6087d3be1a8c25147', 'manager', 'active', '2010-03-30 01:15:10'),
 (5, 'ihor', 'ihoros@bigmir.net', 'e7c58d1fd7fd5bf32311e6eb99ab50dd', 'administrator', 'active', '2010-04-15 12:28:12'),
-(6, 'misha', 'l-mi@narod.ru', 'cf3c26e8a6b49fa287e966b9737af876', 'administrator', 'active', '2010-07-22 09:33:25');
+(6, 'misha', 'l-mi@narod.ru', 'cf3c26e8a6b49fa287e966b9737af876', 'administrator', 'active', '2010-07-26 17:01:01');
 
 -- --------------------------------------------------------
 
@@ -382,7 +384,7 @@ CREATE TABLE IF NOT EXISTS `vacancies` (
   `requirements` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_vacancy_name` (`name`) USING BTREE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Vacancies list table' AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Vacancies list table' AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `vacancies`
@@ -390,8 +392,7 @@ CREATE TABLE IF NOT EXISTS `vacancies` (
 
 INSERT INTO `vacancies` (`id`, `num`, `name`, `duties`, `requirements`) VALUES
 (1, 2, 'PHP программист', 'писать php код', '- Уверенные знания php (OOП для php5)\r\n- Уверенные знания mysql (объединения, вложенные запросы, триггеры)\r\n- Уверенные знания javascript\r\n- Хорошие знания xhtml, css, навыки верстки\r\n- Навыки работы в unix-системах\r\n- Аналитическое мышление, способность решать сложные задачи \r\n- Знание английского языка'),
-(2, 1, 'Верстальщик', 'Верстать сайт', 'Знание css, html'),
-(3, 1, 'qw', '123', '321');
+(2, 1, 'Верстальщик', 'Верстать сайт', 'Знание css, html');
 
 -- --------------------------------------------------------
 
@@ -406,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `vacancies_test` (
   `test_id` smallint(6) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `vacancie_id` (`vacancy_id`,`test_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
 
 --
 -- Дамп данных таблицы `vacancies_test`
@@ -417,5 +418,4 @@ INSERT INTO `vacancies_test` (`id`, `vacancy_id`, `test_id`) VALUES
 (34, 1, 2),
 (35, 1, 3),
 (31, 2, 1),
-(32, 2, 2),
-(36, 4, 3);
+(32, 2, 2);
