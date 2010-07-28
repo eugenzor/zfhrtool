@@ -126,8 +126,6 @@ class Answers extends Zht_Db_Table
                     -> where('tq_id IN (?)', $questionIds))
                 -> toArray();
         return (array) $answers;
-
-
     }
-
+    
 }

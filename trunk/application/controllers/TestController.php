@@ -301,6 +301,25 @@ class TestController extends Controller_Action_Abstract
         }
     }
 
+    /**
+     * Пересчитывает количество вопросов в тесте
+     * @return void
+     */
+    public function recalculationAction()
+    {
+        if ( $this -> _authorize( 'test', 'edit')) {
+            $testId = (int) $this -> getRequest() -> getParam('testId');
+            if ($testId) {
+                $objTests = new Tests();
+                $objTests -> recalculationQuestions($testId);
+                $objQuestions = new Questions();
+                $objQuestions -> recalculationAnswers($testId);
+            //die(''.$testId);
+            }
+            $this->_helper->redirector ( 'index', 'test' );
+        }
+    }
+
 
     
 

@@ -250,4 +250,13 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->assertController('test');
         $this->assertAction('newLink');
     }
+
+    public function testRecalculationAction()
+    {
+        $this ->_doLogin('meestro@ukr.net', '123456');
+        $this->dispatch('/test/recalculation/testId/1');
+        $this->assertModule('default');
+        $this->assertController('test');
+        $this->assertAction('recalculation');
+    }
 }
