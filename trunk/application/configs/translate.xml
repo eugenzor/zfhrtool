@@ -50,6 +50,21 @@
    <tuv xml:lang="ru"><seg>Ваш почтовый адрес</seg></tuv>
 </tu>
 
+<tu tuid='[LS_VALIDATION_EMAIL_HINT]'>
+   <tuv xml:lang="ru"><seg>Ваш почтовый адрес</seg></tuv>
+</tu>
+
+<tu tuid='[LS_VALIDATION_NICKNAME_RULE]'>
+   <tuv xml:lang="ru"><seg>Имя должно состоять минимум из 3 символов</seg></tuv>
+</tu>
+
+<tu tuid='[LS_VALIDATION_EMAIL_RULE]'>
+   <tuv xml:lang="ru"><seg>Не верно введён почтовый адрес</seg></tuv>
+</tu>
+
+<tu tuid='[LS_VALIDATION_PASSWORD_RULE]'>
+   <tuv xml:lang="ru"><seg>Пароль должен состоять минимум из 6 символов</seg></tuv>
+</tu>
 
 <tu tuid='[LS_VALIDATTION_FORM_FAILED]'>
    <tuv xml:lang="ru"><seg>Ошибка! Проверьте, верно ли заполнены все поля формы.</seg></tuv>
