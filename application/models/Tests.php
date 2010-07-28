@@ -102,4 +102,22 @@ class Tests extends Zht_Db_Table
         $objQuestions = new Questions();
         return $objQuestions -> getQuestionListByTestId( $testId );
     }
+
+    /**
+     * Пересчитывает количество вопросов в тесте
+     *
+     * @param int $testId
+     * @return void
+     */
+    public function recalculationQuestions($testId)
+    {
+        $questionsTable = Questions::NAME;
+        $testTable = $this->_name;
+        $this -> getAdapter() -> query("UPDATE {$testTable} "
+                                         ."SET t_quest_amount = (SELECT count(*) FROM {$questionsTable} WHERE t_id = {$testTable}.t_id) "
+                                       ."WHERE t_id = {$testId}");
+
+    }
+    //UPDATE test SET t_quest_amount = (SELECT count(*) FROM `test_question` WHERE t_id=test.t_id) WHERE t_id = 1;
+    //UPDATE test_question SET tq_answer_amount = (SELECT count(*) FROM `test_question_answer` WHERE tq_id=test_question.tq_id) WHERE t_id = 1;
 }

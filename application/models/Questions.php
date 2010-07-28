@@ -272,4 +272,20 @@ class Questions extends Zht_Db_Table
         return $questions;
     }
 
+     /**
+     * Пересчитывает количество ответов на вопрос
+     *
+     * @param int $testId
+     * @return void
+     */
+    public function recalculationAnswers($testId)
+    {
+        $questionsTable = $this->_name;
+        $answersTable = Answers::NAME;
+
+        $this -> getAdapter() -> query("UPDATE {$questionsTable} "
+                                         ."SET tq_answer_amount = (SELECT count(*) FROM {$answersTable} WHERE tq_id = {$questionsTable}.tq_id) "
+                                       ."WHERE t_id = {$testId}");
+    }
+
 }
