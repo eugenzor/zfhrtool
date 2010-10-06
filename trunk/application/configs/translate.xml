@@ -12,6 +12,9 @@
   <tu tuid='[LS_PAGE_TITLE_USER_SIGNUP]'>
    <tuv xml:lang="ru"><seg>Регистрация пользователей</seg></tuv>
   </tu>
+  <tu tuid='[LS_PAGE_TITLE_USER_SIGNIN]'>
+   <tuv xml:lang="ru"><seg>Вход в систему</seg></tuv>
+  </tu>
   <tu tuid='[LS_FORM_FIELD_NICKNAME]'>
    <tuv xml:lang="ru"><seg>Имя</seg></tuv>
   </tu>
