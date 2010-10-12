@@ -15,14 +15,17 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_VACANCIES]'));
 			<?php echo $this -> translate( $this -> error ); ?>
 		</div>
 	<?php endif; ?>
-	<table width="100%" border="1" cellpadding="0" cellspacing="0">
+	<table class="tablesorter" border="1" cellpadding="0" cellspacing="0">
+	<thead>
 		<tr class="head">
-			<td>№</td>
-			<td>Вакансия</td>
-			<td>К-во</td>
-                        <td>Тесты</td>
-			<td class="action">Действия</td>
+			<th>№</th>
+			<th>Вакансия</th>
+			<th>К-во</th>
+            <th>Тесты</th>
+			<th class="action">Действия</th>
 		</tr>
+	</thead>
+	<tbody>
 <?php if (!empty($this -> vacancies)): ?>
     <?php foreach ($this -> vacancies as $vacancy): ?>
 		<tr class="item_row">
@@ -42,6 +45,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_VACANCIES]'));
 			<td colspan="5">пока нет вакансий. <a href="<?php echo $this->url(array('controller' => 'vacancy', 'action' => 'edit')); ?>">добавить?</a></td>
 		</tr>
 <?php endif;?>
+	</tbody>
 	</table>
 	<!-- End of Таблица тестов-->
 </div>

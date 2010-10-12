@@ -37,17 +37,16 @@ function addAnswer(num)
 </script>
 
 <div id="main">
-   <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+   <div class="menu-h f-right">
    <ul class="menu" style="float:right">
-       <li style="display:inline"><a href="/index.php">Главная</a></li>
-       <li style="display:inline"><a href="/index.php/test">Тесты</a></li>
-       <li style="display:inline"><a href="/index.php/category">Категории тестов</a></li>
+       <li><a href="/index.php">Главная</a></li>
+       <li><a href="/index.php/test">Тесты</a></li>
+       <li><a href="/index.php/category">Категории тестов</a></li>
    </ul>
-   <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+    </div>
    <h1 class="title" style="display:inline; border:0">Вопросы : добавление/редактирование (тест № <?php echo $this-> objTest -> t_id; ?>, '<?php echo $this -> escape( $this -> objTest -> t_name); ?>'
        <a href="<?php echo $this -> url ( array ( 'controller' => 'test', 'action' => 'edit', 'testId' => $this -> objTest -> t_id ) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a> )
    </h1>
-   <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
        <?php echo $this -> objForm; ?>
        <input type="hidden" id="hasNew" value="0" />
    </div>

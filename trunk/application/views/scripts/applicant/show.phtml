@@ -18,7 +18,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS_INFO]'));
 	    <?php echo $this->escape( $this -> applicant -> name ); ?>
 	    <?php echo $this->escape( $this -> applicant -> patronymic ); ?>
 	</h1>
-<table border="1" width="500px;">
+<table class="table">
     <tr>
 	<td><?php echo $this->translate( '[LS_FORM_EDIT_LASTNAME_LABEL]' ); ?></td>
 	<td><?php echo $this->escape( $this -> applicant -> last_name ); ?></td>
@@ -73,7 +73,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS_INFO]'));
 </div>
 <strong>Комментарии</strong>
 	<?php if (!empty($this -> comments)): ?>
-	    <table border="0" width="500px">
+	    <table border="0" width="560px">
 	    <?php foreach ($this -> comments as $comment): ?>
 		<tr>
 		    <td><?php echo $this->escape( $comment -> nickname ); ?></td>

@@ -6,8 +6,9 @@
  * @subpackage View
  */
 
-$this->headLink()->appendStylesheet("/styles/main.css");
-$this->headLink()->appendStylesheet("/styles/tablesorter.css");
+$this->headLink()->appendStylesheet($this->baseUrl() . "/styles/css-framework/main.css");
+$this->headLink()->appendStylesheet($this->baseUrl() . "/styles/main.css");
+$this->headLink()->appendStylesheet($this->baseUrl() . "/styles/tablesorter.css");
 
 $this->headScript()->appendScript('
     function subm(href) {
@@ -34,10 +35,10 @@ echo $this->doctype(),PHP_EOL;
 </head>
 
 <body class="tundra">
-    <div class="menu-h-d">
+    <div class="menu-h-d button-h-d">
         <?php echo $this->navigation()->menu(); ?>
     </div>
-    <br><br>
+    <br>
     <div class="content">
         <?php echo $this->layout()->content; ?>
     </div>
