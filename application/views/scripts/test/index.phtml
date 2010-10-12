@@ -11,20 +11,19 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
 ?>
 
 <div id="main">
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
-    <ul class="menu" style="float:right">
-        <li style="display:inline"><a href="/index.php">Главная</a></li>
-        <li style="display:inline"><a href="/index.php/category">Редактор категорий</a></li>
-        <li style="display:inline"><a href="/index.php/test/edit">Добавить тест</a></li>
+    <div class="menu-h f-right">
+    <ul>
+        <li><a href="/index.php">Главная</a></li>
+        <li><a href="/index.php/category">Редактор категорий</a></li>
+        <li><a href="/index.php/test/edit">Добавить тест</a></li>
     </ul>
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+    </div>
 	<h1 class="title" style="display:inline; border:0">Тесты : </h1>
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
     <div id="filter-form">
         <?php echo $this -> objFilterForm; ?>
     </div>
 	<!-- Таблица тестов -->
-	<table width="100%" border="1" cellpadding="0" cellspacing="0" id="tableTest" class="tablesorter">
+	<table cellpadding="0" cellspacing="0" id="tableTest" class="tablesorter">
     <thead>
 		<tr>
 			<th>№</th>
@@ -36,7 +35,6 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
 		</tr>
     </thead>
     <tbody>
-
     <?php if (!empty($this -> arrTest)): ?>
         <?php foreach ($this -> arrTest as $test): ?>
         <tr>

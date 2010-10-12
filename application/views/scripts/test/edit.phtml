@@ -24,26 +24,28 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
 </script>
 
 <div id="main">
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
-    <ul class="menu" style="float:right">
-        <li style="display:inline"><a href="/index.php">Главная</a></li>
-        <li style="display:inline"><a href="/index.php/test">Тесты</a></li>
-        <li style="display:inline"><a href="/index.php/category">Категории тестов</a></li>
-        <li style="display:inline"><a href="/index.php/question/edit/testId/<?php echo $this -> testId; ?>">Добавить вопрос</a></li>
+    <div class="menu-h f-right">
+    <ul>
+        <li><a href="/index.php">Главная</a></li>
+        <li><a href="/index.php/test">Тесты</a></li>
+        <li><a href="/index.php/category">Категории тестов</a></li>
+        <li><a href="/index.php/question/edit/testId/<?php echo $this -> testId; ?>">Добавить вопрос</a></li>
     </ul>
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+    </div>
 	<h1 class="title" style="display:inline; border:0">Тесты : добавление/редактирование</h1>
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
         <?php echo $this -> objForm; ?>
 
         Список вопросов теста :
-        <table width="100%" border="1" cellpadding="0" cellspacing="0">
-            <tr class="head">
-                <td>№</td>
-                <td>Текст вопроса</td>
-                <td>к-во вариантов ответов</td>
-                <td class="action">Действия</td>
+        <table cellpadding="0" cellspacing="0"  class="tablesorter">
+        <thead>
+        	<tr class="head">
+                <th>№</th>
+                <th>Текст вопроса</th>
+                <th>к-во вариантов ответов</th>
+                <th class="action">Действия</th>
             </tr>
+        </thead>
+        <tbody>
 <?php $i = 1; if (!empty($this -> arrQuestion)): ?>
     <?php foreach ($this -> arrQuestion as $question): ?>
             <tr class="item_row">
@@ -64,5 +66,6 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
                 <td colspan="5">нет вопросов</td>
             </tr>
 <?php endif;?>
+		</tbody>
         </table>
 </div>
