@@ -244,6 +244,7 @@ CREATE TABLE IF NOT EXISTS `test` (
   `t_quest_amount` int(11) NOT NULL,
   `t_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `cat_id` int(11) unsigned NOT NULL,
+  `time` TINYINT NOT NULL,
   PRIMARY KEY (`t_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
@@ -419,3 +420,5 @@ INSERT INTO `vacancies_test` (`id`, `vacancy_id`, `test_id`) VALUES
 (35, 1, 3),
 (31, 2, 1),
 (32, 2, 2);
+-----------------
+ALTER TABLE `test` ADD `time` TINYINT NOT NULL;
