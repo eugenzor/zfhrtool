@@ -26,10 +26,10 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
 <div id="main">
     <div class="menu-h f-right">
     <ul>
-        <li><a href="/index.php">Главная</a></li>
-        <li><a href="/index.php/test">Тесты</a></li>
-        <li><a href="/index.php/category">Категории тестов</a></li>
-        <li><a href="/index.php/question/edit/testId/<?php echo $this -> testId; ?>">Добавить вопрос</a></li>
+        <li><a href="<?=$this->url(array('controller' => 'index', 'action' => 'index'), null, true)?>">Главная</a></li>
+        <li><a href="<?=$this->url(array('controller' => 'test', 'action' => 'index'), null, true)?>">Тесты</a></li>
+        <li><a href="<?=$this->url(array('controller' => 'category', 'action' => 'index'), null, true)?>">Категории тестов</a></li>
+        <li><a href="<?=$this->url(array('controller' => 'question', 'action' => 'edit', 'testId' => $this -> testId))?>">Добавить вопрос</a></li>
     </ul>
     </div>
 	<h1 class="title" style="display:inline; border:0">Тесты : добавление/редактирование</h1>

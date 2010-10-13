@@ -13,9 +13,9 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_CATEGORIES]'));
 <div id="main">
     <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
     <ul class="menu" style="float:right">
-        <li style="display:inline"><a href="/index.php">Главная</a></li>
-        <li style="display:inline"><a href="/index.php/test">Тесты</a></li>
-        <li style="display:inline"><a href="/index.php/category/edit">Добавить категорию</a></li>
+        <li style="display:inline"><a href="<?=$this->url(array('controller' => 'index', 'action' => 'index'))?>">Главная</a></li>
+        <li style="display:inline"><a href="<?=$this->url(array('controller' => 'test', 'action' => 'index'))?>">Тесты</a></li>
+        <li style="display:inline"><a href="<?=$this->url(array('controller' => 'category', 'action' => 'edit'))?>">Добавить категорию</a></li>
     </ul>
     <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
 	<h1 class="title" style="display:inline; border:0">Категории : </h1>
