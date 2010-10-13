@@ -101,4 +101,22 @@ class Test extends Zend_Db_Table_Row_Abstract {
     public function setCategoryId($id) {
        $this->cat_id = $id;
     }
+
+    /**
+    * Get time
+    *
+    * @return int
+    */
+   public function getTime() {
+      return $this->time;
+   }
+
+    /**
+     * Set time
+     *
+     * @param int $time
+     */
+    public function setTime($time) {
+       $this->time = $time;
+    }
 }

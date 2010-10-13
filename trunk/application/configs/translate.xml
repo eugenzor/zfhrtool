@@ -315,6 +315,9 @@
  <tu tuid='[LS_FORM_FILTER_SELECT_LABEL]'>
     <tuv xml:lang="ru"><seg>Категории :</seg></tuv>
  </tu>
+ <tu tuid='[LS_FORM_TIME_TEXT_LABEL]'>
+    <tuv xml:lang="ru"><seg>Время (мин.) :</seg></tuv>
+ </tu>
  <tu tuid='[LS_FORM_SUBMMIT_FILTER]'>
     <tuv xml:lang="ru"><seg>Применить</seg></tuv>
  </tu>

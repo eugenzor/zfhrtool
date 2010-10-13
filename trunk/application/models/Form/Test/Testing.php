@@ -34,12 +34,9 @@ class Form_Test_Testing extends Zend_Form {
      */
     public function addElementsForm(array $questions, array $answers) {
         foreach ($questions as $id => $question) {
-            $elemQuestion = $this->createElement('textarea', 'question_' . $id)
-                            ->setValue($question['tq_sort_index'] . '. ' . $question['tq_text'])
-                            ->setAttrib('rows', 2)
-                            ->setAttrib('cols', 100)
-                            ->setAttrib('readonly', 'false');
-            $this->addElement($elemQuestion);
+            $elemQuestion = $this->createElement('hidden', 'question_' . $id)
+                            ->setDescription($question['tq_sort_index'] . '. ' . $question['tq_text'] );
+            $this->addElement($elemQuestion);           
 
             $i = 1;
             if (isset($answers[$id])) {
