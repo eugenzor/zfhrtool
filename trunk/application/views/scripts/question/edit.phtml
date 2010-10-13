@@ -39,9 +39,9 @@ function addAnswer(num)
 <div id="main">
    <div class="menu-h f-right">
    <ul class="menu" style="float:right">
-       <li><a href="/index.php">Главная</a></li>
-       <li><a href="/index.php/test">Тесты</a></li>
-       <li><a href="/index.php/category">Категории тестов</a></li>
+       <li><a href="<?=$this->url(array('controller' => 'index', 'action' => 'index'), null, true)?>">Главная</a></li>
+       <li><a href="<?=$this->url(array('controller' => 'test', 'action' => 'index'), null, true)?>">Тесты</a></li>
+       <li><a href="<?=$this->url(array('controller' => 'category', 'action' => 'index'), null, true)?>">Категории тестов</a></li>
    </ul>
     </div>
    <h1 class="title" style="display:inline; border:0">Вопросы : добавление/редактирование (тест № <?php echo $this-> objTest -> t_id; ?>, '<?php echo $this -> escape( $this -> objTest -> t_name); ?>'

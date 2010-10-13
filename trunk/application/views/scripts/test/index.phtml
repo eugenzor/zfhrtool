@@ -13,9 +13,9 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
 <div id="main">
     <div class="menu-h f-right">
     <ul>
-        <li><a href="/index.php">Главная</a></li>
-        <li><a href="/index.php/category">Редактор категорий</a></li>
-        <li><a href="/index.php/test/edit">Добавить тест</a></li>
+        <li><a href="<?=$this->url(array('controller' => 'index', 'action' => 'index'))?>">Главная</a></li>
+        <li><a href="<?=$this->url(array('controller' => 'category', 'action' => 'index'))?>">Редактор категорий</a></li>
+        <li><a href="<?=$this->url(array('controller' => 'test', 'action' => 'edit'))?>">Добавить тест</a></li>
     </ul>
     </div>
 	<h1 class="title" style="display:inline; border:0">Тесты : </h1>
