@@ -82,9 +82,11 @@ class TestController extends Controller_Action_Abstract
                     }
 
                     $testName = $objForm -> testName -> getValue();
-                        $objTest->setName ( $testName );
+                    $objTest->setName ( $testName );
                     $objTest->setCategoryId (
                         $objForm -> categoryId -> getValue() );
+                    $objTest->setTime (
+                        $objForm -> testTime -> getValue() );
                     $objTest->setQuestionAmount ( ( int )
                         $objForm -> testQuestionAmount -> getValue() );
                     $objTest -> save();
@@ -132,8 +134,9 @@ class TestController extends Controller_Action_Abstract
                         $objForm -> populate(
                             array( 'testName'           => $objTest -> t_name,
                                    'categoryId'         => $objTest -> cat_id,
+                                   'testTime'           => $objTest -> time,
                                    'testQuestionAmount' => sizeof( $arrQuestion ),
-                                    'testId'            => $objTest -> t_id));
+                                   'testId'             => $objTest -> t_id));
                     }
                 }
             }
@@ -204,6 +207,7 @@ class TestController extends Controller_Action_Abstract
             $objTests = new Tests();
             $test = $objTests -> find($testId) -> current() -> toArray();
             $testName = $test['t_name'];
+            $testTime = $test['time'];
 
             $objApplicants = new Applicants();
             $applicantName = $objApplicants -> getName($applicantId);            
@@ -257,6 +261,7 @@ class TestController extends Controller_Action_Abstract
             } else {
                 $this->view->testName = $testName;
                 $this->view->applicantName = $applicantName;
+                $this->view->time = $testTime;
 
                 if (is_null($applicantTest -> date)) {
                     $this->view->objForm = $objForm;

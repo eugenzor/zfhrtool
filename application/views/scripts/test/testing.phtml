@@ -12,7 +12,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
 <script type="text/javascript" language="javascript">
 <!--
 //<![CDATA[
-    var min = 20;
+    var min = <?=$this->time?>;
     var sec = 00;
     function timer()
     {
@@ -42,6 +42,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
     <br />
     <?php if (isset($this->objForm)): ?>
     <h1 class="title" style="display:inline; border:0">До конца теста осталось: <font id="timer" color=#FF0000>00:00</font></h1>
+    <br /><br />
     <?php endif ?>
     <div class="z_form">
     <?php if (isset($this->objForm)): ?>

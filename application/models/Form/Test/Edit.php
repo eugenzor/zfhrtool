@@ -37,6 +37,13 @@ class Form_Test_Edit extends Zend_Form
         $categorySelect -> addMultiOptions( array('-1' => 'Все категории'));
         $this -> addElement($categorySelect);
 
+        $testTime = $this->createElement ( 'text', 'testTime' );
+        $testTime -> setLabel ( '[LS_FORM_TIME_TEXT_LABEL]' );
+        $testTime -> setRequired ( true );
+        $testTime -> addDecorator('Errors');
+        $testTime -> addFilters(array('StringTrim', 'HtmlEntities'));
+        $this -> addElement ( $testTime );
+
         $testQuestionAmount = $this -> createElement( 'hidden',
             'testQuestionAmount' );
         $testQuestionAmount -> addFilter('Digits');

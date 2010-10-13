@@ -30,7 +30,8 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
 			<th>Дата создания</th>
 			<th>Название</th>
 			<th>Категория</th>
-			<th>к-во вопросов</th>
+			<th>К-во вопросов</th>
+                        <th>Время прохождение теста (мин.)</th>
 			<th>Действия</th>
 		</tr>
     </thead>
@@ -43,6 +44,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
 			<td><?php echo $this->escape( $test-> t_name ); ?></td>
 			<td><?php echo $this->escape( $test -> cat_name ); ?></td>
 			<td><?php echo $this->escape( $test -> t_quest_amount ); ?></td>
+                        <td><?php echo $this->escape( $test -> time ); ?></td>
 			<td>
                                 <a href="<?php echo $this -> url ( array ( 'controller' => 'test', 'action' => 'recalculation', 'testId' => $test->t_id) ); ?>"><?php echo 'Пересчетать к-во вопросов и ответов'; ?></a><br />
 				<a href="<?php echo $this -> url ( array ( 'controller' => 'test', 'action' => 'edit', 'testId' => $test->t_id) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a><br />                                
