@@ -133,6 +133,7 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
                 'testName' => 'PHP (ООП) (ed)',
+                'testTime' => 20,
                 'categoryId' => '2',
                 'testQuestionAmount' => '3',
                 'testId' => '3' ));
@@ -164,6 +165,7 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
                 'testName' => 'PHP (ООП) (ed)',
+                'testTime' => 20,
                 'categoryId' => '2',
                 'testQuestionAmount' => '3',
                 'formAction' => 'questionAdd',
@@ -181,6 +183,7 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
                 'testName' => 'PHP (ООП) (ed)',
+                'testTime' => 20,
                 'categoryId' => '2',
                 'testQuestionAmount' => '3',
                 'formAction' => 'questionAdd'));
