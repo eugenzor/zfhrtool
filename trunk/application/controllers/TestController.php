@@ -192,118 +192,122 @@ class TestController extends Controller_Action_Abstract
      */
     public function testingAction()
     {        
-        if ( $this -> _authorize( 'test', 'view')) {
-            $objForm = new Form_Test_Testing();
 
-            $link = $this->getRequest()->getParam('link');
+        $objForm = new Form_Test_Testing();
 
-            $objApplicantTests = new ApplicantTests ();
-            $applicantTest = $objApplicantTests ->getTest($link);
-            if (empty ($applicantTest)) exit;
-            $applicantId = $applicantTest -> applicant_id;
-            $testId = $applicantTest -> test_id;
-            $applicantTestId = $applicantTest->id;
+        $link = $this->getRequest()->getParam('link');
 
-            $objTests = new Tests();
-            $test = $objTests -> find($testId) -> current() -> toArray();
-            $testName = $test['t_name'];
-            $testTime = $test['time'];
+        $objApplicantTests = new ApplicantTests ();
+        $applicantTest = $objApplicantTests ->getTest($link);
+        if (empty ($applicantTest)) exit;
+        $applicantId = $applicantTest -> applicant_id;
+        $testId = $applicantTest -> test_id;
+        $applicantTestId = $applicantTest->id;
 
-            $objApplicants = new Applicants();
-            $applicantName = $objApplicants -> getName($applicantId);            
+        $objTests = new Tests();
+        $test = $objTests -> find($testId) -> current() -> toArray();
+        $testName = $test['t_name'];
+        $testTime = $test['time'];
 
-            $objQuestion = new Questions();
-            $questions = $objQuestion->getQuestions($testId);
-            $questions = $this->convertArr($questions, 'tq_id');
-            $countQuestions = count($questions);
+        $objApplicants = new Applicants();
+        $applicantName = $objApplicants -> getName($applicantId);
 
-            $objTestAnswers = new Answers();
-            $answers = $objTestAnswers->getAnswers(array_keys($questions));
-            $answers = $this->convertArr($answers, 'tq_id', true); // ключем $answers будет id вопроса
+        $objQuestion = new Questions();
+        $questions = $objQuestion->getQuestions($testId);
+        $questions = $this->convertArr($questions, 'tq_id');
+        $countQuestions = count($questions);
 
-            $objForm->addElementsForm($questions, $answers);
+        $objTestAnswers = new Answers();
+        $answers = $objTestAnswers->getAnswers(array_keys($questions));
+        $answers = $this->convertArr($answers, 'tq_id', true); // ключем $answers будет id вопроса
 
-            if ($this->getRequest()->isPost()) {
-                if ($objForm->isValid($_POST)) {
-                    
-                    $objApplicantAnswers = new ApplicantAnswers();
-                    
-                    $newAnswers = $this->keyReplace($objForm->getValues(), 'answer_');
-                    foreach ($newAnswers as $answerId => $val) {
-                        if ($val) {
-                            $newAnswer = $objApplicantAnswers->createRow(array('applicant_tests_id' => $applicantTestId,
-                                                                      'answer_id' => $answerId));
-                            $newAnswer->save();
-                        }
+        $objForm->addElementsForm($questions, $answers);
+
+        if ($this->getRequest()->isPost()) {
+            //получаем ответы на вопросы и сохраняем
+            if ($objForm->isValid($_POST)) {
+
+                $objApplicantAnswers = new ApplicantAnswers();
+
+                $newAnswers = $this->keyReplace($objForm->getValues(), 'answer_');
+                foreach ($newAnswers as $answerId => $val) {
+                    if ($val) {
+                        $newAnswer = $objApplicantAnswers->createRow(array('applicant_tests_id' => $applicantTestId,
+                                                                  'answer_id' => $answerId));
+                        $newAnswer->save();
                     }
-
-                    // Вычисляем количество правильных ответов на вопросы
-                    $questionOk = 0;
-                    foreach ($answers as $arr) {
-                        $ok = true;
-                        foreach ($arr as $answer){
-                            if($answer['tqa_flag'] != $newAnswers[$answer['tqa_id']]){
-                                $ok = false;
-                                break;
-                            }
-                        }
-                        if($ok) {
-                            $questionOk++;
-                        }
-                    }
-                    $percent = round(100 * $questionOk / $countQuestions);
-
-                    $applicantTest -> percent = $percent;
-                    $applicantTest->save();
-
-                    $this->_helper->redirector('index', 'applicant');
                 }
-            } else {
-                $this->view->testName = $testName;
-                $this->view->applicantName = $applicantName;
-                $this->view->time = $testTime;
 
-                if (is_null($applicantTest -> date)) {
-                    $this->view->objForm = $objForm;
-                    $applicantTest -> date = date('Y.m.d H:i:s');
-                    $applicantTest->save();
-                } else {
-                    $objApplicantAnswers = new ApplicantAnswers();
-
-                    $applicantAnswers = $objApplicantAnswers->getAnswers($applicantTestId);
-                    $applicantAnswers = $this->convertArr($applicantAnswers,'answer_id');
-
-                    // Вычисляем количество правильных ответов на вопросы
-                    // ключем $answers будет id вопроса
-                    $questionOk = 0;
-                    $failAnswerQuestions = array();
-                    foreach ($answers as $id => $arr) {
-                        $ok = true;
-                        foreach ($arr as $answer){
-                            if( (bool) $answer['tqa_flag'] != isset($applicantAnswers[$answer['tqa_id']])){
-                                $ok = false;
-                                $failAnswerQuestions[$questions[$id]['tq_sort_index']] = $questions[$id]; // $id == $an['tq_id']
-                                ksort($failAnswerQuestions);                                
-                                // ключами $failAnswerQuestions будут tq_sort_index
-                                break;
-                            }
-                        }
-                        if($ok) {
-                            $questionOk++;
+                // Вычисляем количество правильных ответов на вопросы
+                $questionOk = 0;
+                foreach ($answers as $arr) {
+                    $ok = true;
+                    foreach ($arr as $answer){
+                        if($answer['tqa_flag'] != $newAnswers[$answer['tqa_id']]){
+                            $ok = false;
+                            break;
                         }
                     }
-                    ksort($failAnswerQuestions);
-                    // ключи $failAnswerQuestions будут отсортировыны по tq_sort_index
-
-                    $applicantAnswers = $this->convertArr($applicantAnswers,'tq_id',true);
-
-                    $this->view->failAnswerQuestions = $failAnswerQuestions;
-                    $this->view->newRows = $applicantAnswers;
-                    $this->view->countQuestions = $countQuestions;
-                    $this->view->countQuestionFail = $countQuestions - $questionOk;
+                    if($ok) {
+                        $questionOk++;
+                    }
                 }
+                $percent = round(100 * $questionOk / $countQuestions);
+
+                $applicantTest -> percent = $percent;
+                $applicantTest->save();
+
+                $this->view->sendTest = true;
+                return;
+            }
+        } else {
+            $this->view->testName = $testName;
+            $this->view->applicantName = $applicantName;
+            $this->view->time = $testTime;
+
+            if (is_null($applicantTest -> date)) {
+                // выводим тест //
+                $this->view->objForm = $objForm;
+                $applicantTest -> date = date('Y.m.d H:i:s');
+                $applicantTest->save();
+            } else if ( $this -> _authorize( 'test', 'view')){
+                // выводим результаты теста //
+                $objApplicantAnswers = new ApplicantAnswers();
+
+                $applicantAnswers = $objApplicantAnswers->getAnswers($applicantTestId);
+                $applicantAnswers = $this->convertArr($applicantAnswers,'answer_id');
+
+                // Вычисляем количество правильных ответов на вопросы
+                // ключем $answers будет id вопроса
+                $questionOk = 0;
+                $failAnswerQuestions = array();
+                foreach ($answers as $id => $arr) {
+                    $ok = true;
+                    foreach ($arr as $answer){
+                        if( (bool) $answer['tqa_flag'] != isset($applicantAnswers[$answer['tqa_id']])){
+                            $ok = false;
+                            $failAnswerQuestions[$questions[$id]['tq_sort_index']] = $questions[$id]; // $id == $an['tq_id']
+                            ksort($failAnswerQuestions);
+                            // ключами $failAnswerQuestions будут tq_sort_index
+                            break;
+                        }
+                    }
+                    if($ok) {
+                        $questionOk++;
+                    }
+                }
+                ksort($failAnswerQuestions);
+                // ключи $failAnswerQuestions будут отсортировыны по tq_sort_index
+
+                $applicantAnswers = $this->convertArr($applicantAnswers,'tq_id',true);
+
+                $this->view->failAnswerQuestions = $failAnswerQuestions;
+                $this->view->newRows = $applicantAnswers;
+                $this->view->countQuestions = $countQuestions;
+                $this->view->countQuestionFail = $countQuestions - $questionOk;
             }
         }
+        
     }
 
     /**

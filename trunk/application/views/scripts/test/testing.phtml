@@ -1,6 +1,5 @@
 <?php
 /**
- * Edit Test page view
  *
  * Страница прохождение и просмотра результатов теста
  *
@@ -35,7 +34,11 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
 
 
 <div id="main">
-
+<?php if (isset($this->sendTest)): ?>
+    <h1>
+    Спасибо за пройденный тест :)
+    </h1>
+<?php else: ?>
     <h1 class="title" style="display:inline; border:0">ФИО: <?php echo $this->applicantName; ?></h1>
     <br />
     <h1 class="title" style="display:inline; border:0">Тест: <?php echo $this->testName; ?></h1>
@@ -64,4 +67,5 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
         <?php endforeach; ?>
     <?php endif ?>
 	</div>
+<?php endif ?>
 </div>
