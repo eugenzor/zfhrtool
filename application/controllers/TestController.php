@@ -268,7 +268,7 @@ class TestController extends Controller_Action_Abstract
             if (is_null($applicantTest -> date)) {
                 // выводим тест //
                 $this->view->objForm = $objForm;
-                $applicantTest -> date = date('Y.m.d H:i:s');
+                $applicantTest -> date = new Zend_Db_Expr('NOW()');
                 $applicantTest->save();
             } else if ( $this -> _authorize( 'test', 'view')){
                 // выводим результаты теста //
