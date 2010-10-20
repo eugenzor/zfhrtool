@@ -35,14 +35,14 @@ class Form_Test_Testing extends Zend_Form {
     public function addElementsForm(array $questions, array $answers) {
         foreach ($questions as $id => $question) {
             $elemQuestion = $this->createElement('hidden', 'question_' . $id)
-                            ->setDescription($question['tq_sort_index'] . '. ' . $question['tq_text'] );
+                            ->setDescription($question['tq_sort_index'] . '. ' . nl2br($question['tq_text']) );
             $this->addElement($elemQuestion);           
 
             $i = 1;
             if (isset($answers[$id])) {
                 foreach ($answers[$id] as $answer) {
                     $elemAnswer = $this->createElement('checkbox', 'answer_' . $answer['tqa_id'])
-                                    ->setLabel($i++ . ') ' . $answer['tqa_text']);
+                                    ->setLabel($i++ . ') ' . nl2br($answer['tqa_text']));
                     $this->addElement($elemAnswer);
                 }
             }
