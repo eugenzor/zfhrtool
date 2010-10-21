@@ -8,6 +8,7 @@
  */
 $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
 ?>
+<?php if (isset($this->objForm)): ?>
 <script type="text/javascript" language="javascript">
 <!--
 //<![CDATA[
@@ -31,6 +32,21 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
 //]]>
 -->
 </script>
+<?php endif;
+/*
+require_once "Text/Highlighter.php";
+require_once "Text/Highlighter/Renderer/Html.php";
+$renderer = new Text_Highlighter_Renderer_Html(array("numbers" => HL_NUMBERS_LI, "tabsize" => 4));
+$hlJava =& Text_Highlighter::factory("JAVA");
+$hlJava->setRenderer($renderer);
+
+echo $hlJava->highlight('class JavaProgram {
+    public static void main(String args[]) {
+        System.out.println("Hello World!");
+    }
+}');
+echo '<pre>echo "ggggg"</pre>';*/
+?>
 
 
 <div id="main">
