@@ -191,8 +191,8 @@ class TestController extends Controller_Action_Abstract
      * @return void
      */
     public function testingAction()
-    {        
-
+    {
+        
         $objForm = new Form_Test_Testing();
 
         $link = $this->getRequest()->getParam('link');

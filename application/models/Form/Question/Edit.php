@@ -30,7 +30,7 @@ class Form_Question_Edit extends Zend_Form
         $questionTextArea -> setLabel ( 'Текст вопроса :' );
         $questionTextArea -> setAttrib( 'rows', 3 );
         $questionTextArea -> setAttrib( 'cols', 50 );
-        $questionTextArea -> addFilters(array('StringTrim', 'HtmlEntities'));
+        $questionTextArea -> addFilters(array('StringTrim'));
         $questionTextArea -> setRequired( true );
         $this -> addElement ( $questionTextArea );
 
@@ -97,7 +97,7 @@ class Form_Question_Edit extends Zend_Form
                 $elemTextArea -> setAttrib( 'rows', 3 );
                 $elemTextArea -> setAttrib( 'cols', 50 );
                 $elemTextArea -> setValue( $arrAnswer[ 'tqa_text' ] );
-                $elemTextArea -> addFilters(array('StringTrim', 'HtmlEntities'));
+                $elemTextArea -> addFilters(array('StringTrim'));
                 $objInnerSubForm -> addElement ( $elemTextArea );
 
                 $elemCheckBox = $this -> createElement( 'checkbox', 'flag' );

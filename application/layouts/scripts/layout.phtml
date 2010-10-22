@@ -9,6 +9,7 @@
 $this->headLink()->appendStylesheet($this->baseUrl() . "/styles/css-framework/main.css");
 $this->headLink()->appendStylesheet($this->baseUrl() . "/styles/main.css");
 $this->headLink()->appendStylesheet($this->baseUrl() . "/styles/tablesorter.css");
+$this->headLink()->appendStylesheet($this->baseUrl() . "/styles/sample.css");
 
 $this->headScript()->appendScript('
     function subm(href) {
@@ -38,7 +39,7 @@ echo $this->doctype(),PHP_EOL;
     <div class="menu-h-d button-h-d">
         <?php echo $this->navigation()->menu(); ?>
     </div>
-    <br>
+    <br/>
     <div class="content">
         <?php echo $this->layout()->content; ?>
     </div>
