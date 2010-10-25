@@ -38,8 +38,11 @@ class Form_Test_Testing extends Zend_Form {
 
         $classExistsTH = class_exists('Text_Highlighter', false);
         //////////////////////////
-        function highlighter($text, $classExistsTH = false){            
-            $tags = '(?:php)|(?:sql)|(?:css)|(?:js)|(?:html)|(?:bash)';
+        function highlighter($text, $classExistsTH = false){
+            $text = str_replace('[js]','[javascript]',$text);
+            $text = str_replace('[/js]','[/javascript]',$text);
+            $text = str_replace(array('[code lang="js"]','[code lang=\'js\']'),'[code lang="javascript"]',$text);
+            $tags = '(?:php)|(?:sql)|(?:css)|(?:javascript)|(?:html)|(?:sh)';
             if ($classExistsTH){
                 $text .= '[code lang=""][/code]';
                 // заменяет все теги на [code lang="langName"] и [/code]
