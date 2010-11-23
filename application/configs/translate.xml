@@ -34,7 +34,7 @@
 </tu>
 
 <tu tuid='[LS_FORM_BUTTON_SIGNIN]'>
-   <tuv xml:lang="ru"><seg>Ввойти</seg></tuv>
+   <tuv xml:lang="ru"><seg>Войти</seg></tuv>
 </tu>
 
 <tu tuid='[LS_LINK_HAVENT_ACCOUNT_YET]'>
