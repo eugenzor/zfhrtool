@@ -11,14 +11,13 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_CATEGORIES]'));
 ?>
 
 <div id="main">
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
-    <ul class="menu" style="float:right">
-        <li style="display:inline"><a href="<?=$this->url(array('controller' => 'index', 'action' => 'index'), null, true)?>">Главная</a></li>
-        <li style="display:inline"><a href="<?=$this->url(array('controller' => 'test', 'action' => 'index'), null, true)?>">Тесты</a></li>
-        <li style="display:inline"><a href="<?=$this->url(array('controller' => 'category', 'action' => 'index'), null, true)?>">Категории тестов</a></li>
-    </ul>
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+    <div class="menu-h f-right">
+	    <ul>
+	        <li><a href="<?=$this->url(array('controller' => 'index', 'action' => 'index'), null, true)?>">Главная</a></li>
+	        <li><a href="<?=$this->url(array('controller' => 'test', 'action' => 'index'), null, true)?>">Тесты</a></li>
+	        <li><a href="<?=$this->url(array('controller' => 'category', 'action' => 'index'), null, true)?>">Категории тестов</a></li>
+	    </ul>
+    </div>
 	<h1 class="title" style="display:inline; border:0">Категории : добавление/редактирование</h1>
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
     <?php echo $this -> objCategoryEditForm; ?>
 </div>

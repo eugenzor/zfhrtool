@@ -210,10 +210,10 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS]'));
 			    Создать ссылку для "<?php echo $this->escape($test['name'])?>"</a><br />
                             <?php endforeach; ?>
 			    <?php if ($this -> can_edit): ?>
-				<a href="<?php echo $this -> url ( array ( 'controller' => 'applicant', 'action' => 'edit', 'applicantId' => $applicant->id) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a><br />
+				<a href="<?php echo $this -> url ( array ( 'controller' => 'applicant', 'action' => 'edit', 'applicantId' => $applicant->id) ); ?>"><?php echo '<img src="../public/images/edit.png" title="Изменить" class="img_doing" />'; ?></a>
 			    <?php endif; ?>
 			    <?php if ($this -> can_remove): ?>
-				<a href="<?php echo $this -> url ( array ( 'controller' => 'applicant', 'action' => 'remove', 'applicantId' => $applicant->id) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $applicant->last_name . ' ' . $applicant->name ); ?>\'');"><?php echo $this->translate('[LS_LINK_REMOVE]'); ?></a><br />
+				<a href="<?php echo $this -> url ( array ( 'controller' => 'applicant', 'action' => 'remove', 'applicantId' => $applicant->id) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $applicant->last_name . ' ' . $applicant->name ); ?>\'');"><?php echo '<img src="../public/images/delete2.png" title="Удалить" class="img_doing" />'; ?></a>
 			    <?php endif; ?>
 			</td>
 			<?php endif; ?>
