@@ -11,34 +11,37 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_CATEGORIES]'));
 ?>
 
 <div id="main">
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
-    <ul class="menu" style="float:right">
-        <li style="display:inline"><a href="<?=$this->url(array('controller' => 'index', 'action' => 'index'))?>">Главная</a></li>
-        <li style="display:inline"><a href="<?=$this->url(array('controller' => 'test', 'action' => 'index'))?>">Тесты</a></li>
-        <li style="display:inline"><a href="<?=$this->url(array('controller' => 'category', 'action' => 'edit'))?>">Добавить категорию</a></li>
-    </ul>
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
+    <div class="menu-h f-right">
+	    <ul>
+	        <li><a href="<?=$this->url(array('controller' => 'index', 'action' => 'index'))?>">Главная</a></li>
+	        <li><a href="<?=$this->url(array('controller' => 'test', 'action' => 'index'))?>">Тесты</a></li>
+	        <li><a href="<?=$this->url(array('controller' => 'category', 'action' => 'edit'))?>">Добавить категорию</a></li>
+	    </ul>
+    </div>
 	<h1 class="title" style="display:inline; border:0">Категории : </h1>
-    <div style="clear:both; margin-bottom:10px; border-top:2px solid #123466"></div>
 	<!-- Таблица категорий -->
-	<table width="100%" border="1" cellpadding="0" cellspacing="0">
+	<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tablesorter">
+	<thead>
 		<tr class="head">
-			<td>№</td>
-			<td>Категория</td>
-			<td>Комментарии</td>
-			<td class="action">Действия</td>
+			<th>№</th>
+			<th>Категория</th>
+			<th>Комментарии</th>
+			<th class="action">Действия</th>
 		</tr>
+	</thead>
 <?php if (!empty($this -> arrCategory)): ?>
     <?php foreach ($this -> arrCategory as $category): ?>
+	<tbody>
 		<tr class="item_row">
             <td><?php echo $this->escape( $category['cat_id'] ); ?></td>
 			<td><?php echo $this->escape( $category['cat_name'] ); ?></td>
 			<td><?php echo $this->escape( $category['cat_descr'] ); ?></td>
 			<td class="action">
-                <a href="<?php echo $this -> url ( array ( 'controller' => 'category', 'action' => 'edit', 'categoryId' => $category['cat_id']) ); ?>"><?php echo $this->translate('[LS_LINK_EDIT]'); ?></a><br />
-                <a href="<?php echo $this -> url ( array ( 'controller' => 'category', 'action' => 'remove', 'categoryId' => $category['cat_id']) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $category['cat_name'] ); ?>\'');"><?php echo $this->translate('[LS_LINK_REMOVE]'); ?></a><br />
+                <a href="<?php echo $this -> url ( array ( 'controller' => 'category', 'action' => 'edit', 'categoryId' => $category['cat_id']) ); ?>"><?php echo '<img src="../public/images/edit.png" title="Изменить" class="img_doing" />'; ?></a>
+                <a href="<?php echo $this -> url ( array ( 'controller' => 'category', 'action' => 'remove', 'categoryId' => $category['cat_id']) ); ?>" onClick="return confirm('<?php echo $this->translate('[LS_LINK_REMOVE_CONFIRMATION]'); ?> \' <?php echo $this->escape( $category['cat_name'] ); ?>\'');"><?php echo '<img src="../public/images/delete2.png" title="Удалить" class="img_doing" />'; ?></a>
 			</td>
 		</tr>
+	</tbody>
     <?php endforeach; ?>
 <?php else: ?>
 		<tr class="item_row">
