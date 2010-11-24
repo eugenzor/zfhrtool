@@ -59,6 +59,6 @@ h1 {padding-right:150px;}
 
 #answerTable input {float:left;margin-top:-77px !important;margin-left:-20px;}
 #answerTable textarea {margin-bottom:10px;}
-.hl-main {
-font-size:12px;
-}
+.hl-main {font-size:12px;}
+.img_doing {border:0px !important;margin:0 !important; padding:0 5px 0 0 !important;}
+.content img {border:0 !important;}
