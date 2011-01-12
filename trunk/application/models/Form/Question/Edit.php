@@ -33,7 +33,18 @@ class Form_Question_Edit extends Zend_Form
         $questionTextArea -> addFilters(array('StringTrim'));
         $questionTextArea -> setRequired( true );
         $this -> addElement ( $questionTextArea );
+        
+        $categorySelect = $this -> createElement( 'select', 'categoryId' );
+        $categorySelect -> setLabel( '[LS_FORM_CATEGORY_SELECT_LABEL]' );
+        $this -> addElement($categorySelect);
 
+        $questionWeight = $this->createElement ( 'select', 'questionWeight' );
+        $questionWeight -> setLabel ( '[LS_FORM_QUESTION_WEIGHT_LABEL]' );
+        $questionWeight -> addMultiOptions(array(1 => '1', '2', '3', '4'));
+        $this -> addElement ( $questionWeight );
+        
+        if ( $this)
+        
         $testId = $this -> createElement( 'hidden', 'testId' );
         $this -> addElement( $testId );
         
@@ -107,10 +118,30 @@ class Form_Question_Edit extends Zend_Form
                 if ($arrAnswer[ 'tqa_flag' ]) {
                     $elemCheckBox -> setAttrib( 'checked', 'checked');
                 }
+                    
+                $elemHidden = $this -> createElement( 'hidden', 'id' );
+                $elemHidden -> setValue( $arrAnswer[ 'tqa_id' ]);
+                $objInnerSubForm -> addElement( $elemHidden );
                 $objInnerSubForm -> addElement ( $elemCheckBox );
             }
         } 
         $this -> getElement( 'Добавить' ) -> setAttrib( 'onclick',
         'addAnswer(' . $i . '); return true;' );
+    }
+     /**
+     * Установка элементов options для селектора категорий)
+     *
+     * @param  array $arrOptions
+     * @return void
+     */
+    public function setCategoriesSelectOptions($arrOptions)
+    {
+        if ( !empty($arrOptions))
+        {
+            $categorySelect = $this -> getElement( 'categoryId' );
+            $categorySelect -> addMultiOptions ( $arrOptions );        
+        } else {
+            $this -> removeElement( 'categoryId' );
+        }
     }
 }

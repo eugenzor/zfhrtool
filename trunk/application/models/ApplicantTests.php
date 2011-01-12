@@ -114,7 +114,40 @@ class ApplicantTests extends Zht_Db_Table {
         return $applicantTest;
     }
 
-
-
-
+    /**
+     * Возвращает максимальный результат (баллы) пройденых тестирований
+     *
+     * @param integer $applicantId Id соискателя.
+     * @param integer $testId Id теста.
+     * @return integer максимальный результат
+     */
+    public function getMaxScore($applicantId, $testId)
+    {
+        $select = $this -> getAdapter()-> select()
+         -> from( $this->_name, 'max(score)')
+         -> where( 'applicant_id = ?', (int) $applicantId)
+         -> where( 'test_id = ?', (int) $testId);
+        $score = $this -> getAdapter() -> query($select) -> fetchColumn();
+        return $score;
+    }
+    
+     /**
+     * Возвращает по кол-ву баллов link на пройденое тестирование
+     *
+     * @param integer $applicantId Id соискателя.
+     * @param integer $testId Id теста.
+     * @param float $score кол-во баллов пройденого тестирования
+     * @return string link на пройденое тестирование
+     */
+    public function getLinkForScore($applicantId, $testId, $score)
+    {
+        if (is_null($score)) return null;
+        $select = $this -> getAdapter()-> select()
+         -> from( $this->_name, 'link')
+         -> where( 'applicant_id = ?', (int) $applicantId)
+         -> where( 'test_id = ?', (int) $testId)
+         -> where( 'score = ?', (float) $score);
+        $link = $this -> getAdapter() -> query($select) -> fetchColumn();
+        return $link;
+    }
 }

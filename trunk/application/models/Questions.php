@@ -273,7 +273,7 @@ class Questions extends Zht_Db_Table
     }
 
      /**
-     * Пересчитывает количество ответов на вопрос
+     * Пересчитывает количество ответов и правильных ответов на вопрос
      *
      * @param int $testId
      * @return void
@@ -287,5 +287,4 @@ class Questions extends Zht_Db_Table
                                          ."SET tq_answer_amount = (SELECT count(*) FROM {$answersTable} WHERE tq_id = {$questionsTable}.tq_id) "
                                        ."WHERE t_id = {$testId}");
     }
-
 }

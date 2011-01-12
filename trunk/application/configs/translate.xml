@@ -456,5 +456,17 @@
  <tu tuid='[LS_VACANCY_HAS_APPLICANTS]'>
   <tuv xml:lang="ru"><seg>Еще есть соискатели по этой вакансии</seg></tuv>
  </tu>
+ <tu tuid='[LS_FORM_QUESTION_WEIGHT_LABEL]'>
+  <tuv xml:lang="ru"><seg>Вес вопроса</seg></tuv>
+ </tu>
+ <tu tuid='[LS_CATEGORY_HAS_QUESTIONS]'>
+  <tuv xml:lang="ru"><seg>Невозможно удалить категорию. Категория содержит вопросы.</seg></tuv>
+ </tu>
+ <tu tuid='[LS_PAGE_TITLE_QUESTION_CATEGORIES]'>
+  <tuv xml:lang="ru"><seg>Категории вопросов теста</seg></tuv>
+ </tu>
+ <tu tuid='[LS_FORM_CATEGORY_SELECT_LABEL]'>
+  <tuv xml:lang="ru"><seg>Категория вопроса</seg></tuv>
+ </tu>
  </body>
 </tmx>

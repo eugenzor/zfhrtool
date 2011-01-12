@@ -111,8 +111,11 @@ class TestController extends Controller_Action_Abstract
                         if ($objTest) {
                             $arrQuestion = $objTests ->
                                 getQuestionListByTestId( $testId );
+                            $arrQuestionCategories = $objTests ->
+                                getQuestionCategoriesListByTestId( $testId );
 
                             $this -> view -> arrQuestion = $arrQuestion;
+                            $this -> view -> arrQuestionCategories = $arrQuestionCategories;
 //                            $this -> view -> testId = $testId;
                         }
                     }
@@ -129,8 +132,13 @@ class TestController extends Controller_Action_Abstract
                         $arrQuestion = $objTests ->
                             getQuestionListByTestId( $testId );
 
+                        $arrQuestionCategories = $objTests ->
+                            getQuestionCategoriesListByTestId( $testId );
+
                         $this -> view -> arrQuestion = $arrQuestion;
+                        $this -> view -> arrQuestionCategories = $arrQuestionCategories;
                         $this -> view -> testId = $testId;
+                        
                         $objForm -> populate(
                             array( 'testName'           => $objTest -> t_name,
                                    'categoryId'         => $objTest -> cat_id,
@@ -203,6 +211,8 @@ class TestController extends Controller_Action_Abstract
         $applicantId = $applicantTest -> applicant_id;
         $testId = $applicantTest -> test_id;
         $applicantTestId = $applicantTest->id;
+        $applicantScore = $applicantTest -> score;
+        $applicantPercent = $applicantTest -> percent;
 
         $objTests = new Tests();
         $test = $objTests -> find($testId) -> current() -> toArray();
@@ -237,24 +247,8 @@ class TestController extends Controller_Action_Abstract
                         $newAnswer->save();
                     }
                 }
-
-                // Вычисляем количество правильных ответов на вопросы
-                $questionOk = 0;
-                foreach ($answers as $arr) {
-                    $ok = true;
-                    foreach ($arr as $answer){
-                        if($answer['tqa_flag'] != $newAnswers[$answer['tqa_id']]){
-                            $ok = false;
-                            break;
-                        }
-                    }
-                    if($ok) {
-                        $questionOk++;
-                    }
-                }
-                $percent = round(100 * $questionOk / $countQuestions);
-
-                $applicantTest -> percent = $percent;
+                $applicantTest -> score = $this-> 
+                    _calcTestScore($questions, $answers, $newAnswers);
                 $applicantTest->save();
 
                 $this->view->sendTest = true;
@@ -264,6 +258,8 @@ class TestController extends Controller_Action_Abstract
             $this->view->testName = $testName;
             $this->view->applicantName = $applicantName;
             $this->view->time = $testTime;
+            $this->view->score = $applicantScore;
+            $this->view->percent = $applicantPercent;
 
             if (is_null($applicantTest -> date)) {
                 // выводим тест //
@@ -276,35 +272,23 @@ class TestController extends Controller_Action_Abstract
 
                 $applicantAnswers = $objApplicantAnswers->getAnswers($applicantTestId);
                 $applicantAnswers = $this->convertArr($applicantAnswers,'answer_id');
+                
+                $questionsAndAnswers = $this->
+                    _makeQAArray($questions, $answers, $applicantAnswers);
+                
+                $questionCategories = $objTests -> 
+                    getQuestionCategoriesListByTestId($testId);
 
-                // Вычисляем количество правильных ответов на вопросы
-                // ключем $answers будет id вопроса
-                $questionOk = 0;
-                $failAnswerQuestions = array();
-                foreach ($answers as $id => $arr) {
-                    $ok = true;
-                    foreach ($arr as $answer){
-                        if( (bool) $answer['tqa_flag'] != isset($applicantAnswers[$answer['tqa_id']])){
-                            $ok = false;
-                            $failAnswerQuestions[$questions[$id]['tq_sort_index']] = $questions[$id]; // $id == $an['tq_id']
-                            ksort($failAnswerQuestions);
-                            // ключами $failAnswerQuestions будут tq_sort_index
-                            break;
-                        }
-                    }
-                    if($ok) {
-                        $questionOk++;
-                    }
+                if ( $questionCategories ) {
+                    $questionCategories = $this -> 
+                       _calcCategoriesScore ( $questionsAndAnswers, 
+                                              $questionCategories );
                 }
-                ksort($failAnswerQuestions);
-                // ключи $failAnswerQuestions будут отсортировыны по tq_sort_index
 
-                $applicantAnswers = $this->convertArr($applicantAnswers,'tq_id',true);
-
-                $this->view->failAnswerQuestions = $failAnswerQuestions;
-                $this->view->newRows = $applicantAnswers;
                 $this->view->countQuestions = $countQuestions;
-                $this->view->countQuestionFail = $countQuestions - $questionOk;
+                $this->view->countQuestionFail = $this->countWrongAnswers($questionsAndAnswers);
+                $this->view->questionsAndAnswers = $questionsAndAnswers;
+                $this->view->questionCategories = $questionCategories;
             }
         }
         
@@ -329,8 +313,42 @@ class TestController extends Controller_Action_Abstract
         }
     }
 
+    /**
+     * Пересчитывает результат теста (вместо процентов - баллы)
+     * @return void
+     */
+    public function recalcAction()
+    {
+        if ( $this -> _authorize( 'test', 'edit')) {
+            $link = $this->getRequest()->getParam('link');
 
-    
+            $objApplicantTests = new ApplicantTests ();
+            $applicantTest = $objApplicantTests ->getTest($link);
+            if (empty ($applicantTest)) exit;
+            $applicantId = $applicantTest -> applicant_id;
+            $testId = $applicantTest -> test_id;
+            $applicantTestId = $applicantTest->id;
+
+            $objQuestion = new Questions();
+            $questions = $objQuestion->getQuestions($testId);
+            $questions = $this->convertArr($questions, 'tq_id');
+
+            $objTestAnswers = new Answers();
+            $answers = $objTestAnswers->getAnswers(array_keys($questions));
+            // ключем $answers будет id вопроса
+            $answers = $this->convertArr($answers, 'tq_id', true);
+            
+            $objApplicantAnswers = new ApplicantAnswers();
+            $applicantAnswers = $objApplicantAnswers->getAnswers($applicantTestId);
+            $applicantAnswers = $this->convertArr($applicantAnswers,'answer_id');
+            
+            $applicantTest -> score = $this->
+                _calcTestScore($questions, $answers, $applicantAnswers);
+            $applicantTest -> percent = NULL;
+            $applicantTest->save();
+        }
+        $this->_helper->redirector ( 'testing', 'test', null, array('link' => $link) );            
+    }
 
     /**
      * Возвращает массив ключом которого есть значение $key
@@ -414,4 +432,136 @@ class TestController extends Controller_Action_Abstract
                 $res[str_replace($subkey, '', $key)] = $a;
         return (array) $res;
     }
+    
+    /**
+     * Возвращает массив состоящий из вопросов теста / ответов соискателя вида:
+     * array('id'=>array(                      // id - идентификатор вопроса
+     *                  'text'     => string,  // текст вопроса
+     *                  'category' => int,     // категория вопроса
+     *                  'state'    => int,     // 0 - неправильно отвечен
+     *                                         // 1 - частично правильно отвечен
+     *                                         // 2 - правильно отвечен
+     *                  'answers'  => array(   // массив ответов
+     *                                         // заполняется при 'status' > 0
+     *                       'text'  => string // текст варианта ответа
+     *                       'flag'  => int    // правильный/неправильный вариант
+     *                       'state' => int    // 0 - вариант не выбран
+     *                                         // 1 - вариант выбран
+     *                             )
+     *                  )
+     * @param array $questions        - массив вопросов
+     * @param array $answers          - массив ответов
+     * @param array $applicantAnswers - массив ответов соискателя               
+     * @return array
+     */
+    private function _makeQAArray(array $questions, array $answers, array $applicantAnswers)
+    {
+        $result = array();
+        //Перебираем все вопросы
+        foreach ($questions as $question) {
+            $questionIndex = $question['tq_sort_index'];
+            $result[ $questionIndex ]['text'] = $question['tq_text'];
+            $result[ $questionIndex ]['category'] = $question['tqc_id'];
+            $questionAnswers = array();
+            $answerId = 0;
+            $wrongAnswer = 0;    //метка неверного ответа
+            $answerWeight = $question['tq_weight'] / $question ['tq_right_answers_amount'];
+            $questionScore = 0;
+            //Перебираем все варианты ответов на этот вопрос
+            foreach ($answers[$question['tq_id']] as $answer) {
+                $questionAnswers[$answerId]['text'] = $answer['tqa_text'];
+                $questionAnswers[$answerId]['flag'] = $answer['tqa_flag'];
+                $answerState = (int) isset( $applicantAnswers[$answer['tqa_id']] );
+                $questionAnswers[$answerId]['state'] = $answerState;
+                if ( $answer['tqa_flag'] == '1' ) {  //Вариант правильный
+                    $questionScore += $answerWeight * $answerState;
+                } else {                            //Вариант неправильный
+                    $wrongAnswer += $answerState;
+                }
+                $answerId ++;
+            }
+            $questionScore = round( $questionScore, 2 );
+            $result[ $questionIndex ]['score'] = $questionScore;
+            if ( $questionScore == $question['tq_weight'] ) {
+                //вопрос отвечен верно
+                $result[$questionIndex]['state'] = 2;
+            } else {
+                //вопрос отвечен частично верно
+                $result[$questionIndex]['state'] = 1;
+                $result[$questionIndex]['answers'] = $questionAnswers;
+            }
+            if ( $wrongAnswer ||  ! $questionScore ) {
+                //вопрос отвечен неверно
+                $result[$questionIndex]['state'] = 0;
+                $result[$questionIndex]['answers'] = $questionAnswers;
+            }
+        }
+        return $result;
+    }
+    
+    /**
+     * Возвращает кол-во неверных ответов
+     * 
+     * @param array $questions	-	массив вопросов
+     * @return int
+     */
+    public function countWrongAnswers(array $questions)
+    {
+        foreach ( $questions as $question ) {
+            if ( ! $question['state'] ) {
+                $result ++;
+            }
+        }
+        return $result;
+    }
+    
+    /** Подсчитывает сумму баллов в каждой категории.
+     *  Возвращает массив вида:
+     *  array ( 'имя_категории' => 'сумма баллов' )
+     *  
+     * @param array $questions - массив вопросов, возвращенный makeQAArray()
+     * @param array $categories - массив категорий
+     * @return array
+     */
+    private function _calcCategoriesScore(array $questions, array $categories) {
+        $result = array_fill_keys( array_keys( $categories ), 0 );
+    	foreach ( $questions as $question ) {
+    	    if ( $question['category'] ){
+    	        $result[$question['category']] += $question['score'];
+    	    }
+    	}
+    	$result = array_combine( array_values( $categories ), array_values( $result ) );
+    	return $result;
+    }
+    
+    /**
+     * Возвращает сумму баллов, набранных соискателем в тесте
+     * 
+     * @param array $questions	-	массив вопросов теста
+     * @param array $answers - массив ответов теста
+     * @param array $newAnswers - массив ответов соискателя
+     * @return float
+     */
+    private function _calcTestScore(array $questions, array $answers, array $newAnswers)
+    {
+        foreach ($questions as $questionId => $question) {
+            $answerWeight = $question['tq_weight']/$question['tq_right_answers_amount'];
+            $questionScore = 0;
+            foreach ($answers[$questionId] as $answerId => $answer) {
+                if ($answer['tqa_flag']) {
+                    if ($newAnswers[$answer['tqa_id']]) {
+                        $questionScore += $answerWeight;
+                    }
+                } else {
+                    if ($newAnswers[$answer['tqa_id']]) {
+                        $questionScore = 0;
+                        break;
+                    }
+                }
+            }
+        $applicantScore += round($questionScore, 2);
+        }
+        return $applicantScore; 
+    }       
+ 
 }
