@@ -41,6 +41,13 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
     Спасибо за пройденный тест :)
     </h1>
 <?php else: ?>
+    <?php if ( !isset( $this->objForm ) && $this->percent): ?>
+    <div class="menu-h f-right">
+    <ul>
+        <li><a href="<?=$this->url(array('controller' => 'test', 'action' => 'recalc'))?>">Пересчет результата теста</a></li>
+    </ul>
+    </div>
+    <?php endif ?>
     <h1 class="title" style="display:inline; border:0">ФИО: <?php echo $this->applicantName; ?></h1>
     <br />
     <h1 class="title" style="display:inline; border:0">Тест: <?php echo $this->testName; ?></h1>
@@ -48,6 +55,14 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
     <?php if (isset($this->objForm)): ?>
     <h1 class="title" style="display:inline; border:0">До конца теста осталось: <font id="timer" color=#FF0000>00:00</font></h1>
     <br /><br />
+    <?php else: ?>
+    <h1 class="title" style="display:inline; border:0">Результат: 
+        <?php if ( $this->score ):?>
+            <?php echo $this->score; ?>
+        <?php else: ?>
+            <?php echo $this->percent;?>%
+        <?php endif; ?>
+    </h1>    
     <?php endif ?>
     <div class="z_form">
     <?php if (isset($this->objForm)): ?>
@@ -56,17 +71,53 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
     <?php //print_r($this->failAnswerQuestions);print_r($this->newRows);die; ?>
     Количество вопросов: <?php echo (int) $this->countQuestions; ?><br />
     Неверных ответов: <?php echo $this->countQuestionFail; ?><br /><br />
-        <?php foreach ($this->failAnswerQuestions as $failAnswerQuestions): ?>
-            <b><?php echo $this->escape($failAnswerQuestions['tq_text']); ?></b><br />
-            <?php if (isset($this->newRows[$failAnswerQuestions['tq_id']])): ?>
-                <?php foreach ($this->newRows[$failAnswerQuestions['tq_id']] as $newRows): ?>
-                    <b>*</b>&nbsp;<?php echo $this->escape($newRows['tqa_text']); ?><br />
-                <?php endforeach; ?>
-            <?php else: ?>
-                    &nbsp;Нет ответа<br />
-            <?php endif ?>
-            <br />
+    <?php if ( $this->questionCategories ):?>
+    <p>Сумма баллов по категориям:</p>
+    <ol>
+        <?php foreach ( $this->questionCategories as $name => $score ):?>
+            <li><?php echo $this->escape( $name ); ?>
+                &nbsp;&ndash;&nbsp;
+                <?php echo $this->escape( $score ); ?>
+            </li>
         <?php endforeach; ?>
+    </ol>
+    <?php endif; ?>
+        
+    <?php foreach ( $this->questionsAndAnswers as $question ): ?>
+        <p class="question">
+        <?php switch ( $question['state'] ): 
+                  case 0:?>
+                <span class="wrong">
+            <?php break;?>
+            <?php case 1:?>
+                <span class="halfright">
+            <?php break;?>
+            <?php case 2:?>
+                <span class="right">
+            <?php break;?>
+        <?php endswitch;?>
+        <?php echo $this->escape($question['text'])?></span>
+        </p>
+        <?php if ( $question['state'] < 2 ):?>
+            <ul>
+            <?php foreach ( $question['answers'] as $answer ):?>
+                <li>
+                <?php if ( $answer['state'] ):?>
+                 	<img src="<?=$this->baseUrl().'/images/ch_tick.gif'?>" title="Выбран" class="img_doing" />
+                <?php else:?>
+                    <img src="<?=$this->baseUrl().'/images/ch_cross.gif'?>" title="Не выбран" class="img_doing" />
+                <?php endif;?>
+                <?php if ( $answer['flag'] ):?>
+                    <span class="right">
+                <?php else :?>
+                   <span class="wrong">
+                <?php endif;?>
+                <?php echo $this->escape($answer['text'])?></span>
+                </li>
+            <?php endforeach;?>
+            </ul>
+        <?php endif;?>
+    <?php endforeach;?>
     <?php endif ?>
 	</div>
 <?php endif ?>

@@ -33,12 +33,19 @@ class QuestionController extends Controller_Action_Abstract
     {
         if ( $this -> _authorize( 'question', 'edit')) {
             $objForm = new Form_Question_Edit();
+            $arrParams = $this -> getRequest() -> getParams();
+            $testId = $this -> getRequest() -> getParam('testId');
+            if ($testId != '') {
+                // выбираем из базы категории вопросов
+                $objCategories = new QuestionCategories();
+                $arrCategories = $objCategories -> getCategoryShortListByTestId( $testId );
+                $objForm -> setCategoriesSelectOptions( $arrCategories );
+            }
             if ($this->getRequest ()->isPost ()){
                 if ( $objForm->isValid ( $_POST )) {
                     // Выполняем update (insert/update данных о вопросе)
-                    $arrParams = $this->getRequest()->getParams();
-                    $testId = $objForm -> testId -> getValue();
                     $strQuestionText = $objForm -> questionText -> getValue();
+                    $intQuestionWeight = $objForm -> questionWeight -> getValue();
 
                     $objQuestions = new Questions ();
                     $intMaxSortIndex =
@@ -57,12 +64,20 @@ class QuestionController extends Controller_Action_Abstract
 
                     $objQuestion -> setText( $strQuestionText );
                     $objQuestion -> setTestId( $testId );
+                    $objQuestion -> setWeight( $intQuestionWeight );
+                    if ( $arrCategories ) {
+                        $objQuestion -> setCategoryId(
+                            $objForm -> categoryId -> getValue() );
+                    }
 
                     if (array_key_exists( 'answer', $arrParams) ) {
                         $intAnswerAmount = sizeof ( $arrParams['answer'] );
                         $objQuestion -> setAnswerAmount( $intAnswerAmount);
                     }
                     $objQuestion -> save();
+                    if ( !$questionId ) {
+                        $questionId = $objQuestions -> getAdapter()-> lastInsertId();
+                    }
 
                     // Вносим в базу варианты ответов и обг=новляем их количество,
                     // поскольку не валидные в базу не добавляются и количество
@@ -73,14 +88,13 @@ class QuestionController extends Controller_Action_Abstract
                         $intAnswerAmount = $objQuestions ->
                             saveAnswerList($questionId, $arrParams['answer'] );
                         $objQuestion -> setAnswerAmount( $intAnswerAmount);
-                        $objQuestion -> save();
                     }
-
+                    $objQuestion -> updateRightAnswersAmount();
+                    $objQuestion -> save();
+                    
                     $this->_helper->redirector ( 'edit', 'test', null,
                         array( 'testId' => $testId ) );
                 } else {
-                    $arrParams = $this->getRequest() -> getParams();
-                    $testId = $objForm -> testId -> getValue();
                     if ($testId != '') {
                         // выбираем из базы данные о редактируемом тесте
                         $objTests = new Tests ( );
@@ -103,8 +117,6 @@ class QuestionController extends Controller_Action_Abstract
                     // @todo: пререформатировать массив answer, полученный через POST для функции addAnswersSubForm()
                 }
             } else {
-                $arrParams = $this->getRequest() -> getParams();
-                $testId = $this -> getRequest() -> getParam('testId');
                 $arrAnswer = array();
                 if (array_key_exists('questionId', $arrParams)  &&
                         !empty($arrParams['questionId'])) {
@@ -116,16 +128,17 @@ class QuestionController extends Controller_Action_Abstract
                     $arrAnswer = $objQuestions ->
                         getAnswerListByQuestionId( $questionId );
                     $objForm -> populate(
-                        array( 'questionText'       => $objQuestion -> tq_text,
-                               'questionId'         => $objQuestion -> tq_id,
-                               'testId'             => $testId));
+                        array( 'questionText'   => $objQuestion -> tq_text,
+                               'questionId'     => $objQuestion -> tq_id,
+                               'questionWeight' => $objQuestion -> getWeight(),
+                               'categoryId'     => $objQuestion -> getCategoryId(),
+                               'testId'         => $testId));
                 }
                 $objForm -> addAnswersSubForm( $arrAnswer );
                 if ( !empty( $testId ) ) {
                     // выбираем из базы данные о редактируемом тесте
                     $objTests = new Tests ( );
                     $objTest = $objTests->getTestById( $testId );
-
                     $this -> view -> objTest = $objTest;
                     $objForm -> populate( array( 'testId' => $testId));
                 }

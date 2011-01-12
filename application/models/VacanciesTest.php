@@ -75,12 +75,18 @@ class VacanciesTest extends Zht_Db_Table {
         {
             $link = $objAT -> getLink($test['applicantId'], $test['testId']);
             $percentMax = $objAT -> getMaxPercent($test['applicantId'], $test['testId']);
+            $scoreMax = $objAT -> getMaxScore($test['applicantId'], $test['testId']);
             $linkMaxPercent = $objAT -> getLinkForPercent($test['applicantId'], $test['testId'], $percentMax);
-            $arrTest[$test['applicantId']][] = array('id'    => $test['testId'],
-                                                      'name' => $test['testName'],
-                                                      'link' => $link,
-                                                      'linkMaxPercent' => $linkMaxPercent,
-                                                      'percentMax' => $percentMax);
+            $linkMaxScore = $objAT -> getLinkForScore($test['applicantId'], $test['testId'], $scoreMax);
+            $arrTest[$test['applicantId']][] = array(
+                                     'id'             => $test['testId'],
+                                     'name'           => $test['testName'],
+                                     'link'           => $link,
+                                     'linkMaxScore'   => $linkMaxScore,
+                                     'linkMaxPercent' => $linkMaxPercent,
+                                     'percentMax'     => $percentMax,
+                                     'scoreMax'       => $scoreMax
+                                    );
         }
         return $arrTest;
     }

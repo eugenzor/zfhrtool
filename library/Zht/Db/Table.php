@@ -21,8 +21,12 @@ class Zht_Db_Table extends Zend_Db_Table_Abstract
      * fetchPairs для объекта db
      * @return array
      */
-    public function fetchPairs(){
-        return $this->getAdapter()->fetchPairs("SELECT * FROM $this->_name");
+    public function fetchPairs($select = null){
+        if ($select){
+            return $this->getAdapter()->fetchPairs($select);
+        } else {
+            return $this->getAdapter()->fetchPairs("SELECT * FROM $this->_name");
+        }
     }
 
     /**

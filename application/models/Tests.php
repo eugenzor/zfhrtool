@@ -84,6 +84,9 @@ class Tests extends Zht_Db_Table
     {
         $objQuestions = new Questions();
         $objQuestions -> removeQuestionsByTestId( $testId );
+        
+        $objQuestionCategories = new QuestionCategories();
+        $objQuestionCategories -> removeCategoriesByTestId( $testId );
 
         // Удаляем информацию о тесте из БД
         $where = array (
@@ -101,6 +104,18 @@ class Tests extends Zht_Db_Table
     {
         $objQuestions = new Questions();
         return $objQuestions -> getQuestionListByTestId( $testId );
+    }
+
+    /**
+     * Get array of Question Categories by TestId
+     *
+     * @param int $testId
+     * @return array | bool
+     */
+    public function getQuestionCategoriesListByTestId( $testId )
+    {
+        $objQuestionsCategories = new QuestionCategories();
+        return $objQuestionsCategories -> getCategoryShortListByTestId( $testId );
     }
 
     /**

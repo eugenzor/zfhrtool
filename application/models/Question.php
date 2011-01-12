@@ -60,7 +60,24 @@ class Question extends Zend_Db_Table_Row_Abstract {
       $this->tq_text = $text;
    }
 
-    /**
+   /**
+    * Get weight
+    *
+    * @return string
+    */
+   public function getWeight() {
+      return $this->tq_weight;
+   }
+   /**
+    * Set weight
+    *
+    * @param string $weight
+    */
+   public function setWeight($weight) {
+      $this->tq_weight = $weight;
+   }
+
+   /**
      * Get AnswerAmount
      *
      * @return string
@@ -109,4 +126,47 @@ class Question extends Zend_Db_Table_Row_Abstract {
     public function setTestId($id) {
        $this->t_id = $id;
     }
+
+    /**
+     * Get RightAnswersAmount
+     *
+     * @return string
+     */
+    public function getRightAnswersAmount() {
+       return $this->tq_right_answers_amount;
+    }
+    /**
+     * Update RightAnswersAmount
+     *
+     * @return void
+     */
+    public function updateRightAnswersAmount() {
+        if ( !$this->getId() ) {
+            $this->save();
+        }
+        $objAnswers = new Answers();
+        $this->tq_right_answers_amount = $objAnswers->countRightAnswers( $this->getId() );
+    }
+    /**
+     * Get questions category id
+     *
+     * @return string
+     */
+    public function getCategoryId() {
+       return $this->tqc_id;
+    }
+    /**
+     * Set question category id
+     *
+     * @param string $id
+     */
+    public function setCategoryId($id) {
+       $this->tqc_id = $id;
+    }
+
+    /**
+     * Get RightAnswersAmount
+     *
+     * @return string
+     */
 }

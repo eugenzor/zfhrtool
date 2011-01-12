@@ -1,0 +1,25 @@
+<?php
+/**
+ * Edit Category page view
+ *
+ * Страница добавление/ редактирования категорий системы тестирования
+ *
+ * @package zfhrtool
+ * @subpackage View
+ */
+$this->headTitle($this->translate('[LS_PAGE_TITLE_QUESTION_CATEGORIES]'));
+?>
+
+<div id="main">
+    <div class="menu-h f-right">
+	    <ul>
+	        <li><a href="<?=$this->url(array('controller' => 'index', 'action' => 'index'), null, true)?>">Главная</a></li>
+	        <li><a href="<?=$this->url(array('controller' => 'test', 'action' => 'edit', 'testId' => $this->testId), null, true)?>">Вопросы теста</a></li>
+	        <li><a href="<?=$this->url(array('controller' => 'questioncategory', 'action' => 'index', 'testId' => $this->testId), null, true)?>">Категории вопросов</a></li>
+	    </ul>
+    </div>
+	<h1 class="title" style="display:inline; border:0">
+	<?php echo $this->translate('[LS_PAGE_TITLE_QUESTION_CATEGORIES]');?> : добавление/редактирование
+	</h1>
+    <?php echo $this -> objCategoryEditForm; ?>
+</div>

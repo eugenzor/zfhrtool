@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.5
+-- version 3.2.3
 -- http://www.phpmyadmin.net
 --
--- Хост: localhost
--- Время создания: Июл 26 2010 г., 19:25
--- Версия сервера: 5.1.41
--- Версия PHP: 5.3.2-1ubuntu4.2
+-- Host: localhost
+-- Generation Time: Jan 12, 2011 at 11:17 AM
+-- Server version: 5.1.40
+-- PHP Version: 5.2.12
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,13 +16,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- База данных: `zfhrtool`
+-- Database: `zfhrtool`
 --
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `applicants`
+-- Table structure for table `applicants`
 --
 
 DROP TABLE IF EXISTS `applicants`;
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `applicants` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
 
 --
--- Дамп данных таблицы `applicants`
+-- Dumping data for table `applicants`
 --
 
 INSERT INTO `applicants` (`id`, `name`, `last_name`, `patronymic`, `birth`, `vacancy_id`, `email`, `phone`, `resume`, `status`, `number`) VALUES
@@ -54,7 +54,7 @@ INSERT INTO `applicants` (`id`, `name`, `last_name`, `patronymic`, `birth`, `vac
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `applicant_answers`
+-- Table structure for table `applicant_answers`
 --
 
 DROP TABLE IF EXISTS `applicant_answers`;
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `applicant_answers` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=66 ;
 
 --
--- Дамп данных таблицы `applicant_answers`
+-- Dumping data for table `applicant_answers`
 --
 
 INSERT INTO `applicant_answers` (`id`, `applicant_tests_id`, `answer_id`) VALUES
@@ -140,7 +140,7 @@ INSERT INTO `applicant_answers` (`id`, `applicant_tests_id`, `answer_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `applicant_tests`
+-- Table structure for table `applicant_tests`
 --
 
 DROP TABLE IF EXISTS `applicant_tests`;
@@ -151,36 +151,38 @@ CREATE TABLE IF NOT EXISTS `applicant_tests` (
   `test_id` int(11) NOT NULL,
   `percent` tinyint(4) DEFAULT NULL,
   `link` varchar(32) DEFAULT NULL,
+  `score` decimal(6,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `link` (`link`),
-  KEY `atd` (`applicant_id`,`test_id`,`date`)
+  KEY `atd` (`applicant_id`,`test_id`,`date`),
+  KEY `score` (`score`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;
 
 --
--- Дамп данных таблицы `applicant_tests`
+-- Dumping data for table `applicant_tests`
 --
 
-INSERT INTO `applicant_tests` (`id`, `date`, `applicant_id`, `test_id`, `percent`, `link`) VALUES
-(7, '2010-07-20 16:14:27', 16, 1, 0, 'efa3d7c5039b5a4c6d10acc972d60a1d'),
-(10, '2010-07-20 16:41:03', 16, 1, 33, '6523ae468b50381ab345b4902bbb3bd0'),
-(11, '2010-07-20 16:41:39', 16, 1, 0, 'de1fd73f11864f07370185cc91c6d68c'),
-(12, '2010-07-20 17:44:14', 16, 1, 0, '9e56145795f28ab49eece5e79136a3af'),
-(13, '2010-07-20 16:42:13', 16, 1, 33, 'f7aa9df2b2a627fc24c3d8f22bda9deb'),
-(14, '2010-07-20 16:43:08', 16, 1, NULL, '24ba7a1d9e5c707b0cbdff2b0189f229'),
-(19, '2010-07-21 10:19:43', 16, 1, 67, '9a1df9e7773d7f9990c092a9ea1500ba'),
-(20, '2010-07-21 11:10:14', 16, 1, 100, '8ef6373cad9e2fe506f4c628df6ee588'),
-(25, '2010-07-26 17:59:08', 18, 3, NULL, 'b63335f3ae5d9baf033fc0c202e1de04'),
-(27, '2010-07-22 07:54:32', 18, 1, 33, 'da0b70a92d0f87a053d5b191a5db2b50'),
-(28, '2010-07-22 12:53:28', 16, 1, 0, 'c1470e681591569c57926a399df3f814'),
-(29, '2010-07-22 12:22:21', 17, 1, 33, 'a55a53f3137bff5437dad4b48e747fdf'),
-(31, '2010-07-22 12:53:46', 17, 1, 67, '016960a3b0f7e1bd75ce8fe4b7057e89'),
-(32, NULL, 17, 2, NULL, '92c2bc7eb520710774a9d2963c0899f7'),
-(33, NULL, 18, 3, NULL, '2551dad1661d671a7eed3055f487526a');
+INSERT INTO `applicant_tests` (`id`, `date`, `applicant_id`, `test_id`, `percent`, `link`, `score`) VALUES
+(7, '2010-07-20 16:14:27', 16, 1, 0, 'efa3d7c5039b5a4c6d10acc972d60a1d', NULL),
+(10, '2010-07-20 16:41:03', 16, 1, 33, '6523ae468b50381ab345b4902bbb3bd0', NULL),
+(11, '2010-07-20 16:41:39', 16, 1, 0, 'de1fd73f11864f07370185cc91c6d68c', NULL),
+(12, '2010-07-20 17:44:14', 16, 1, 0, '9e56145795f28ab49eece5e79136a3af', NULL),
+(13, '2010-07-20 16:42:13', 16, 1, 33, 'f7aa9df2b2a627fc24c3d8f22bda9deb', NULL),
+(14, '2010-07-20 16:43:08', 16, 1, NULL, '24ba7a1d9e5c707b0cbdff2b0189f229', NULL),
+(19, '2010-07-21 10:19:43', 16, 1, 67, '9a1df9e7773d7f9990c092a9ea1500ba', NULL),
+(20, '2010-07-21 11:10:14', 16, 1, 100, '8ef6373cad9e2fe506f4c628df6ee588', NULL),
+(25, '2010-07-26 17:59:08', 18, 3, NULL, 'b63335f3ae5d9baf033fc0c202e1de04', NULL),
+(27, '2010-07-22 07:54:32', 18, 1, 33, 'da0b70a92d0f87a053d5b191a5db2b50', NULL),
+(28, '2010-07-22 12:53:28', 16, 1, 0, 'c1470e681591569c57926a399df3f814', NULL),
+(29, '2010-07-22 12:22:21', 17, 1, 33, 'a55a53f3137bff5437dad4b48e747fdf', NULL),
+(31, '2010-07-22 12:53:46', 17, 1, NULL, '016960a3b0f7e1bd75ce8fe4b7057e89', 2.00),
+(32, NULL, 17, 2, NULL, '92c2bc7eb520710774a9d2963c0899f7', NULL),
+(33, NULL, 18, 3, NULL, '2551dad1661d671a7eed3055f487526a', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `category`
+-- Table structure for table `category`
 --
 
 DROP TABLE IF EXISTS `category`;
@@ -193,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `category` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Category list table' AUTO_INCREMENT=4 ;
 
 --
--- Дамп данных таблицы `category`
+-- Dumping data for table `category`
 --
 
 INSERT INTO `category` (`cat_id`, `cat_name`, `cat_descr`, `cat_test_amount`) VALUES
@@ -204,7 +206,7 @@ INSERT INTO `category` (`cat_id`, `cat_name`, `cat_descr`, `cat_test_amount`) VA
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `comments`
+-- Table structure for table `comments`
 --
 
 DROP TABLE IF EXISTS `comments`;
@@ -219,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
 --
--- Дамп данных таблицы `comments`
+-- Dumping data for table `comments`
 --
 
 INSERT INTO `comments` (`id`, `user_id`, `comment`, `date`, `applicant_id`) VALUES
@@ -234,7 +236,7 @@ INSERT INTO `comments` (`id`, `user_id`, `comment`, `date`, `applicant_id`) VALU
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `test`
+-- Table structure for table `test`
 --
 
 DROP TABLE IF EXISTS `test`;
@@ -244,23 +246,23 @@ CREATE TABLE IF NOT EXISTS `test` (
   `t_quest_amount` int(11) NOT NULL,
   `t_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `cat_id` int(11) unsigned NOT NULL,
-  `time` TINYINT NOT NULL,
+  `time` tinyint(4) NOT NULL,
   PRIMARY KEY (`t_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- Дамп данных таблицы `test`
+-- Dumping data for table `test`
 --
 
-INSERT INTO `test` (`t_id`, `t_name`, `t_quest_amount`, `t_date`, `cat_id`) VALUES
-(1, 'Психологический тест', 3, '2010-03-30 01:26:49', 1),
-(2, 'Общий тест по PHP', 4, '2010-03-30 01:36:19', 2),
-(3, 'PHP (ООП)', 3, '2010-03-30 01:41:57', 2);
+INSERT INTO `test` (`t_id`, `t_name`, `t_quest_amount`, `t_date`, `cat_id`, `time`) VALUES
+(1, 'Психологический тест', 3, '2010-03-30 01:26:49', 1, 12),
+(2, 'Общий тест по PHP', 4, '2010-03-30 01:36:19', 2, 10),
+(3, 'PHP (ООП)', 3, '2010-03-30 01:41:57', 2, 0);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `test_question`
+-- Table structure for table `test_question`
 --
 
 DROP TABLE IF EXISTS `test_question`;
@@ -268,32 +270,35 @@ CREATE TABLE IF NOT EXISTS `test_question` (
   `tq_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `tq_text` text NOT NULL,
   `tq_answer_amount` int(10) unsigned NOT NULL DEFAULT '0',
+  `tq_right_answers_amount` int(10) unsigned NOT NULL,
   `tq_sort_index` int(10) unsigned NOT NULL DEFAULT '0',
   `t_id` int(10) unsigned NOT NULL,
+  `tq_weight` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `tqc_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`tq_id`),
   KEY `t_id` (`t_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
--- Дамп данных таблицы `test_question`
+-- Dumping data for table `test_question`
 --
 
-INSERT INTO `test_question` (`tq_id`, `tq_text`, `tq_answer_amount`, `tq_sort_index`, `t_id`) VALUES
-(1, 'Первый психологический вопрос', 3, 1, 1),
-(2, 'Второй психологический вопрос', 2, 2, 1),
-(3, 'Третий психологический вопрос', 2, 3, 1),
-(4, 'Ворос по PHP 1', 2, 1, 2),
-(5, 'Вопрос по PHP 2', 3, 2, 2),
-(6, 'что такое ООП ?', 3, 1, 3),
-(7, 'какое ключевое слово используют для объявления класса?', 5, 2, 3),
-(8, 'как называется экземпляр класса', 3, 3, 3),
-(9, 'Вопрос по PHP 4', 2, 4, 2),
-(10, 'Вопрос по PHP 3', 2, 3, 2);
+INSERT INTO `test_question` (`tq_id`, `tq_text`, `tq_answer_amount`, `tq_right_answers_amount`, `tq_sort_index`, `t_id`, `tq_weight`, `tqc_id`) VALUES
+(1, 'Первый психологический вопрос', 3, 1, 1, 1, 3, 5),
+(2, 'Второй психологический вопрос', 2, 1, 2, 1, 2, 6),
+(3, 'Третий психологический вопрос', 2, 1, 3, 1, 1, 7),
+(4, 'Ворос по PHP 1', 2, 1, 1, 2, 2, 1),
+(5, 'Вопрос по PHP 2', 3, 2, 2, 2, 1, 2),
+(6, 'что такое ООП ?', 3, 1, 1, 3, 1, NULL),
+(7, 'какое ключевое слово используют для объявления класса?', 5, 1, 2, 3, 1, NULL),
+(8, 'как называется экземпляр класса', 3, 1, 3, 3, 1, NULL),
+(9, 'Вопрос по PHP 4', 2, 1, 4, 2, 1, 4),
+(10, 'Вопрос по PHP 3', 2, 1, 3, 2, 3, 2);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `test_question_answer`
+-- Table structure for table `test_question_answer`
 --
 
 DROP TABLE IF EXISTS `test_question_answer`;
@@ -306,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `test_question_answer` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=74 ;
 
 --
--- Дамп данных таблицы `test_question_answer`
+-- Dumping data for table `test_question_answer`
 --
 
 INSERT INTO `test_question_answer` (`tqa_id`, `tqa_text`, `tqa_flag`, `tq_id`) VALUES
@@ -341,7 +346,35 @@ INSERT INTO `test_question_answer` (`tqa_id`, `tqa_text`, `tqa_flag`, `tq_id`) V
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `users`
+-- Table structure for table `test_question_category`
+--
+
+DROP TABLE IF EXISTS `test_question_category`;
+CREATE TABLE IF NOT EXISTS `test_question_category` (
+  `tqc_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tqc_name` varchar(255) NOT NULL,
+  `tqc_descr` text,
+  `t_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`tqc_id`),
+  KEY `t_id` (`t_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `test_question_category`
+--
+
+INSERT INTO `test_question_category` (`tqc_id`, `tqc_name`, `tqc_descr`, `t_id`) VALUES
+(1, 'категория 1', 'это категория 1', 2),
+(2, 'категория 2', 'это категория 2', 2),
+(4, 'категория 3', 'это категория 3', 2),
+(5, 'категория 1', 'это психологическая категория 1', 1),
+(6, 'категория 2', 'это психологическая категория 2', 1),
+(7, 'категория 3', 'это психологическая категория 3', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
 --
 
 DROP TABLE IF EXISTS `users`;
@@ -356,10 +389,10 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_user_email` (`email`),
   UNIQUE KEY `index_user_nickname` (`nickname`) USING BTREE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
--- Дамп данных таблицы `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `nickname`, `email`, `password`, `role`, `status`, `last_login_at`) VALUES
@@ -368,12 +401,13 @@ INSERT INTO `users` (`id`, `nickname`, `email`, `password`, `role`, `status`, `l
 (3, 'Петров Петр Петрович', 'peter@zfhrtool.net', '69b36922923cb75e65d407bd8e8913d3', 'staff', 'active', '2010-03-10 19:34:06'),
 (4, 'meestro', 'meestro@ukr.net', '7695596c92c750d6087d3be1a8c25147', 'manager', 'active', '2010-03-30 01:15:10'),
 (5, 'ihor', 'ihoros@bigmir.net', 'e7c58d1fd7fd5bf32311e6eb99ab50dd', 'administrator', 'active', '2010-04-15 12:28:12'),
-(6, 'misha', 'l-mi@narod.ru', 'cf3c26e8a6b49fa287e966b9737af876', 'administrator', 'active', '2010-07-26 17:01:01');
+(6, 'misha', 'l-mi@narod.ru', 'cf3c26e8a6b49fa287e966b9737af876', 'administrator', 'active', '2010-07-26 17:01:01'),
+(7, 'vlad', 'noskov.vlad@gmail.com', 'c04127b78802ba45eb9ef36b21945f61', 'administrator', 'active', '2011-01-12 11:08:49');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `vacancies`
+-- Table structure for table `vacancies`
 --
 
 DROP TABLE IF EXISTS `vacancies`;
@@ -388,7 +422,7 @@ CREATE TABLE IF NOT EXISTS `vacancies` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Vacancies list table' AUTO_INCREMENT=3 ;
 
 --
--- Дамп данных таблицы `vacancies`
+-- Dumping data for table `vacancies`
 --
 
 INSERT INTO `vacancies` (`id`, `num`, `name`, `duties`, `requirements`) VALUES
@@ -398,7 +432,7 @@ INSERT INTO `vacancies` (`id`, `num`, `name`, `duties`, `requirements`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `vacancies_test`
+-- Table structure for table `vacancies_test`
 --
 
 DROP TABLE IF EXISTS `vacancies_test`;
@@ -411,7 +445,7 @@ CREATE TABLE IF NOT EXISTS `vacancies_test` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
 
 --
--- Дамп данных таблицы `vacancies_test`
+-- Dumping data for table `vacancies_test`
 --
 
 INSERT INTO `vacancies_test` (`id`, `vacancy_id`, `test_id`) VALUES
@@ -420,5 +454,3 @@ INSERT INTO `vacancies_test` (`id`, `vacancy_id`, `test_id`) VALUES
 (35, 1, 3),
 (31, 2, 1),
 (32, 2, 2);
------------------
-ALTER TABLE `test` ADD `time` TINYINT NOT NULL;

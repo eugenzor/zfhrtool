@@ -66,10 +66,11 @@ class Answers extends Zht_Db_Table
         if (!$questionId) {
             $questionId =$this -> getAdapter()-> lastInsertId();
         }
-        // Удаляем ответы для текущего вопроса
+/*        // Удаляем ответы для текущего вопроса
         $where = array (
                 'tq_id=?' => $questionId );
-        $this -> delete( $where );
+        $this -> delete( $where );*/
+        
         // Вносим новые ответы в БД
         $intAffectedRows = 0;
         foreach ($arrAnswer as $arrAnswerItem) {
@@ -80,7 +81,12 @@ class Answers extends Zht_Db_Table
             );
             if ( !empty( $data['tqa_text'] ) ) {
                 $intAffectedRows++;
-                $this -> insert( $data );
+                if ( isset( $arrAnswerItem['id'] ) ) {
+                    $where = array( 'tqa_id=?' => $arrAnswerItem['id'] );
+                    $this -> update( $data, $where );
+                } else {
+                    $this -> insert( $data );
+                }
             }
         }
         return $intAffectedRows;
@@ -126,6 +132,22 @@ class Answers extends Zht_Db_Table
                     -> where('tq_id IN (?)', $questionIds))
                 -> toArray();
         return (array) $answers;
+    }
+
+    /**
+     * Count answers with tqa_flag = 1 for specified questionId
+     *
+     * @param int $questionId
+     * @return int 
+     */
+    public function countRightAnswers( $questionId )
+    {
+        $select = $this->select();
+        $select ->from($this, array('COUNT(*) as count')); 
+        $select ->where( 'tq_id = ?', $questionId );
+        $select ->where( 'tqa_flag = 1');
+        $row = $this ->fetchRow( $select );
+        return $row->count;
     }
     
 }

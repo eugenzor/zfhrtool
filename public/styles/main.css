@@ -62,3 +62,9 @@ h1 {padding-right:150px;}
 .hl-main {font-size:12px;}
 .img_doing {border:0px !important;margin:0 !important; padding:0 5px 0 0 !important;}
 .content img {border:0 !important;}
+
+/* Question-Answer Styles */
+.question {padding: 10px 0px 0px 0px; font-weight: bold;}
+.right {background-color: #41a62a}
+.halfright {background-color: #afc700;}
+.wrong {background-color: #cc0000;}

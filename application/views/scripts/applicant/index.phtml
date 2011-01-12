@@ -185,6 +185,16 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS]'));
 			</td>
                         <td>
                             <?php if(isset($this -> arrTests[$applicant -> id])) foreach($this -> arrTests[$applicant -> id] as $test): ?>
+                                <?php if (($test['scoreMax'])): ?>
+                                <a href="<?php echo $this -> url ( array (
+                                    'controller' => 'test',
+                                    'action' => 'testing',
+                                    'link' => $test['linkMaxScore']
+                                ) ); ?>">
+
+                                <?php echo $this->escape($test['name'])?>:&nbsp;
+                                <?php echo $this->escape($test['scoreMax'])?></a><br />
+                                <?php endif; ?>
                                 <?php if (($test['percentMax'])): ?>
                                 <a href="<?php echo $this -> url ( array (
                                     'controller' => 'test',
@@ -193,7 +203,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_APPLICANTS]'));
                                 ) ); ?>">
 
                                 <?php echo $this->escape($test['name'])?>:&nbsp;
-                                <?php echo $this->escape($test['percentMax'].'%')?></a><br />
+                                <?php echo $this->escape($test['percentMax'])?>%</a><br />
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </td>
