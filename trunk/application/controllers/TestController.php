@@ -248,7 +248,7 @@ class TestController extends Controller_Action_Abstract
                     }
                 }
                 $applicantTest -> score = $this-> 
-                    _calcTestScore($questions, $answers, $newAnswers);
+                    calcTestScore($questions, $answers, $newAnswers);
                 $applicantTest->save();
 
                 $this->view->sendTest = true;
@@ -273,21 +273,21 @@ class TestController extends Controller_Action_Abstract
                 $applicantAnswers = $objApplicantAnswers->getAnswers($applicantTestId);
                 $applicantAnswers = $this->convertArr($applicantAnswers,'answer_id');
                 
-                $questionsAndAnswers = $this->
-                    _makeQAArray($questions, $answers, $applicantAnswers);
+                $questions = $this-> makeQAArray($questions, $answers, $applicantAnswers);
+                unset( $answers );
+                unset( $applicantAnswers );
                 
                 $questionCategories = $objTests -> 
                     getQuestionCategoriesListByTestId($testId);
 
                 if ( $questionCategories ) {
                     $questionCategories = $this -> 
-                       _calcCategoriesScore ( $questionsAndAnswers, 
-                                              $questionCategories );
+                       calcCategoriesScore ( $questions, $questionCategories );
                 }
 
                 $this->view->countQuestions = $countQuestions;
-                $this->view->countQuestionFail = $this->countWrongAnswers($questionsAndAnswers);
-                $this->view->questionsAndAnswers = $questionsAndAnswers;
+                $this->view->countQuestionFail = $this->countWrongAnswers($questions);
+                $this->view->questionsAndAnswers = $questions;
                 $this->view->questionCategories = $questionCategories;
             }
         }
@@ -343,7 +343,7 @@ class TestController extends Controller_Action_Abstract
             $applicantAnswers = $this->convertArr($applicantAnswers,'answer_id');
             
             $applicantTest -> score = $this->
-                _calcTestScore($questions, $answers, $applicantAnswers);
+                calcTestScore($questions, $answers, $applicantAnswers);
             $applicantTest -> percent = NULL;
             $applicantTest->save();
         }
@@ -454,11 +454,11 @@ class TestController extends Controller_Action_Abstract
      * @param array $applicantAnswers - массив ответов соискателя               
      * @return array
      */
-    private function _makeQAArray(array $questions, array $answers, array $applicantAnswers)
+    public function makeQAArray(array $questions, array $answers, array $applicantAnswers)
     {
         $result = array();
         //Перебираем все вопросы
-        foreach ($questions as $question) {
+        foreach ($questions as $questionId => $question) {
             $questionIndex = $question['tq_sort_index'];
             $result[ $questionIndex ]['text'] = $question['tq_text'];
             $result[ $questionIndex ]['category'] = $question['tqc_id'];
@@ -468,7 +468,7 @@ class TestController extends Controller_Action_Abstract
             $answerWeight = $question['tq_weight'] / $question ['tq_right_answers_amount'];
             $questionScore = 0;
             //Перебираем все варианты ответов на этот вопрос
-            foreach ($answers[$question['tq_id']] as $answer) {
+            foreach ($answers[$questionId] as $answer) {
                 $questionAnswers[$answerId]['text'] = $answer['tqa_text'];
                 $questionAnswers[$answerId]['flag'] = $answer['tqa_flag'];
                 $answerState = (int) isset( $applicantAnswers[$answer['tqa_id']] );
@@ -523,7 +523,7 @@ class TestController extends Controller_Action_Abstract
      * @param array $categories - массив категорий
      * @return array
      */
-    private function _calcCategoriesScore(array $questions, array $categories) {
+    public function calcCategoriesScore(array $questions, array $categories) {
         $result = array_fill_keys( array_keys( $categories ), 0 );
     	foreach ( $questions as $question ) {
     	    if ( $question['category'] ){
@@ -542,7 +542,7 @@ class TestController extends Controller_Action_Abstract
      * @param array $newAnswers - массив ответов соискателя
      * @return float
      */
-    private function _calcTestScore(array $questions, array $answers, array $newAnswers)
+    public function calcTestScore(array $questions, array $answers, array $newAnswers)
     {
         foreach ($questions as $questionId => $question) {
             $answerWeight = $question['tq_weight']/$question['tq_right_answers_amount'];

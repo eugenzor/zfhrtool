@@ -17,12 +17,12 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     /**
      * Prepares the environment before running a test.
      */
-/*
+
     protected function setUp() {
         $this -> setDbDump( dirname(__FILE__) . '/_files/setup.sql' );
         parent::setUp ();
     }
-*/
+
 
     protected function _doLogin( $email, $password )
     {
@@ -261,5 +261,179 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $this->assertModule('default');
         $this->assertController('test');
         $this->assertAction('recalculation');
+    }
+    
+    //проверяем работоспособность єкшена
+    public function testRecalcAction()
+    {
+        $this ->_doLogin('meestro@ukr.net', '123456');
+        $this->dispatch('/test/recalc/link/92c2bc7eb520710774a9d2963c0899f7');
+        $this->assertModule('default');
+        $this->assertController('test');
+        $this->assertAction('recalc');
+        $this->assertRedirect('/test/recalc/link/92c2bc7eb520710774a9d2963c0899f7');        
+    }
+
+    protected $questions = array(
+            '333' => array(
+                'tq_weight'               => '1',
+                'tq_right_answers_amount' => '1',
+                'tq_id'                   => '333',
+                'tq_sort_index'           => '0',
+                'tq_text'                 => 'question1',
+                'tqc_id'                  => '1'
+            ),
+            '444' => array(
+                'tq_weight'               => '2',
+                'tq_right_answers_amount' => '2',
+                'tq_id'                   => '444',
+                'tq_sort_index'           => '1',
+                'tq_text'                 => 'question2',
+                'tqc_id'                  => '2'
+            ),
+        );
+
+    protected $answers = array(
+            '333' => array(
+                '0' => array(
+                    'tqa_flag' => '1',
+                    'tqa_id'   => '10',
+                    'tqa_text' => 'answer10'
+                ),
+                '1' => array(
+                    'tqa_flag' => '0',
+                    'tqa_id'   => '11',
+                    'tqa_text' => 'answer11'
+                )
+            ),
+            '444' => array(
+                '0' => array(
+                    'tqa_flag' => '0',
+                    'tqa_id'   => '20',
+                    'tqa_text' => 'answer20'
+                ),
+                '1' => array(
+                    'tqa_flag' => '1',
+                    'tqa_id'   => '21',
+                    'tqa_text' => 'answer21'
+                ),
+                '2' => array(
+                    'tqa_flag' => '1',
+                    'tqa_id'   => '22',
+                    'tqa_text' => 'answer22'
+                )
+            )
+        );
+
+    //тестирование функции calcTestScore
+    /**
+     * @dataProvider provider
+     */
+    public function testCalcTestScore($score, $testanswers)
+    {
+        $result = TestController::calcTestScore($this->questions, $this->answers, $testanswers);
+        $this->assertEquals($score, $result);
+    }
+    
+    public function provider()
+    {
+        return array(
+            //Все ответы правильные
+            array(3.0, array(
+                        '10' => array('id' => 110),
+                        '21' => array('id' => 121),
+                        '22' => array('id' => 122),
+                     )
+            ),
+            //Все ответы не правильные
+            array(0.0, array(
+                        '20' => array('id' => 020),
+                        '21' => array('id' => 121),
+                        '22' => array('id' => 122),
+                     )
+            ),
+            //Первый не правильный, второй правильный
+            array(2.0, array(
+                        '11' => array('id' => 011),
+                        '21' => array('id' => 121),
+                        '22' => array('id' => 122),
+                     )
+            ),
+            //Первый не правильный, второй частично правильный
+            array(1.0, array(
+                        '11' => array('id' => 011),
+                        '22' => array('id' => 122),
+                     )
+            ),            
+        );
+    }
+    
+    //тестирование функции makeQAArray
+    public function testMakeQAArray()
+    {
+        $expectation = array(
+            '0' => array(
+                'text'     => 'question1',
+                'category' => '1',
+                'score'    => 1.0,
+                'state'    => 2
+            ),
+            '1' => array(
+                'text'     => 'question2',
+                'category' => '2',
+                'score'    => 1.0,
+                'state'    => 1,
+                'answers'  => array(
+                    '0'  => array(
+                        'text'  => 'answer20',
+                        'flag'  => '0',
+                        'state' => '0'
+                    ),  
+                    '1'  => array(
+                        'text'  => 'answer21',
+                        'flag'  => '1',
+                        'state' => '1'
+                    ),  
+                    '2'  => array(
+                        'text'  => 'answer22',
+                        'flag'  => '1',
+                        'state' => '0'
+                    ),  
+                )
+            ),
+        );
+        $testanswers = array(
+            '10' => array('id' => 110),
+            '21' => array('id' => 121),
+        );
+        $result = TestController::makeQAArray( $this->questions, $this->answers, $testanswers );
+        $this->assertEquals( $expectation, $result );
+    }
+    
+    public function testCalcCategoriesScore()
+    {
+        $questions = array(
+            '1' => array(
+                'category' => '1',
+                'score'    => 1.5
+            ),
+            '2' => array(
+                'category' => '2',
+                'score'    => 0.5
+            ),
+            '3' => array(
+                'category' => '1',
+                'score'    => 1.0
+            ),
+            '4' => array(
+                'category' => '2',
+                'score'    => 1.0
+            )
+        );
+        $category = array('1' => 'category1', '2' => 'category2');
+        $expectation = array('category1' => 2.5, 'category2' => 1.5);
+        $this->assertEquals( $expectation,
+                             TestController::calcCategoriesScore($questions,
+                                                                 $category));
     }
 }

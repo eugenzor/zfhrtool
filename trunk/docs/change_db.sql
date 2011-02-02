@@ -1,6 +1,7 @@
 ALTER TABLE `test_question` ADD `tq_weight` TINYINT UNSIGNED NOT NULL DEFAULT '1';
 ALTER TABLE `test_question` ADD `tq_right_answers_amount` INT UNSIGNED NULL AFTER `tq_answer_amount`;
 ALTER TABLE `test_question` ADD `tqc_id` INT UNSIGNED NULL;
+ALTER TABLE `test_question` ADD INDEX ( `tqc_id` );
 
 UPDATE `test_question` SET `tq_right_answers_amount` = (
     SELECT COUNT(*) 

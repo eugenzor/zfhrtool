@@ -35,6 +35,18 @@ class Questions extends Zht_Db_Table
      * @var string
      */
     protected $_primary = 'tq_id';
+    
+    /**
+     * Карта взаимосвязей (внешние ключи)
+     * @var array
+     */
+    protected $_referenceMap = array(
+        'Categories' => array(
+            'columns'       => array('tqc_id'),
+            'refTableClass' => 'QuestionCategories',
+            'refColumns'    => array('tqc_id')
+        )
+    );
 
     /**
      * Get Question By questionId

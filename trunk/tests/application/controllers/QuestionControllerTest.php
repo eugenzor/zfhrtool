@@ -111,18 +111,19 @@ class QuestionControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     {
         $this -> _request -> setMethod( 'post' ) -> setPost(
             array(
-                'questionText' => 'вопрос',
-                'testId' => '1',
-                'answer' => array(
-                                array(
-                                    'text' => '1',
-                                    'flag' => '0' ),
-                                array(
-                                    'text' => '2',
-                                    'flag' => '1' ),
-                                array(
-                                    'text' => '3',
-                                    'flag' => '0' ) ) ) );
+                'questionText'   => 'вопрос',
+                'questionWeight' => '3',
+                'testId'         => '1',
+                'answer'         => array(
+                                    array(
+                                        'text' => '1',
+                                        'flag' => '0' ),
+                                    array(
+                                        'text' => '2',
+                                        'flag' => '1' ),
+                                    array(
+                                        'text' => '3',
+                                        'flag' => '0' ) ) ) );
         $this ->_doLogin('meestro@ukr.net', '123456');
         $this->dispatch('/question/edit');
         $this->assertModule('default');

@@ -31,6 +31,12 @@ class Tests extends Zht_Db_Table
     protected $_rowClass = 'Test';
 
     /**
+     * Dependent tables
+     * @var array
+     */
+    protected $_dependentTables = array('QuestionCategories');
+
+    /**
      * Get Test By TestId
      *
      * @param string $testId
@@ -85,8 +91,8 @@ class Tests extends Zht_Db_Table
         $objQuestions = new Questions();
         $objQuestions -> removeQuestionsByTestId( $testId );
         
-        $objQuestionCategories = new QuestionCategories();
-        $objQuestionCategories -> removeCategoriesByTestId( $testId );
+        /*$objQuestionCategories = new QuestionCategories();
+        $objQuestionCategories -> removeCategoriesByTestId( $testId );*/
 
         // Удаляем информацию о тесте из БД
         $where = array (
