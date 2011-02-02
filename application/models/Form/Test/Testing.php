@@ -37,8 +37,37 @@ class Form_Test_Testing extends Zend_Form {
         @ include_once "Text/Highlighter.php";
 
         $classExistsTH = class_exists('Text_Highlighter', false);
-        //////////////////////////
-        function highlighter($text, $classExistsTH = false){
+
+        foreach ($questions as $id => $question) {             
+            $elemQuestion = $this->createElement('hidden', 'question_' . $id)
+                            ->setDescription($question['tq_sort_index'] . '. ' . $this->_highlighter($question['tq_text'], $classExistsTH));
+            $elemQuestion->getDecorator('Description')->setOptions(array('escape'=> false, 'tag'=>'div', 'class'=>'description'));
+            $this->addElement($elemQuestion);           
+
+            $i = 1;
+            if (isset($answers[$id])) {
+                foreach ($answers[$id] as $answer) {
+                    $elemAnswer = $this->createElement('checkbox', 'answer_' . $answer['tqa_id'])
+                                    ->setLabel($i++ . ') ' . $this->_highlighter($answer['tqa_text'], $classExistsTH));
+                    $elemAnswer->getDecorator('Label')->setOption('escape', false);
+                    $this->addElement($elemAnswer);
+                }
+            }
+        }
+
+        $submit = $this->createElement('submit', 'send', array('label' => 'Oтправить'));
+        $this->addElement($submit);
+    }
+    
+    /**
+     * Функция перенесена из функции addElementsForm() из-за возникающей ошибки:
+     *     Cannot redeclare highlighter() (previously declared in 
+     *     application\models\Form\Test\Testing.php:41) in 
+     *     application\models\Form\Test\Testing.php on line 41
+     * @param unknown_type $text
+     * @param unknown_type $classExistsTH
+     */
+    private function _highlighter($text, $classExistsTH = false){
             $text = str_replace('[js]','[javascript]',$text);
             $text = str_replace('[/js]','[/javascript]',$text);
             $text = str_replace(array('[code lang="js"]','[code lang=\'js\']'),'[code lang="javascript"]',$text);
@@ -69,25 +98,6 @@ class Form_Test_Testing extends Zend_Form {
             return $text;
         }
         /////////////////////
-        foreach ($questions as $id => $question) {             
-            $elemQuestion = $this->createElement('hidden', 'question_' . $id)
-                            ->setDescription($question['tq_sort_index'] . '. ' . highlighter($question['tq_text'], $classExistsTH));
-            $elemQuestion->getDecorator('Description')->setOptions(array('escape'=> false, 'tag'=>'div', 'class'=>'description'));
-            $this->addElement($elemQuestion);           
-
-            $i = 1;
-            if (isset($answers[$id])) {
-                foreach ($answers[$id] as $answer) {
-                    $elemAnswer = $this->createElement('checkbox', 'answer_' . $answer['tqa_id'])
-                                    ->setLabel($i++ . ') ' . highlighter($answer['tqa_text'], $classExistsTH));
-                    $elemAnswer->getDecorator('Label')->setOption('escape', false);
-                    $this->addElement($elemAnswer);
-                }
-            }
-        }
-
-        $submit = $this->createElement('submit', 'send', array('label' => 'Oтправить'));
-        $this->addElement($submit);
-    }
+    
 
 }

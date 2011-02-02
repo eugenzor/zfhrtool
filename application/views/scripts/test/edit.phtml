@@ -29,7 +29,9 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
         <li><a href="<?=$this->url(array('controller' => 'index', 'action' => 'index'), null, true)?>">Главная</a></li>
         <li><a href="<?=$this->url(array('controller' => 'test', 'action' => 'index'), null, true)?>">Тесты</a></li>
         <li><a href="<?=$this->url(array('controller' => 'category', 'action' => 'index'), null, true)?>">Категории тестов</a></li>
+        <?php if ( isset( $this->testId ) ):?>
         <li><a href="<?=$this->url(array('controller' => 'questioncategory', 'action' => 'index'))?>">Категории вопросов</a></li>
+        <?php endif;?>
         <li><a href="<?=$this->url(array('controller' => 'question', 'action' => 'edit', 'testId' => $this -> testId))?>">Добавить вопрос</a></li>
     </ul>
     </div>

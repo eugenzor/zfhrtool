@@ -21,7 +21,7 @@ class Form_QuestionCategory_Edit extends Zend_Form
     public function init() {
 
         $this->setAction ( $this->getView()->
-            url ( array ('controller'=>'questioncategory', 'action' => 'edit') ) );
+            url ( array ('controller'=>'questioncategory', 'action' => 'edit'), null, true ) );
         $this->setMethod ( 'post' );
 
         $nameText = $this->createElement ( 'text', 'categoryName' );

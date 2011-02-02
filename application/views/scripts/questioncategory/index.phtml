@@ -30,9 +30,9 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_QUESTION_CATEGORIES]'));
 			<th class="action">Действия</th>
 		</tr>
 	</thead>
-<?php if (!empty($this -> arrCategory)): ?>
-    <?php foreach ($this -> arrCategory as $category): ?>
 	<tbody>
+	    <?php if (!empty($this -> arrCategory)): ?>
+    <?php foreach ($this -> arrCategory as $category): ?>
 		<tr class="item_row">
 			<td><?php echo $this->escape( $category['name'] ); ?></td>
 			<td><?php echo $this->escape( $category['descr'] ); ?></td>
@@ -45,13 +45,13 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_QUESTION_CATEGORIES]'));
                 </a>
 			</td>
 		</tr>
-	</tbody>
     <?php endforeach; ?>
 <?php else: ?>
 		<tr class="item_row">
 			<td colspan="3">нет категорий</td>
 		</tr>
 <?php endif;?>
+	</tbody>
 	</table>
 	<!-- End of Таблица тестов-->
 </div>

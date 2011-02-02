@@ -23,24 +23,26 @@ class QuestionCategories extends Zht_Db_Table
      * @var string
      */
     protected $_rowClass = 'QuestionCategory';
+    
+    /**
+     * Dependent tables
+     * @var array
+     */
+    protected $_dependentTables = array('Questions');
 
     /**
-     * Get QuestionCategory By categoryId
-     *
-     * @param string $categoryId
-     * @return QuestionCategory | boolean
+     * Карта взаимосвязей (внешние ключи)
+     * @var array
      */
-    public function getCategoryById($categoryId)
-    {
-        $where = array (
-                'tqc_id=?' => $categoryId );
-        $objCategory = $this->fetchRow ( $where );
-        if (is_null ( $objCategory )) {
-            return false;
-        }
-        return $objCategory;
-    }
-
+    protected $_referenceMap = array(
+        'Tests' => array(
+            'columns'       => array('t_id'),
+            'refTableClass' => 'Tests',
+            'refColumns'    => array('t_id'),
+            'onDelete'      => self::CASCADE
+        )
+    );
+    
     /**
      * Get list (array) of question categories for specified testId
      * Return:
@@ -99,29 +101,24 @@ class QuestionCategories extends Zht_Db_Table
      */
     public function removeCategoryById($categoryId)
     {
-        $query = "SELECT count(tq_id) from test_question "
+        $category = $this -> find($categoryId) -> current();
+        $dependentRows = $category->findDependentRowset('Questions');
+        if ( count($dependentRows) ){
+            throw new Exception ( 'Category has dependent questions' );
+        } else {
+            return $category -> delete();
+        }
+        
+        /*$query = "SELECT count(tq_id) from test_question "
                . "WHERE tqc_id = $categoryId";
         $intQuestionAmount = $this -> getAdapter() ->fetchOne( $query );
-        if ( $intTestAmount > 0 ) {
-            throw new Exception ( '[LS_CATEGORY_HAS_QUESTIONS]' );
+        if ( $intQuestionAmount > 0 ) {
             return false;
         }
         $where = array (
                 'tqc_id=?' => $categoryId );
-        $intResult = $this -> delete( $where );
-        return $intResult;
-    }
-    
-    /**
-     * Удаление категорий, соответсвующих заданному тесту (по $testId )
-     *
-     * @param int $testId
-     * @return void
-     */
-    public function removeCategoriesByTestId( $testId )
-    {
-        $where = array('t_id=?' => $testId);
-        $this -> delete( $where );
+        $result = $this -> delete( $where );
+        return $result;*/
     }
     
 }

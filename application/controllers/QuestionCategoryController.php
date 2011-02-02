@@ -55,8 +55,8 @@ class QuestionCategoryController extends Controller_Action_Abstract
 
                     $categoryId = $form -> categoryId -> getValue();
                     if ( !empty($categoryId)) {
-                            $objCategory = $objCategories ->
-                            getCategoryById( $categoryId );
+                            $objCategory = $objCategories -> find( $categoryId );
+                            $objCategory = $objCategory -> current();
                         } else {
                             $objCategory = $objCategories -> createRow();
                         }
@@ -84,7 +84,7 @@ class QuestionCategoryController extends Controller_Action_Abstract
                 {
                     // выбираем из базы данные о редактируемой категории
                     $categories = new QuestionCategories();
-                    $objCategory = $categories->getCategoryById( $categoryId );
+                    $objCategory = $categories -> find($categoryId) -> current();
                     if ($objCategory) {
                         $form -> populate(
                             array( 'categoryName'  =>  $objCategory -> getName(),

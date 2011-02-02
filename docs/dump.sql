@@ -276,7 +276,8 @@ CREATE TABLE IF NOT EXISTS `test_question` (
   `tq_weight` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `tqc_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`tq_id`),
-  KEY `t_id` (`t_id`)
+  KEY `t_id` (`t_id`),
+  KEY `tqc_id` (`tqc_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
