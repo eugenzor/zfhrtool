@@ -339,31 +339,47 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
     {
         return array(
             //Все ответы правильные
-            array(3.0, array(
+            array( array(
+                        'score'   => 3.0,
+                        'percent' => 100
+                   ), 
+                   array(
                         '10' => array('id' => 110),
                         '21' => array('id' => 121),
                         '22' => array('id' => 122),
-                     )
+                   )
             ),
             //Все ответы не правильные
-            array(0.0, array(
+            array( array(
+                        'score'   => 0.0,
+                        'percent' => 0
+                   ), 
+                   array(
                         '20' => array('id' => 020),
                         '21' => array('id' => 121),
                         '22' => array('id' => 122),
-                     )
+                   )
             ),
             //Первый не правильный, второй правильный
-            array(2.0, array(
+            array( array(
+                        'score'   => 2.0,
+                        'percent' => 67
+                   ), 
+                   array(
                         '11' => array('id' => 011),
                         '21' => array('id' => 121),
                         '22' => array('id' => 122),
-                     )
+                   )
             ),
             //Первый не правильный, второй частично правильный
-            array(1.0, array(
+            array( array(
+                        'score'   => 1.0,
+                        'percent' => 33
+                   ), 
+                   array(
                         '11' => array('id' => 011),
                         '22' => array('id' => 122),
-                     )
+                   )
             ),            
         );
     }
@@ -376,12 +392,14 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
                 'text'     => 'question1',
                 'category' => '1',
                 'score'    => 1.0,
+                'weight'   => 1,
                 'state'    => 2
             ),
             '1' => array(
                 'text'     => 'question2',
                 'category' => '2',
                 'score'    => 1.0,
+                'weight'   => 2,
                 'state'    => 1,
                 'answers'  => array(
                     '0'  => array(
@@ -415,23 +433,27 @@ class TestControllerTest extends Zht_Test_PHPUnit_ControllerTestCase
         $questions = array(
             '1' => array(
                 'category' => '1',
-                'score'    => 1.5
+                'score'    => 1.5,
+                'weight'   => 3
             ),
             '2' => array(
                 'category' => '2',
-                'score'    => 0.5
+                'score'    => 0.5,
+                'weight'   => 1,
             ),
             '3' => array(
                 'category' => '1',
-                'score'    => 1.0
+                'score'    => 1.0,
+                'weight'   => 1
             ),
             '4' => array(
                 'category' => '2',
-                'score'    => 1.0
+                'score'    => 1.0,
+                'weight'   => 2
             )
         );
         $category = array('1' => 'category1', '2' => 'category2');
-        $expectation = array('category1' => 2.5, 'category2' => 1.5);
+        $expectation = array('category1' => 75, 'category2' => 50);
         $this->assertEquals( $expectation,
                              TestController::calcCategoriesScore($questions,
                                                                  $category));

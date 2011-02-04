@@ -245,10 +245,13 @@ class TestController extends Controller_Action_Abstract
                         $newAnswer = $objApplicantAnswers->createRow(array('applicant_tests_id' => $applicantTestId,
                                                                   'answer_id' => $answerId));
                         $newAnswer->save();
+                    } else {
+                        unset( $newAnswers[$answerId] );
                     }
                 }
-                $applicantTest -> score = $this-> 
-                    calcTestScore($questions, $answers, $newAnswers);
+                $result = $this -> calcTestScore($questions, $answers, $newAnswers); 
+                $applicantTest -> score = $result['score'];
+                $applicantTest -> percent = $result['percent'];
                 $applicantTest->save();
 
                 $this->view->sendTest = true;
@@ -342,9 +345,9 @@ class TestController extends Controller_Action_Abstract
             $applicantAnswers = $objApplicantAnswers->getAnswers($applicantTestId);
             $applicantAnswers = $this->convertArr($applicantAnswers,'answer_id');
             
-            $applicantTest -> score = $this->
-                calcTestScore($questions, $answers, $applicantAnswers);
-            $applicantTest -> percent = NULL;
+            $result = $this -> calcTestScore($questions, $answers, $applicantAnswers); 
+            $applicantTest -> score = $result['score'];
+            $applicantTest -> percent = $result['percent'];
             $applicantTest->save();
         }
         $this->_helper->redirector ( 'testing', 'test', null, array('link' => $link) );            
@@ -438,6 +441,8 @@ class TestController extends Controller_Action_Abstract
      * array('id'=>array(                      // id - идентификатор вопроса
      *                  'text'     => string,  // текст вопроса
      *                  'category' => int,     // категория вопроса
+     *                  'score'    => float    // полученные баллы за вопрос
+     *                  'weight'   => int      // максимальное кол-во баллов за вопрос  
      *                  'state'    => int,     // 0 - неправильно отвечен
      *                                         // 1 - частично правильно отвечен
      *                                         // 2 - правильно отвечен
@@ -462,6 +467,7 @@ class TestController extends Controller_Action_Abstract
             $questionIndex = $question['tq_sort_index'];
             $result[ $questionIndex ]['text'] = $question['tq_text'];
             $result[ $questionIndex ]['category'] = $question['tqc_id'];
+            $result[ $questionIndex ]['weight'] = $question['tq_weight'];
             $questionAnswers = array();
             $answerId = 0;
             $wrongAnswer = 0;    //метка неверного ответа
@@ -494,6 +500,7 @@ class TestController extends Controller_Action_Abstract
                 //вопрос отвечен неверно
                 $result[$questionIndex]['state'] = 0;
                 $result[$questionIndex]['answers'] = $questionAnswers;
+                $result[ $questionIndex ]['score'] = 0;
             }
         }
         return $result;
@@ -507,6 +514,7 @@ class TestController extends Controller_Action_Abstract
      */
     public function countWrongAnswers(array $questions)
     {
+        $result = 0;
         foreach ( $questions as $question ) {
             if ( ! $question['state'] ) {
                 $result ++;
@@ -515,45 +523,58 @@ class TestController extends Controller_Action_Abstract
         return $result;
     }
     
-    /** Подсчитывает сумму баллов в каждой категории.
+    /** Подсчитывает процент правильных ответов в каждой категории.
      *  Возвращает массив вида:
-     *  array ( 'имя_категории' => 'сумма баллов' )
+     *  array ( 'имя_категории' => int )
      *  
      * @param array $questions - массив вопросов, возвращенный makeQAArray()
      * @param array $categories - массив категорий
      * @return array
      */
-    public function calcCategoriesScore(array $questions, array $categories) {
-        $result = array_fill_keys( array_keys( $categories ), 0 );
+    public function calcCategoriesScore(array $questions, array $categories) 
+    {
+        $score = array_fill_keys( array_keys( $categories ), 0 );
     	foreach ( $questions as $question ) {
     	    if ( $question['category'] ){
-    	        $result[$question['category']] += $question['score'];
+    	        if ( $score[$question['category']] ) {
+    	            $score[$question['category']] = 
+    	                ($score[$question['category']] + $question['score']/$question['weight'])/2;
+    	        } else {
+    	            $score[$question['category']] = $question['score']/$question['weight'];
+    	        }
     	    }
     	}
-    	$result = array_combine( array_values( $categories ), array_values( $result ) );
+    	foreach ($score as $key => $percent) {
+    	    $result[ $categories[$key] ] = round( $percent*100 );
+    	}
     	return $result;
     }
     
     /**
-     * Возвращает сумму баллов, набранных соискателем в тесте
+     * Возвращает результат прохождения теста в виде массива
+     *  array( 'score'   => float,  // сумма баллов, набранных соискателем в тесте
+     *         'percent' => int )   // процент от максимального кол-ва баллов
      * 
      * @param array $questions	-	массив вопросов теста
      * @param array $answers - массив ответов теста
      * @param array $newAnswers - массив ответов соискателя
-     * @return float
+     * @return array
      */
     public function calcTestScore(array $questions, array $answers, array $newAnswers)
     {
+        $applicantScore = 0;
+        $maxScore = 0;
         foreach ($questions as $questionId => $question) {
+            $maxScore += $question['tq_weight'];
             $answerWeight = $question['tq_weight']/$question['tq_right_answers_amount'];
             $questionScore = 0;
             foreach ($answers[$questionId] as $answerId => $answer) {
                 if ($answer['tqa_flag']) {
-                    if ($newAnswers[$answer['tqa_id']]) {
+                    if ( isset( $newAnswers[ $answer['tqa_id'] ] ) ) {
                         $questionScore += $answerWeight;
                     }
                 } else {
-                    if ($newAnswers[$answer['tqa_id']]) {
+                    if ( isset( $newAnswers[ $answer['tqa_id'] ] ) ) {
                         $questionScore = 0;
                         break;
                     }
@@ -561,7 +582,8 @@ class TestController extends Controller_Action_Abstract
             }
         $applicantScore += round($questionScore, 2);
         }
-        return $applicantScore; 
+        $percent = round( $applicantScore / $maxScore * 100 );
+        return array( 'score' => $applicantScore, 'percent' => $percent); 
     }       
  
 }

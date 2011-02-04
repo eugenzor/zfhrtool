@@ -13,7 +13,7 @@
  * @subpackage Controller
  */
 
-class QuestionCategoryController extends Controller_Action_Abstract
+class QuestioncategoryController extends Controller_Action_Abstract
 {
 
     /**

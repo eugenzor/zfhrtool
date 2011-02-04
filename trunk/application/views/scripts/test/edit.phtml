@@ -58,7 +58,10 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
                 <td><?php echo $this->escape( $question['tq_sort_index'] ); ?></td>
                 <td><?php echo $this->escape( $question['tq_text'] ); ?></td>
                 <td><?php echo $this->escape( $question['tq_weight'] );?></td>
-                <td><?php echo $this->escape( $this->arrQuestionCategories[ $question['tqc_id'] ] )?></td>
+                <td><?php if ( isset( $question['tqc_id'] )): ?>
+                        <?php echo $this->escape( $this->arrQuestionCategories[ $question['tqc_id'] ] )?>
+                    <?php endif;?>
+                </td>
                 <td><?php echo $this->escape( $question['tq_answer_amount'] ); ?></td>
                 <td><?php echo $this->escape( $question['tq_right_answers_amount'])?></td>
                 <td class="action">
