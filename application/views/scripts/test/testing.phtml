@@ -41,7 +41,7 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
     Спасибо за пройденный тест :)
     </h1>
 <?php else: ?>
-    <?php if ( !isset( $this->objForm ) && $this->percent): ?>
+    <?php if ( !isset( $this->objForm ) && !isset( $this->score)): ?>
     <div class="menu-h f-right">
     <ul>
         <li><a href="<?=$this->url(array('controller' => 'test', 'action' => 'recalc'))?>">Пересчет результата теста</a></li>
@@ -56,14 +56,14 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
     <h1 class="title" style="display:inline; border:0">До конца теста осталось: <font id="timer" color=#FF0000>00:00</font></h1>
     <br /><br />
     <?php else: ?>
-    <h1 class="title" style="display:inline; border:0">Результат: 
+    <h1 class="title" style="display:inline; border:0">Результат:</h1>
         <?php if ( $this->score ):?>
-            <?php echo $this->score; ?>
+        <h3>Набрано баллов: <?php echo $this->score; ?></h3>
+        <h3>Процент от максимального: <?php echo $this->percent; ?>%</h3> 
         <?php else: ?>
-            <?php echo $this->percent;?>%
-        <?php endif; ?>
-    </h1>    
-    <?php endif ?>
+       <h3>Процент правильных ответов: <?php echo $this->percent; ?>%</h3>
+        <?php endif;?> 
+    <?php endif; ?>
     <div class="z_form">
     <?php if (isset($this->objForm)): ?>
         <?php echo $this->objForm; ?>
@@ -72,12 +72,12 @@ $this->headTitle($this->translate('[LS_PAGE_TITLE_TESTS]'));
     Количество вопросов: <?php echo (int) $this->countQuestions; ?><br />
     Неверных ответов: <?php echo $this->countQuestionFail; ?><br /><br />
     <?php if ( $this->questionCategories ):?>
-    <p>Сумма баллов по категориям:</p>
+    <p>Процент набранных баллов в каждой категории:</p>
     <ol>
         <?php foreach ( $this->questionCategories as $name => $score ):?>
             <li><?php echo $this->escape( $name ); ?>
                 &nbsp;&ndash;&nbsp;
-                <?php echo $this->escape( $score ); ?>
+                <?php echo $this->escape( $score ); ?>%
             </li>
         <?php endforeach; ?>
     </ol>
