@@ -26,13 +26,6 @@ echo $this->doctype(),PHP_EOL;
     <?= $this->headTitle()?>
     <?= $this->headLink() ?>
     <?= $this->headScript(); ?>
-<?php
-    if ($this->dojo()->isEnabled()):
-        $this->dojo()//->setLocalPath('/scripts/dojo/dojo/dojo.js')
-            ->addStyleSheetModule('dijit.themes.tundra');
-        echo $this->dojo();
-    endif;
-?>
 </head>
 
 <body class="tundra">
